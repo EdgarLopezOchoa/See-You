@@ -10,4 +10,9 @@
 
     <color name="blue">#0014C3</color>
     <color name="gold">#938500</color>
+
+    <color name="Color1">#FF018786</color>
+    <color name="Color2">#13D6D5</color>
+    <color name="Color3">#4EFAF8</color>
+
 </resources>

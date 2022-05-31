@@ -17,6 +17,9 @@
         <item name="android:background">#009688</item>
         <item name="itemIconTint">@color/white</item>
         <item name="itemTextColor">@color/white</item>
+        <item name="itemIconSize">120px</item>
+        <item name="itemPaddingBottom">20px</item>
+        <item name="itemIconPadding">20px</item>
 
     </style>
 </resources>
