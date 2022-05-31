@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     RutasFragment RutasFragment = new RutasFragment();
     MapsFragment mapsFragment = new MapsFragment();
+    PerfilFragment perfilFragment = new PerfilFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.MapsFragment:
                     loadFragment(mapsFragment);
+                    return true;
+                case R.id.PerfilFragment:
+                    loadFragment(perfilFragment);
                     return true;
             }
             return false;

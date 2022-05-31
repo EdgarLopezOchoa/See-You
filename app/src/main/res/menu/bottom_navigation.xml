@@ -2,10 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/MapsFragment"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/mapa_foreground"
         android:title="Mapa"></item>
     <item
         android:id="@+id/RutasFragment"
-        android:title="Rutas"></item>
+        android:title="Rutas"
+        android:icon="@drawable/ruta_foreground"></item>
+
+    <item
+        android:icon="@drawable/perfil_foreground"
+        android:title="Perfil"
+        android:id="@+id/PerfilFragment"></item>
 
 </menu>

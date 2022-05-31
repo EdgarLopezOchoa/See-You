@@ -77,7 +77,8 @@ public class MapsFragment extends Fragment {
 
             // Add a marker in Sydney and move the camera
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setZoomControlsEnabled(true);
+           // mMap.getUiSettings().setZoomControlsEnabled(true);
+            mMap.getUiSettings().setCompassEnabled(true);
             mMap.setPadding(0, 10, 0, 0);
         }
 

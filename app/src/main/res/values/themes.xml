@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="BottomNavigation">
-        <item name="android:background">#F8AA37</item>
+        <item name="android:background">#009688</item>
         <item name="itemIconTint">@color/white</item>
         <item name="itemTextColor">@color/white</item>
 
