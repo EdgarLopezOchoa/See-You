@@ -13,49 +13,10 @@
         app:layout_constraintBottom_toTopOf="@+id/navegador"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout="@layout/fragment_maps">
 
     </FrameLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navegador1"
-        style="@style/BottomNavigation"
-        android:layout_width="0dp"
-
-        android:layout_height="wrap_content"
-        android:elevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/bottom_navigation_empty">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fondodegradado">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="cursive"
-                android:text="SEE YOU"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="32sp"
-                android:textStyle="bold|italic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navegador"
@@ -71,16 +32,5 @@
         android:background="@drawable/fondodegradado">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="39dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="10dp"
-        android:clickable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/FrameLayout"
-        app:srcCompat="@drawable/ubicacion" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
