@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //llama al fragmento de mapa y lo pone en el FrameLayout
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.FrameLayout,mapsFragment);
         transaction.commit();
@@ -27,9 +29,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navegador);
         navigation.setOnNavigationItemSelectedListener(mOnNavigacionItemSelectedListener);
     }
-    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigacionItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigacionItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            //la navegacion entre fragmentos de la barra inferior
+
             switch (item.getItemId()){
                 case R.id.RutasFragment:
                     loadFragment(RutasFragment);
@@ -46,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void loadFragment(Fragment fragment){
+
+        //remplaza el fragmentLayour por los fragmentos
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.FrameLayout,fragment);
         transaction.commit();

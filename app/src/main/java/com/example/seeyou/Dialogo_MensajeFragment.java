@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Dialogo_MensajeFragment#newInstance} factory method to
@@ -28,9 +32,18 @@ public class Dialogo_MensajeFragment extends DialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    //Toma las variables de otro fragmento
+    public GoogleMap Mapa = MapsFragment.mMap;
+    double LatitudDialogo = MapsFragment.LatitudDialogo;
+    double LongitudDialogo = MapsFragment.LongitudDialogo;
+    //
+
+    //variables normales
     private NotificationManagerCompat notificationManagerCompat;
     private EditText  mensaje,titulo1;
-    private Button notificacion,cancelar;
+    private Button Registrar,cancelar;
+
 
 
 
@@ -67,26 +80,41 @@ public class Dialogo_MensajeFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dialogo__mensaje, container, false);
-        notificacion = view.findViewById(R.id.BTNenviarmensaje);
+        Registrar = view.findViewById(R.id.BTNenviarmensaje);
         cancelar = view.findViewById(R.id.BTNenviarcancelar);
         titulo1 = view.findViewById(R.id.ETtituloubicacion);
-
-        Intent intent = new Intent(getContext(),MapsFragment.class);
-
-
 
 
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //cierra el fragmento
                 getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
+
             }
         });
 
-        notificacion.setOnClickListener(new View.OnClickListener() {
+        Registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //Crea la ubicacion con los valores de longitud y latitud que se le proporciona
+                LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
+
+                //Crea todos los valores que lleva el punto
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(ubicacion1);
+                markerOptions.title(titulo1.getText().toString());
+
+                //añade el punto
+                Mapa.addMarker(markerOptions);
+
+                //cierra el fragmento
+                getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
+
+
+                //Codigo de notificaciones por si lo necesitamos
 
                /* String message = mensaje.getText().toString();
                 String titulo = titulo1.getText().toString();

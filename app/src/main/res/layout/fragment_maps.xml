@@ -55,18 +55,20 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1"></fragment>
+        app:layout_constraintTop_toBottomOf="@+id/navegador1"
+        app:layout_constraintVertical_bias="0.0"></fragment>
 
     <ImageView
         android:id="@+id/IVubicacion"
         android:layout_width="39dp"
         android:layout_height="42dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
         android:clickable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1"
+        app:layout_constraintEnd_toEndOf="@+id/IVlocation"
+        app:layout_constraintStart_toStartOf="@+id/IVlocation"
+        app:layout_constraintTop_toBottomOf="@+id/IVlocation"
         app:srcCompat="@drawable/ubicacion" />
 
     <Button
@@ -75,12 +77,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-
         android:text="Cancelar"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
+        android:background="@drawable/button"
+        app:backgroundTint="@null"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navegador1" />
+
+    <ImageView
+        android:id="@+id/IVlocation"
+        android:layout_width="42dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/location_round"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navegador1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
