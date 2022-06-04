@@ -69,4 +69,18 @@
         app:layout_constraintTop_toBottomOf="@+id/navegador1"
         app:srcCompat="@drawable/ubicacion" />
 
+    <Button
+        android:id="@+id/BTNcancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+
+        android:text="Cancelar"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navegador1" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
