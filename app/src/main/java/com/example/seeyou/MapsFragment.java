@@ -194,6 +194,8 @@ public class MapsFragment extends Fragment {
                     brillo.screenBrightness= 0.05F;
                     getActivity().getWindow().setAttributes(brillo);
                     */
+
+                    Marcador();
                 }
             });
 
