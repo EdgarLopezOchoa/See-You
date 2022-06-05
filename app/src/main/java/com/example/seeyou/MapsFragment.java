@@ -51,7 +51,8 @@ public class MapsFragment extends Fragment {
 
 
             //Guarda los valores de longitud y latitud en variables
-           Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            @SuppressLint("MissingPermission")
+            Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             double lat = loc.getLatitude();
             double lon = loc.getLongitude();
 
