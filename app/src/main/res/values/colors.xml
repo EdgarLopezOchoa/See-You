@@ -25,5 +25,6 @@
     <color name="Verde_Azul">#00F361</color>
     <color name="Rojo">#FF0000</color>
     <color name="Rojo_fuerte">#C30000</color>
+    <color name="Trasparente">#00FFFFFF</color>
 
 </resources>

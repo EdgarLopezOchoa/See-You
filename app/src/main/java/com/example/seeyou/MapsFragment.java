@@ -2,6 +2,7 @@ package com.example.seeyou;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.navigation.NavigationView;
 
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
@@ -211,6 +213,7 @@ public class MapsFragment extends Fragment {
             if (mapFragment != null) {
                 mapFragment.getMapAsync(callback);
             }
+
         }
 
     }
