@@ -6,7 +6,7 @@
             <gradient
                 android:startColor="@color/Rojo_fuerte"
 
-                android:endColor="@color/morado"
+                android:endColor="@color/blue"
 
                 >
 

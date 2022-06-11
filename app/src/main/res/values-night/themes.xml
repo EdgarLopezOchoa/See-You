@@ -13,4 +13,19 @@
         <item name="android:statusBarColor">@color/Trasparente</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="BottomNavigation">
+        <item name="android:background">#009688</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="itemIconSize">120px</item>
+        <item name="itemPaddingBottom">20px</item>
+        <item name="itemIconPadding">20px</item>
+
+    </style>
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/Trasparente</item>
+    </style>
 </resources>

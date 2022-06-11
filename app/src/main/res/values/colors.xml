@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="blue">#0014C3</color>
+    <color name="blue">#000F91</color>
     <color name="gold">#938500</color>
 
     <color name="Color1">#FF018786</color>
@@ -24,7 +24,7 @@
     <color name="Azul_cian">#00F3A6</color>
     <color name="Verde_Azul">#00F361</color>
     <color name="Rojo">#FF0000</color>
-    <color name="Rojo_fuerte">#C30000</color>
+    <color name="Rojo_fuerte">#9C0000</color>
     <color name="Trasparente">#00FFFFFF</color>
 
 </resources>
