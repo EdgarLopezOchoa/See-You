@@ -50,11 +50,11 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            titulo = itemView.findViewById(R.id.TVnombreubicacion);
-            ubicacion = itemView.findViewById(R.id.TVubicacion);
-            coordenadas = itemView.findViewById(R.id.TVmasinformacion);
-            descripcion = itemView.findViewById(R.id.TVdescripcion);
-            header = itemView.findViewById(R.id.TVmarcador);
+            titulo = itemView.findViewById(R.id.TVnombreubicacionmarker);
+            ubicacion = itemView.findViewById(R.id.TVubicacionmarker);
+            coordenadas = itemView.findViewById(R.id.TVmasinformacionmarker);
+            descripcion = itemView.findViewById(R.id.TVdescripcionmarker);
+            header = itemView.findViewById(R.id.TVmarcadornum);
 
         }
     }

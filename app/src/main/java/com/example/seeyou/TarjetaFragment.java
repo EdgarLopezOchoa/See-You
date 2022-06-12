@@ -9,11 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +67,7 @@ public class TarjetaFragment extends DialogFragment {
 
 
 
-        Button ubicacionnombre = view.findViewById(R.id.button2);
+        Button ubicacionnombre = view.findViewById(R.id.BTNviajarmarker);
 
 
 

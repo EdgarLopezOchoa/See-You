@@ -2,36 +2,25 @@ package com.example.seeyou;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,7 +29,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.navigation.NavigationView;
 
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
@@ -62,10 +50,10 @@ public class MapsFragment extends Fragment {
 
             int permisos = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
 
-
+            Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (permisos == PackageManager.PERMISSION_GRANTED) {
 
-                Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
             if (loc != null) {
                 //Guarda los valores de longitud y latitud en variables
                 double lon = loc.getLongitude();
@@ -104,15 +92,42 @@ public class MapsFragment extends Fragment {
                 @Override
                 public boolean onMarkerClick(@NonNull Marker marker) {
 
+
+                    //asigna el contenedor y el layout donde se mostrara el cuadro de dialogo
                     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog
                             (getContext(), R.style.BottomSheetDialog);
                     View bottomSheetView = LayoutInflater.from(getContext()).inflate(
-                            R.layout.fragment_tarjeta, (LinearLayout) contenedor
+                            R.layout.marker_layout, (LinearLayout) contenedor
                     );
                     bottomSheetDialog.setContentView(bottomSheetView);
 
-
                     bottomSheetDialog.show();
+
+
+                    //Asigna los valores a los objetos dentro el bottomsheetdialog
+                    TextView nombre = bottomSheetDialog.findViewById(R.id.TVnombreubicacionmarker);
+                    nombre.setText(marker.getTitle());
+                    TextView ubicacion = bottomSheetDialog.findViewById(R.id.TVubicacionmarker);
+                    ubicacion.setText("Aun Nose Como le pondre esta info xd");
+                    TextView coordenada = bottomSheetDialog.findViewById(R.id.TVmasinformacionmarker);
+                    LatLng latLng = marker.getPosition();
+                    double Latitud,logitud;
+                    Latitud = latLng.latitude;
+                    logitud = latLng.longitude;
+
+                    coordenada.setText("" + Latitud + " : " + logitud);
+
+
+                    bottomSheetDialog.findViewById(R.id.BTNviajarmarker).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getContext(), "ESTE BOTON HARA HALGO LUEGO :D",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
+
 
                     return true;
                 }

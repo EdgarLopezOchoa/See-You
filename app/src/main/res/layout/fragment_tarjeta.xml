@@ -28,7 +28,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/TVmarcador"
+                android:id="@+id/TVmarcadornum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -54,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/TVnombreubicacion"
+                android:id="@+id/TVnombreubicacionmarker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -64,29 +64,29 @@
                 android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/TVmarcador" />
+                app:layout_constraintTop_toBottomOf="@+id/TVmarcadornum" />
 
             <TextView
-                android:id="@+id/TVubicacion"
+                android:id="@+id/TVubicacionmarker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:elevation="10dp"
                 android:text="TextView"
-                app:layout_constraintEnd_toEndOf="@+id/TVnombreubicacion"
-                app:layout_constraintStart_toStartOf="@+id/TVnombreubicacion"
-                app:layout_constraintTop_toBottomOf="@+id/TVnombreubicacion" />
+                app:layout_constraintEnd_toEndOf="@+id/TVnombreubicacionmarker"
+                app:layout_constraintStart_toStartOf="@+id/TVnombreubicacionmarker"
+                app:layout_constraintTop_toBottomOf="@+id/TVnombreubicacionmarker" />
 
             <TextView
-                android:id="@+id/TVmasinformacion"
+                android:id="@+id/TVmasinformacionmarker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:elevation="10dp"
                 android:text="TextView"
-                app:layout_constraintEnd_toEndOf="@+id/TVubicacion"
-                app:layout_constraintStart_toStartOf="@+id/TVubicacion"
-                app:layout_constraintTop_toBottomOf="@+id/TVubicacion" />
+                app:layout_constraintEnd_toEndOf="@+id/TVubicacionmarker"
+                app:layout_constraintStart_toStartOf="@+id/TVubicacionmarker"
+                app:layout_constraintTop_toBottomOf="@+id/TVubicacionmarker" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -97,22 +97,22 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold|italic"
-                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacionmarker"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/TVmasinformacion" />
+                app:layout_constraintTop_toBottomOf="@+id/TVmasinformacionmarker" />
 
             <TextView
-                android:id="@+id/TVdescripcion"
+                android:id="@+id/TVdescripcionmarker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:justificationMode="inter_word"
-                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacionmarker"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/BTNviajarmarker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -122,8 +122,8 @@
                 android:backgroundTintMode="@null"
                 android:text="INICIAR VIAJE"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/TVdescripcion"
-                app:layout_constraintStart_toStartOf="@+id/TVdescripcion"
+                app:layout_constraintEnd_toEndOf="@+id/TVdescripcionmarker"
+                app:layout_constraintStart_toStartOf="@+id/TVdescripcionmarker"
                 app:layout_constraintTop_toBottomOf="@+id/SWhabilitar" />
 
             <Switch
@@ -136,9 +136,9 @@
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
                 android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="@+id/TVdescripcion"
-                app:layout_constraintStart_toStartOf="@+id/TVdescripcion"
-                app:layout_constraintTop_toBottomOf="@+id/TVdescripcion" />
+                app:layout_constraintEnd_toEndOf="@+id/TVdescripcionmarker"
+                app:layout_constraintStart_toStartOf="@+id/TVdescripcionmarker"
+                app:layout_constraintTop_toBottomOf="@+id/TVdescripcionmarker" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
