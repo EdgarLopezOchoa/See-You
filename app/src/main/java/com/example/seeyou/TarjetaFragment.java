@@ -67,7 +67,7 @@ public class TarjetaFragment extends DialogFragment {
 
 
 
-        Button ubicacionnombre = view.findViewById(R.id.BTNviajarmarker);
+        Button ubicacionnombre = view.findViewById(R.id.BTNviajar);
 
 
 

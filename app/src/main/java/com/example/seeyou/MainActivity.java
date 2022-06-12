@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     RutasFragment RutasFragment = new RutasFragment();
     MapsFragment mapsFragment = new MapsFragment();
-    //PerfilFragment perfilFragment = new PerfilFragment();
+    PerfilFragment perfilFragment = new PerfilFragment();
     MarkersFragment markersFragment = new MarkersFragment();
 
     @Override
@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.MarkersFragment:
                     loadFragment(markersFragment);
                     return true;
+                case R.id.PerfilFragment:
+                    loadFragment(perfilFragment);
+                    return true;
             }
             return false;
         }
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         //remplaza el fragmentLayour por los fragmentos
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
         transaction.replace(R.id.FrameLayout,fragment);
         transaction.commit();
     }

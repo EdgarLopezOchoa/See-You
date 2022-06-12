@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +39,25 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         holder.coordenadas.setText(MarkerList.get(position).getCoordenadas());
         holder.ubicacion.setText(MarkerList.get(position).getUbicacion());
         holder.header.setText(MarkerList.get(position).getTitulo());
+
+
+        holder.iniciar_viaje.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "ESTE BOTON HARA ALGO ALGUN DIA :D",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.eliminarmarker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "ESTE BOTON BORRARA EL MARCADOR ALGUN DIA :D",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     @Override
@@ -46,6 +67,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView titulo,ubicacion,coordenadas,descripcion,header;
+        private Button iniciar_viaje,eliminarmarker;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +77,8 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             coordenadas = itemView.findViewById(R.id.TVmasinformacionmarker);
             descripcion = itemView.findViewById(R.id.TVdescripcionmarker);
             header = itemView.findViewById(R.id.TVmarcadornum);
+            iniciar_viaje = itemView.findViewById(R.id.BTNviajarmarker);
+            eliminarmarker = itemView.findViewById(R.id.BTNeliminarmarker);
 
         }
     }

@@ -8,10 +8,14 @@
         android:id="@+id/RutasFragment"
         android:title="Rutas"
         android:icon="@drawable/ruta_foreground"></item>
+    <item
+        android:id="@+id/MarkersFragment"
+        android:title="Markers"
+        android:icon="@drawable/marker_foreground"></item>
 
     <item
         android:icon="@drawable/perfil_foreground"
         android:title="Perfil"
-        android:id="@+id/MarkersFragment"></item>
+        android:id="@+id/PerfilFragment"></item>
 
 </menu>

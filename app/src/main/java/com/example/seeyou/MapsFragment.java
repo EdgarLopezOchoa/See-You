@@ -2,16 +2,14 @@ package com.example.seeyou;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +35,9 @@ public class MapsFragment extends Fragment {
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
+    int tiempo = 5000;
+
+    Handler handler = new Handler();
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -46,28 +47,10 @@ public class MapsFragment extends Fragment {
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
 
-            locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            //UbicacionEnBucle();
 
-            int permisos = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+            obtenerubicacion();
 
-            Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (permisos == PackageManager.PERMISSION_GRANTED) {
-
-
-            if (loc != null) {
-                //Guarda los valores de longitud y latitud en variables
-                double lon = loc.getLongitude();
-                double lat = loc.getLatitude();
-
-                //Crea el punto donde se marcara
-                LatLng UbicacionActualo = new LatLng(lat, lon);
-
-                //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
-            }
-            } else{
-                Toast.makeText(getContext(), "NO SE A PODIDO OPTENER LA UBICACION", Toast.LENGTH_SHORT).show();
-            }
 
 
             //LatLng sydney = new LatLng(31.233544, -110.979941);
@@ -105,11 +88,11 @@ public class MapsFragment extends Fragment {
 
 
                     //Asigna los valores a los objetos dentro el bottomsheetdialog
-                    TextView nombre = bottomSheetDialog.findViewById(R.id.TVnombreubicacionmarker);
+                    TextView nombre = bottomSheetDialog.findViewById(R.id.TVnombreubicacion);
                     nombre.setText(marker.getTitle());
-                    TextView ubicacion = bottomSheetDialog.findViewById(R.id.TVubicacionmarker);
+                    TextView ubicacion = bottomSheetDialog.findViewById(R.id.TVubicacion);
                     ubicacion.setText("Aun Nose Como le pondre esta info xd");
-                    TextView coordenada = bottomSheetDialog.findViewById(R.id.TVmasinformacionmarker);
+                    TextView coordenada = bottomSheetDialog.findViewById(R.id.TVmasinformacion);
                     LatLng latLng = marker.getPosition();
                     double Latitud,logitud;
                     Latitud = latLng.latitude;
@@ -117,16 +100,21 @@ public class MapsFragment extends Fragment {
 
                     coordenada.setText("" + Latitud + " : " + logitud);
 
-
-                    bottomSheetDialog.findViewById(R.id.BTNviajarmarker).setOnClickListener(new View.OnClickListener() {
+                    bottomSheetDialog.findViewById(R.id.BTNviajar).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(), "ESTE BOTON HARA HALGO LUEGO :D",
+                            Toast.makeText(getContext(), "ESTE BOTON HARA ALGO LUEGO :D",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
 
-
+                    bottomSheetDialog.findViewById(R.id.BTNeliminar).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getContext(), "ESTE BOTON BORRARA EL MARCADOR ALGUN DIA :D",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
                     return true;
@@ -139,6 +127,50 @@ public class MapsFragment extends Fragment {
 
     };
 
+    /*public void UbicacionEnBucle() {
+
+
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+
+
+                if (tiempo == 5000) {
+                    // función a ejecutar
+                    Toast.makeText(getContext(), "SE REPITIO :D",
+                            Toast.LENGTH_SHORT).show();
+
+                    handler.postDelayed(this, tiempo);
+                }
+            }
+
+        }, tiempo);
+
+    }*/
+
+
+    public void obtenerubicacion(){
+
+        locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+
+        //Optiene la ultima localizacion conocida del usuario
+        @SuppressLint("MissingPermission")
+        Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (loc != null) {
+            //Guarda los valores de longitud y latitud en variables
+            double lat = loc.getLatitude();
+            double lon = loc.getLongitude();
+
+            //Crea el punto donde se marcara
+            LatLng UbicacionActualo = new LatLng(lat, lon);
+
+            //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
+        }else{
+            Toast.makeText(getContext(), "NO SE A PODIDO OBTENER LA UBICACION", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void Marcador() {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -198,26 +230,8 @@ public class MapsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //Da acceso de permiso a la ubicacion
-                locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                obtenerubicacion();
 
-
-                //Optiene la ultima localizacion conocida del usuario
-                @SuppressLint("MissingPermission")
-                Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (loc != null) {
-                    //Guarda los valores de longitud y latitud en variables
-                    double lat = loc.getLatitude();
-                    double lon = loc.getLongitude();
-
-                    //Crea el punto donde se marcara
-                    LatLng UbicacionActualo = new LatLng(lat, lon);
-
-                    //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
-                }else{
-                    Toast.makeText(getContext(), "NO SE A PODIDO OB@TENER LA UBICACION", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
