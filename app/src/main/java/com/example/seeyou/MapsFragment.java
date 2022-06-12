@@ -190,16 +190,19 @@ public class MapsFragment extends Fragment {
                 //Optiene la ultima localizacion conocida del usuario
                 @SuppressLint("MissingPermission")
                 Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (loc != null) {
+                    //Guarda los valores de longitud y latitud en variables
+                    double lat = loc.getLatitude();
+                    double lon = loc.getLongitude();
 
-                //Guarda los valores de longitud y latitud en variables
-                double lat = loc.getLatitude();
-                double lon = loc.getLongitude();
+                    //Crea el punto donde se marcara
+                    LatLng UbicacionActualo = new LatLng(lat, lon);
 
-                //Crea el punto donde se marcara
-                LatLng UbicacionActualo = new LatLng(lat, lon);
-
-                //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
+                    //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
+                }else{
+                    Toast.makeText(getContext(), "NO SE A PODIDO OB@TENER LA UBICACION", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

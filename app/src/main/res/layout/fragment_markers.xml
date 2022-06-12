@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
-    tools:context=".MapsFragment" >
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MarkersFragment">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/navegador1"
         style="@style/BottomNavigation"
@@ -26,8 +23,7 @@
             android:id="@+id/ContrainTitutlo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="8dp">
+            >
 
             <TextView
                 android:id="@+id/TVtitulorutas"
@@ -36,7 +32,7 @@
 
                 android:layout_marginEnd="20dp"
                 android:fontFamily="cursive"
-                android:text="SEE YOU"
+                android:text="MARKERS"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="32sp"
@@ -52,52 +48,12 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RVmarkers"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1"
-        app:layout_constraintVertical_bias="0.0"></fragment>
-
-    <ImageView
-        android:id="@+id/IVubicacion"
-        android:layout_width="39dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        app:layout_constraintEnd_toEndOf="@+id/IVlocation"
-        app:layout_constraintStart_toStartOf="@+id/IVlocation"
-        app:layout_constraintTop_toBottomOf="@+id/IVlocation"
-        app:srcCompat="@drawable/ubicacion" />
-
-    <Button
-        android:id="@+id/BTNcancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:text="Cancelar"
-        android:textColor="@color/white"
-        android:visibility="invisible"
-        android:background="@drawable/button"
-        app:backgroundTint="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navegador1" />
-
-    <ImageView
-        android:id="@+id/IVlocation"
-        android:layout_width="42dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/marcador_round"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

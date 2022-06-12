@@ -1,104 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ContenedorTarjeta"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/fondo_de_tarjeta"
+    android:background="@drawable/fondodegradado"
     android:orientation="vertical"
     tools:context=".TarjetaFragment">
 
-    <TextView
-        android:id="@+id/TVtitulotarjeta"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="Informacion"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
 
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/TVmarcador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="MARCADOR No."
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="133dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/statusbar"
-                app:srcCompat="@drawable/perfil_foreground" />
+                android:id="@+id/imageView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="70dp"
+                android:background="@drawable/fondodegradado"
+                android:elevation="5dp"
+                android:src="@drawable/perfil_foreground"
+                app:layout_constraintBottom_toTopOf="@+id/textView12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+            <TextView
+                android:id="@+id/TVnombreubicacion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"
+                android:elevation="10dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/TVmarcador" />
 
-                <TextView
-                    android:id="@+id/TVnombreubicacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="TextView" />
+            <TextView
+                android:id="@+id/TVubicacion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:elevation="10dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="@+id/TVnombreubicacion"
+                app:layout_constraintStart_toStartOf="@+id/TVnombreubicacion"
+                app:layout_constraintTop_toBottomOf="@+id/TVnombreubicacion" />
 
-                <TextView
-                    android:id="@+id/TVubicacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="TextView" />
+            <TextView
+                android:id="@+id/TVmasinformacion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:elevation="10dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="@+id/TVubicacion"
+                app:layout_constraintStart_toStartOf="@+id/TVubicacion"
+                app:layout_constraintTop_toBottomOf="@+id/TVubicacion" />
 
-                <TextView
-                    android:id="@+id/TVmasinformacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:text="TextView" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="DESCRIPCION"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/TVmasinformacion" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical"></LinearLayout>
+            <TextView
+                android:id="@+id/TVdescripcion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:justificationMode="inter_word"
+                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="DESCRIPCION"
-        android:textAlignment="center"
-        android:textStyle="bold"></TextView>
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button"
+                android:backgroundTint="@null"
+                android:backgroundTintMode="@null"
+                android:text="INICIAR VIAJE"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/TVdescripcion"
+                app:layout_constraintStart_toStartOf="@+id/TVdescripcion"
+                app:layout_constraintTop_toBottomOf="@+id/SWhabilitar" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"></TextView>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/button"
-        android:text="INICIAR VIAJE"
-        app:backgroundTint="@null"></Button>
-
-
-</LinearLayout>
+            <Switch
+                android:id="@+id/SWhabilitar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Habilitar"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="@+id/TVdescripcion"
+                app:layout_constraintStart_toStartOf="@+id/TVdescripcion"
+                app:layout_constraintTop_toBottomOf="@+id/TVdescripcion" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
