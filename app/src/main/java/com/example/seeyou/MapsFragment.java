@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
@@ -53,12 +54,12 @@ public class MapsFragment extends Fragment {
 
 
 
-            //LatLng sydney = new LatLng(31.233544, -110.979941);
-            //LatLng seguro = new LatLng(31.240626, -110.970661);
+            LatLng sydney = new LatLng(31.233544, -110.979941);
+            LatLng seguro = new LatLng(31.240626, -110.970661);
 
 
-            //mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicacion de la escuela"));
-            //mMap.addMarker(new MarkerOptions().position(seguro).title("IMMS"));
+            mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicacion de la escuela"));
+            mMap.addMarker(new MarkerOptions().position(seguro).title("IMMS"));
 
 
             //Habilita el ver la ubicacion actual
@@ -89,16 +90,18 @@ public class MapsFragment extends Fragment {
 
                     //Asigna los valores a los objetos dentro el bottomsheetdialog
                     TextView nombre = bottomSheetDialog.findViewById(R.id.TVnombreubicacion);
-                    nombre.setText(marker.getTitle());
                     TextView ubicacion = bottomSheetDialog.findViewById(R.id.TVubicacion);
-                    ubicacion.setText("Aun Nose Como le pondre esta info xd");
                     TextView coordenada = bottomSheetDialog.findViewById(R.id.TVmasinformacion);
+                    TextView descripcion = bottomSheetDialog.findViewById(R.id.TVdescripcion);
                     LatLng latLng = marker.getPosition();
                     double Latitud,logitud;
                     Latitud = latLng.latitude;
                     logitud = latLng.longitude;
 
                     coordenada.setText("" + Latitud + " : " + logitud);
+                    nombre.setText(marker.getTitle());
+                    ubicacion.setText("Aun Nose Como le pondre esta info xd");
+                    descripcion.setText("AQUI PONDRE UNA DESCRIPCION CUANDO SE CONECTE A LA BD :D");
 
                     bottomSheetDialog.findViewById(R.id.BTNviajar).setOnClickListener(new View.OnClickListener() {
                         @Override

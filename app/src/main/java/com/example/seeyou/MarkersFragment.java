@@ -81,7 +81,7 @@ public class MarkersFragment extends Fragment {
         {
             markersList.add(new Markers(i,"CASITA NO. " + i,"San Carlos #" + i,
                     "1244232122, -12421322"
-                    ,"Es la colonia donde vivo desde hace años","MARCADOR NO. " + i));
+                    ,"ES LA COLONIA DONDE E VIVIDO TODA MI VIDA Y AQUI EN NOGALES UWU","MARCADOR NO. " + i));
         }
 
         recyclerView.setAdapter(new MakersAdapters(markersList,getContext()));

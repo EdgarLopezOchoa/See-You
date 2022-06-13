@@ -29,7 +29,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:fontFamily="cursive"
+                android:fontFamily="sans-serif-condensed-light"
                 android:text="RUTAS"
                 android:textAlignment="center"
                 android:textColor="@color/white"
