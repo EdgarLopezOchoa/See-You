@@ -5,13 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Dialogo_MensajeFragment"
-    >
+    app:cardCornerRadius="30dp"
+    tools:context=".Dialogo_MensajeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       >
+        android:layout_height="match_parent">
 
 
         <Button
@@ -20,7 +19,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
-
+            android:background="@drawable/button2"
             android:text="REGISTRAR"
             android:textColor="@color/white"
             app:backgroundTint="@null"
@@ -53,7 +52,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="10dp"
-
+            android:background="@drawable/button"
             android:layout_marginBottom="30dp"
             android:ems="10"
             android:text="Cancelar"

@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.seeyou.adapters.MakersAdapters;
+import com.example.seeyou.adapters.Markers;
+
 import java.util.ArrayList;
 import java.util.List;
 

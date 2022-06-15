@@ -13,7 +13,7 @@
     <color name="gris_obscuro">#595959</color>
 
     <color name="blue">#000D7C</color>
-    <color name="gold">#938500</color>
+    <color name="gold">#9E9000</color>
 
     <color name="Color1">#FF018786</color>
     <color name="Color2">#13D6D5</color>
@@ -28,7 +28,8 @@
     <color name="Azul_cian">#00F3A6</color>
     <color name="Verde_Azul">#00F361</color>
     <color name="Rojo">#FF0000</color>
-    <color name="Rojo_fuerte">#870101</color>
+    <color name="Rojo_fuerte">#C60000</color>
+    <color name="Rojo_obscuro">#870101</color>
     <color name="Trasparente">#00FFFFFF</color>
     <color name="verde_fuerte">#009302</color>
     <color name="verde">#10FF00</color>

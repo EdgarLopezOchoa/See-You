@@ -1,4 +1,4 @@
-package com.example.seeyou;
+package com.example.seeyou.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.seeyou.R;
 
 import java.util.List;
 

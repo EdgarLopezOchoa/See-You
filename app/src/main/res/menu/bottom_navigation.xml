@@ -9,10 +9,6 @@
         android:title="Rutas"
         android:icon="@drawable/routs_foreground"
         android:iconTint="@color/white"></item>
-    <item
-        android:id="@+id/MarkersFragment"
-        android:title="Markers"
-        android:icon="@drawable/marker_foreground"></item>
 
     <item
         android:icon="@drawable/perfil_foreground"

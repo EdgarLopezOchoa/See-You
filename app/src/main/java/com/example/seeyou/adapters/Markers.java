@@ -1,4 +1,4 @@
-package com.example.seeyou;
+package com.example.seeyou.adapters;
 
 import androidx.recyclerview.widget.RecyclerView;
 

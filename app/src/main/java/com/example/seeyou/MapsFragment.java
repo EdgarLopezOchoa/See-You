@@ -4,6 +4,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,26 +13,22 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationRequest;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.seeyou.adapters.MakersAdapters;
+import com.example.seeyou.adapters.Markers;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -53,6 +50,8 @@ public class MapsFragment extends Fragment {
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
+    private SearchView SVubicacion;
+    private TextView titulo;
     int tiempo = 5000;
     int bucleubicacion = 0;
 
@@ -161,6 +160,7 @@ public class MapsFragment extends Fragment {
 
 
 
+    @SuppressLint("MissingPermission")
     public void getLastLocation() {
         // Get last known recent location using new Google Play Services SDK (v11+)
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
@@ -278,6 +278,26 @@ public class MapsFragment extends Fragment {
         location = view.findViewById(R.id.IVlocation);
         contenedor = view.findViewById(R.id.Contenedormarker);
         vermarkers = view.findViewById(R.id.IVvermarkers);
+        SVubicacion = view.findViewById(R.id.SVubicacion);
+        titulo = view.findViewById(R.id.TVtituloseeyou);
+
+
+        SVubicacion.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                titulo.setVisibility(View.INVISIBLE);
+                SVubicacion.setBackgroundResource(R.drawable.searchbar);
+            }
+        });
+
+        SVubicacion.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                titulo.setVisibility(View.VISIBLE);
+                SVubicacion.setBackgroundResource(R.color.Trasparente);
+                return false;
+            }
+        });
 
 
         location.setOnClickListener(new View.OnClickListener() {
@@ -301,7 +321,7 @@ public class MapsFragment extends Fragment {
                 bottomSheetDialog.setContentView(bottomSheetView);
 
                 bottomSheetDialog.show();
-
+                bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
 
 
@@ -331,7 +351,7 @@ public class MapsFragment extends Fragment {
 
                 //vuelve invisible el boton de cancelar
                 cancelar.setVisibility(View.INVISIBLE);
-                vermarkers.setVisibility(View.INVISIBLE);
+
 
             }
         });

@@ -73,9 +73,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.MapsFragment:
                     loadFragment(mapsFragment);
                     return true;
-                case R.id.MarkersFragment:
-                    loadFragment(markersFragment);
-                    return true;
                 case R.id.PerfilFragment:
                     loadFragment(perfilFragment);
                     return true;
@@ -129,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onLocationChanged(Location location) {
         // New location has now been determined
-        String msg = "Updated Location: " +
+        /*String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());*/
     }
 }
