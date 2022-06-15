@@ -1,16 +1,22 @@
 package com.example.seeyou;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.location.LocationRequest;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,50 +39,57 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
     LocationManager locManager;
-    private ImageView ubicacion, location;
+    private ImageView ubicacion, location,vermarkers;
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     int tiempo = 5000;
+    int bucleubicacion = 0;
 
-    Handler handler = new Handler();
+    private com.google.android.gms.location.LocationRequest mLocationRequest;
+
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
 
 
+        @SuppressLint("MissingPermission")
         @Override
         public void onMapReady(GoogleMap googleMap) {
+
+            try {
+
+
             mMap = googleMap;
 
-            //UbicacionEnBucle();
+            //startLocationUpdates();
 
-            obtenerubicacion();
-
-
+            getLastLocation();
 
             LatLng sydney = new LatLng(31.233544, -110.979941);
             LatLng seguro = new LatLng(31.240626, -110.970661);
 
-
             mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicacion de la escuela"));
             mMap.addMarker(new MarkerOptions().position(seguro).title("IMMS"));
 
-
             //Habilita el ver la ubicacion actual
             mMap.setMyLocationEnabled(true);
-            // mMap.getUiSettings().setZoomControlsEnabled(true);
-
-            //Habilida la funcion del compas, cuando gires la pantalla podras volver a orientarla
             mMap.getUiSettings().setCompassEnabled(true);
-
-            //Desabilita el boton que te envia a la ubicacion tuya (porque cree un boton mas estetico para eso)
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
 
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
@@ -124,46 +143,77 @@ public class MapsFragment extends Fragment {
                 }
             });
 
-
+            }catch (Exception e){
+                Toast.makeText(getContext(), "NECESITAS ACTIVAR LA UBICACION Y " +
+                        "DAR PERMISOS A LA APP", Toast.LENGTH_SHORT).show();
+            }
         }
+
+
 
 
     };
 
-    /*public void UbicacionEnBucle() {
+
+    //PROBANDO CODIGO DE UBICACION VIA GOOGLE
 
 
 
-        handler.postDelayed(new Runnable() {
-            public void run() {
 
 
-                if (tiempo == 5000) {
-                    // función a ejecutar
-                    Toast.makeText(getContext(), "SE REPITIO :D",
-                            Toast.LENGTH_SHORT).show();
+    public void getLastLocation() {
+        // Get last known recent location using new Google Play Services SDK (v11+)
+        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
 
-                    handler.postDelayed(this, tiempo);
-                }
-            }
+        locationClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // GPS location can be null if GPS is switched off
+                        if (location != null) {
+                            LatLng UbicacionActualo = new LatLng(location.getLatitude(), location.getLongitude());
 
-        }, tiempo);
+                            //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
 
-    }*/
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "NO SE A PODIDO OBTENER TU ULTIMA UBICACION",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
 
-    public void obtenerubicacion(){
+
+    //HASTA AQUI TERMINA EL CODIGO DE UBICACION VIA GOOGLE
+
+
+
+
+    public void obtenerubicacion(double lat,double lon){
 
         locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
 
+
+        LatLng UbicacionActualo = new LatLng(lat, lon);
+
+        //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
+
         //Optiene la ultima localizacion conocida del usuario
-        @SuppressLint("MissingPermission")
+       /* @SuppressLint("MissingPermission")
         Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (loc != null) {
             //Guarda los valores de longitud y latitud en variables
-            double lat = loc.getLatitude();
-            double lon = loc.getLongitude();
+             lat = loc.getLatitude();
+             lon = loc.getLongitude();
 
             //Crea el punto donde se marcara
             LatLng UbicacionActualo = new LatLng(lat, lon);
@@ -172,7 +222,7 @@ public class MapsFragment extends Fragment {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
         }else{
             Toast.makeText(getContext(), "NO SE A PODIDO OBTENER LA UBICACION", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     public void Marcador() {
@@ -226,14 +276,47 @@ public class MapsFragment extends Fragment {
         cancelar = view.findViewById(R.id.BTNcancelar);
         enviar = view.findViewById(R.id.BTNenviarmensaje);
         location = view.findViewById(R.id.IVlocation);
-        contenedor = view.findViewById(R.id.ContenedorTarjeta);
+        contenedor = view.findViewById(R.id.Contenedormarker);
+        vermarkers = view.findViewById(R.id.IVvermarkers);
 
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                obtenerubicacion();
+                getLastLocation();
+
+            }
+        });
+
+
+        vermarkers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog
+                        (getContext(), R.style.BottomSheetDialog);
+                View bottomSheetView = LayoutInflater.from(getContext()).inflate(
+                        R.layout.markersbottomshet, (LinearLayout) view.findViewById(R.id.ContenedorTarjeta)
+                );
+                bottomSheetDialog.setContentView(bottomSheetView);
+
+                bottomSheetDialog.show();
+
+                RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
+
+
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                List<Markers> markersList = new ArrayList<>();
+
+                for (int i = 0; i <20; i++)
+                {
+                    markersList.add(new Markers(i,"CASITA NO. " + i,"San Carlos #" + i,
+                            "1244232122, -12421322"
+                            ,"ES LA COLONIA DONDE E VIVIDO TODA MI VIDA Y AQUI EN NOGALES UWU","MARCADOR NO. " + i));
+                }
+
+                recyclerView.setAdapter(new MakersAdapters(markersList,getContext()));
 
             }
         });
@@ -248,6 +331,7 @@ public class MapsFragment extends Fragment {
 
                 //vuelve invisible el boton de cancelar
                 cancelar.setVisibility(View.INVISIBLE);
+                vermarkers.setVisibility(View.INVISIBLE);
 
             }
         });
@@ -258,6 +342,7 @@ public class MapsFragment extends Fragment {
 
                 //vuelve visible el boton de cancelar
                 cancelar.setVisibility(View.VISIBLE);
+                vermarkers.setVisibility(View.VISIBLE);
 
                     /*hacia una prueba donde bajaba el brillo a la pantalla cuando hacia clic a esta imagen,
                      funciona pero no tiene utilidad de momento

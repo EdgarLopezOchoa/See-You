@@ -80,14 +80,15 @@
         android:id="@+id/BTNcancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button"
         android:text="Cancelar"
         android:textColor="@color/white"
         android:visibility="invisible"
-        android:background="@drawable/button"
         app:backgroundTint="@null"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/navegador1"
         app:layout_constraintTop_toBottomOf="@+id/navegador1" />
 
     <ImageView
@@ -99,5 +100,16 @@
         android:src="@drawable/marcador_round"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navegador1" />
+
+    <ImageView
+        android:id="@+id/IVvermarkers"
+        android:layout_width="39dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/bookmarkers_round"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

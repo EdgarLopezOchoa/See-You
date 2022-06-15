@@ -38,7 +38,6 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         holder.descripcion.setText(MarkerList.get(position).getDescripction());
         holder.coordenadas.setText(MarkerList.get(position).getCoordenadas());
         holder.ubicacion.setText(MarkerList.get(position).getUbicacion());
-        holder.header.setText(MarkerList.get(position).getTitulo());
 
 
         holder.iniciar_viaje.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +75,6 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             ubicacion = itemView.findViewById(R.id.TVubicacionmarker);
             coordenadas = itemView.findViewById(R.id.TVmasinformacionmarker);
             descripcion = itemView.findViewById(R.id.TVdescripcionmarker);
-            header = itemView.findViewById(R.id.TVmarcadornum);
             iniciar_viaje = itemView.findViewById(R.id.BTNviajarmarker);
             eliminarmarker = itemView.findViewById(R.id.BTNeliminarmarker);
 

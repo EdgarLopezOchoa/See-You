@@ -27,5 +27,9 @@
     </style>
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@color/Trasparente</item>
+        <item name="behavior_skipCollapsed">true</item>
+        <item name="behavior_fitToContents">true</item>
+        <item name="behavior_peekHeight">1000dp</item> // yep, that helped to skip collapsed state at initial
+        <item name="behavior_hideable">true</item>
     </style>
 </resources>
