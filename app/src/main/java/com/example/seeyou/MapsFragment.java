@@ -11,18 +11,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +38,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,8 +46,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
@@ -54,6 +62,8 @@ public class MapsFragment extends Fragment {
     private TextView titulo;
     int tiempo = 5000;
     int bucleubicacion = 0;
+    View view;
+
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -71,7 +81,6 @@ public class MapsFragment extends Fragment {
 
             try {
 
-
             mMap = googleMap;
 
             //startLocationUpdates();
@@ -81,8 +90,11 @@ public class MapsFragment extends Fragment {
             LatLng sydney = new LatLng(31.233544, -110.979941);
             LatLng seguro = new LatLng(31.240626, -110.970661);
 
-            mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicacion de la escuela"));
-            mMap.addMarker(new MarkerOptions().position(seguro).title("IMMS"));
+            mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicacion de la escuela")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+            mMap.addMarker(new MarkerOptions().position(seguro).title("IMMS")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
 
             //Habilita el ver la ubicacion actual
             mMap.setMyLocationEnabled(true);
@@ -116,9 +128,23 @@ public class MapsFragment extends Fragment {
                     Latitud = latLng.latitude;
                     logitud = latLng.longitude;
 
+                    Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(Latitud, logitud, 1);
+
+                    Address address = (Address) addresses.get(0);
+                    String addressStr = "";
+                    addressStr += address.getAddressLine(0);
+
+                        ubicacion.setText(addressStr);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     coordenada.setText("" + Latitud + " : " + logitud);
                     nombre.setText(marker.getTitle());
-                    ubicacion.setText("Aun Nose Como le pondre esta info xd");
+
                     descripcion.setText("AQUI PONDRE UNA DESCRIPCION CUANDO SE CONECTE A LA BD :D");
 
                     bottomSheetDialog.findViewById(R.id.BTNviajar).setOnClickListener(new View.OnClickListener() {
@@ -270,7 +296,7 @@ public class MapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+        view = inflater.inflate(R.layout.fragment_maps, container, false);
 
         ubicacion = view.findViewById(R.id.IVubicacion);
         cancelar = view.findViewById(R.id.BTNcancelar);
@@ -282,11 +308,43 @@ public class MapsFragment extends Fragment {
         titulo = view.findViewById(R.id.TVtituloseeyou);
 
 
+
+        SVubicacion.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String location = SVubicacion.getQuery().toString();
+                List<Address> addressList = null;
+                if (location != null & !location.equals("")){
+                    Geocoder geocoder = new Geocoder(getContext());
+                    try {
+                        addressList = geocoder.getFromLocationName(location,1);
+                        Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                    }catch (Exception e){
+                        Toast.makeText(getContext(), "UBICACION NO ENCONTRADA....", Toast.LENGTH_SHORT).show();
+                    }
+                    }else{
+                    Toast.makeText(getContext(), "FAVOR DE INTRODUCIR UN NOMBRE VALIDO.", Toast.LENGTH_SHORT).show();
+
+
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+
         SVubicacion.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 titulo.setVisibility(View.INVISIBLE);
                 SVubicacion.setBackgroundResource(R.drawable.searchbar);
+
             }
         });
 
@@ -362,7 +420,7 @@ public class MapsFragment extends Fragment {
 
                 //vuelve visible el boton de cancelar
                 cancelar.setVisibility(View.VISIBLE);
-                vermarkers.setVisibility(View.VISIBLE);
+
 
                     /*hacia una prueba donde bajaba el brillo a la pantalla cuando hacia clic a esta imagen,
                      funciona pero no tiene utilidad de momento
@@ -391,6 +449,7 @@ public class MapsFragment extends Fragment {
         }
 
     }
+
 }
 
 

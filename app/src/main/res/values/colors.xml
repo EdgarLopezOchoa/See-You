@@ -18,10 +18,13 @@
     <color name="Color1">#FF018786</color>
     <color name="Color2">#13D6D5</color>
     <color name="Color3">#4EFAF8</color>
+    <color name="Color7">#76FFFD</color>
 
-    <color name="Color4">#E407A6</color>
+    <color name="rosa">#E407A6</color>
+    <color name="rosa_pastel">#ED4FC1</color>
     <color name="Color5">#145FAF</color>
-    <color name="Color6">#DD4819</color>
+    <color name="naranja">#DD4819</color>
+    <color name="naraja_pastel">#E8704A</color>
 
     <color name="Amarillo">#FFD400</color>
     <color name="morado">#5500AA</color>

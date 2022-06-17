@@ -29,18 +29,6 @@
 
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/fondodegradado"
-                android:elevation="5dp"
-                android:src="@drawable/perfil_foreground"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
             <TextView
                 android:id="@+id/TVnombreubicacionmarker"
                 android:layout_width="wrap_content"
@@ -60,12 +48,13 @@
                 android:id="@+id/TVubicacionmarker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:elevation="10dp"
                 android:text="TextView"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="@+id/TVdescripcionmarker"
-                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/SWhabilitarmarker"
                 app:layout_constraintTop_toBottomOf="@+id/TVdescripcionmarker" />
 
             <TextView
@@ -90,20 +79,19 @@
                 android:textSize="16sp"
                 android:textStyle="bold|italic"
                 app:layout_constraintEnd_toEndOf="@+id/TVdescripcionmarker"
-                app:layout_constraintStart_toStartOf="@+id/TVdescripcionmarker"
+                app:layout_constraintStart_toEndOf="@+id/SWhabilitarmarker"
                 app:layout_constraintTop_toBottomOf="@+id/TVnombreubicacionmarker" />
 
             <TextView
                 android:id="@+id/TVdescripcionmarker"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="20dp"
                 android:justificationMode="inter_word"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                app:layout_constraintBottom_toBottomOf="@+id/TVacomododescripmarker"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/SWhabilitarmarker"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
             <Button
@@ -120,18 +108,17 @@
                 app:layout_constraintTop_toTopOf="@+id/BTNeliminarmarker" />
 
             <Switch
-                android:id="@+id/SWhabilitar"
+                android:id="@+id/SWhabilitarmarker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginStart="20dp"
                 android:text="Habilitar"
                 android:textAlignment="textEnd"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/imageView2"
-                app:layout_constraintEnd_toEndOf="@+id/imageView2"
-                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintBottom_toBottomOf="@+id/textView12"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView12" />
 
             <Button
@@ -139,7 +126,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/button"
                 android:text="ELIMINAR MARCADOR"
@@ -157,6 +144,14 @@
                 app:layout_constraintEnd_toEndOf="@+id/TVmasinformacionmarker"
                 app:layout_constraintStart_toStartOf="@+id/TVmasinformacionmarker"
                 app:layout_constraintTop_toBottomOf="@+id/TVmasinformacionmarker" />
+
+            <TextView
+                android:id="@+id/TVacomododescripmarker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="@+id/textView12"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

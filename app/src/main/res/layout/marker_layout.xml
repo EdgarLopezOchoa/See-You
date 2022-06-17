@@ -16,74 +16,49 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/TVmarcadornum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="MARCADOR No."
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            android:textStyle="bold|italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="90dp"
-            android:background="@drawable/fondodegradado"
-            android:elevation="5dp"
-            android:src="@drawable/perfil_foreground"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/TVnombreubicacion"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             android:elevation="10dp"
             android:justificationMode="inter_word"
             android:text="TextView"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="@color/azul_obscuro"
-            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/TVmarcadornum" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/TVubicacion"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
             android:elevation="10dp"
             android:text="TextView"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/TVnombreubicacion"
-            app:layout_constraintStart_toStartOf="@+id/TVnombreubicacion"
-            app:layout_constraintTop_toBottomOf="@+id/TVnombreubicacion" />
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/SWhabilitar"
+            app:layout_constraintTop_toBottomOf="@+id/TVdescripcion" />
 
         <TextView
             android:id="@+id/TVmasinformacion"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:elevation="10dp"
             android:text="TextView"
-            android:textColor="@color/black"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/TVubicacion"
             app:layout_constraintStart_toStartOf="@+id/TVubicacion"
             app:layout_constraintTop_toBottomOf="@+id/TVubicacion" />
@@ -92,66 +67,84 @@
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:text="DESCRIPCION"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
-            app:layout_constraintStart_toStartOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/TVmasinformacion" />
+            app:layout_constraintStart_toEndOf="@+id/SWhabilitar"
+            app:layout_constraintTop_toBottomOf="@+id/TVnombreubicacion" />
 
         <TextView
             android:id="@+id/TVdescripcion"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
             android:justificationMode="inter_word"
-            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/TVacomodardescrip"
             app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
-            app:layout_constraintStart_toStartOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="@+id/SWhabilitar"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
         <Button
             android:id="@+id/BTNviajar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/button2"
             android:text="INICIAR VIAJE"
             app:backgroundTint="@null"
-            app:layout_constraintEnd_toEndOf="@+id/TVdescripcion"
-            app:layout_constraintStart_toStartOf="@+id/TVdescripcion"
-            app:layout_constraintTop_toBottomOf="@+id/SWhabilitar" />
+            app:layout_constraintBottom_toBottomOf="@+id/BTNeliminar"
+            app:layout_constraintEnd_toStartOf="@+id/TVbotonesmarker"
+            app:layout_constraintStart_toStartOf="@+id/TVmasinformacion"
+            app:layout_constraintTop_toTopOf="@+id/BTNeliminar" />
 
         <Switch
             android:id="@+id/SWhabilitar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
             android:text="Habilitar  "
             android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="@+id/TVdescripcion"
-            app:layout_constraintStart_toStartOf="@+id/TVdescripcion"
-            app:layout_constraintTop_toBottomOf="@+id/TVdescripcion" />
+            app:layout_constraintBottom_toBottomOf="@+id/textView12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView12" />
 
         <Button
             android:id="@+id/BTNeliminar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/button"
             android:text="ELIMINAR MARCADOR"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/BTNviajar"
-            app:layout_constraintStart_toStartOf="@+id/BTNviajar"
-            app:layout_constraintTop_toBottomOf="@+id/BTNviajar" />
+            app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+            app:layout_constraintStart_toEndOf="@+id/TVbotonesmarker"
+            app:layout_constraintTop_toBottomOf="@+id/TVmasinformacion" />
+
+        <TextView
+            android:id="@+id/TVbotonesmarker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+            app:layout_constraintStart_toStartOf="@+id/TVmasinformacion"
+            app:layout_constraintTop_toBottomOf="@+id/TVmasinformacion" />
+
+        <TextView
+            android:id="@+id/TVacomodardescrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
