@@ -54,12 +54,13 @@ import java.util.Locale;
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
     LocationManager locManager;
-    private ImageView ubicacion, location,vermarkers;
+    private ImageView ubicacion, location,vermarkers, cambiarmapa;
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     private SearchView SVubicacion;
     private TextView titulo;
+    public static String direccion;
     int tiempo = 5000;
     int bucleubicacion = 0;
     View view;
@@ -80,6 +81,7 @@ public class MapsFragment extends Fragment {
         public void onMapReady(GoogleMap googleMap) {
 
             try {
+
 
             mMap = googleMap;
 
@@ -150,7 +152,7 @@ public class MapsFragment extends Fragment {
                     bottomSheetDialog.findViewById(R.id.BTNviajar).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(), "ESTE BOTON HARA ALGO LUEGO :D",
+                            Toast.makeText(getContext(), "ESTE BOTON HARA ALGO ALGUN DIA :D",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -221,36 +223,6 @@ public class MapsFragment extends Fragment {
 
 
 
-
-    public void obtenerubicacion(double lat,double lon){
-
-        locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-
-
-        LatLng UbicacionActualo = new LatLng(lat, lon);
-
-        //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
-
-        //Optiene la ultima localizacion conocida del usuario
-       /* @SuppressLint("MissingPermission")
-        Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (loc != null) {
-            //Guarda los valores de longitud y latitud en variables
-             lat = loc.getLatitude();
-             lon = loc.getLongitude();
-
-            //Crea el punto donde se marcara
-            LatLng UbicacionActualo = new LatLng(lat, lon);
-
-            //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
-        }else{
-            Toast.makeText(getContext(), "NO SE A PODIDO OBTENER LA UBICACION", Toast.LENGTH_SHORT).show();
-        }*/
-    }
-
     public void Marcador() {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -265,6 +237,18 @@ public class MapsFragment extends Fragment {
                 //Le da a las variables globales los valores que necesitan
                 LatitudDialogo = latitud;
                 LongitudDialogo = longitud;
+
+
+                Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(latitud, longitud, 1);
+
+                    Address address = (Address) addresses.get(0);
+                    direccion += address.getAddressLine(0);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
                 //Guarda Todas las opciones necesarias para hacer el marcador
@@ -306,6 +290,25 @@ public class MapsFragment extends Fragment {
         vermarkers = view.findViewById(R.id.IVvermarkers);
         SVubicacion = view.findViewById(R.id.SVubicacion);
         titulo = view.findViewById(R.id.TVtituloseeyou);
+        cambiarmapa = view.findViewById(R.id.IVcambiarmapa);
+
+
+
+
+        cambiarmapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL){
+                    mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                }
+                else if (mMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
+                    mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                }else if (mMap.getMapType() == GoogleMap.MAP_TYPE_TERRAIN){
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+            }
+        });
 
 
 
@@ -356,6 +359,9 @@ public class MapsFragment extends Fragment {
                 return false;
             }
         });
+
+
+
 
 
         location.setOnClickListener(new View.OnClickListener() {

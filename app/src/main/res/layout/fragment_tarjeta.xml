@@ -10,11 +10,12 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         app:cardBackgroundColor="@color/white"
@@ -62,9 +63,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="50dp"
                 android:elevation="10dp"
                 android:text="TextView"
                 android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/TVubicacionmarker"
                 app:layout_constraintStart_toStartOf="@+id/TVubicacionmarker"
                 app:layout_constraintTop_toBottomOf="@+id/TVubicacionmarker" />
@@ -94,19 +97,6 @@
                 app:layout_constraintStart_toStartOf="@+id/SWhabilitarmarker"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-            <Button
-                android:id="@+id/BTNviajarmarker"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/button2"
-                android:text="INICIAR VIAJE"
-                app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/BTNeliminarmarker"
-                app:layout_constraintEnd_toStartOf="@+id/TVbotones"
-                app:layout_constraintStart_toStartOf="@+id/TVmasinformacionmarker"
-                app:layout_constraintTop_toTopOf="@+id/BTNeliminarmarker" />
-
             <Switch
                 android:id="@+id/SWhabilitarmarker"
                 android:layout_width="0dp"
@@ -121,30 +111,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView12" />
 
-            <Button
-                android:id="@+id/BTNeliminarmarker"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/button"
-                android:text="ELIMINAR MARCADOR"
-                app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacionmarker"
-                app:layout_constraintStart_toEndOf="@+id/TVbotones"
-                app:layout_constraintTop_toBottomOf="@+id/TVmasinformacionmarker" />
-
-            <TextView
-                android:id="@+id/TVbotones"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacionmarker"
-                app:layout_constraintStart_toStartOf="@+id/TVmasinformacionmarker"
-                app:layout_constraintTop_toBottomOf="@+id/TVmasinformacionmarker" />
-
             <TextView
                 android:id="@+id/TVacomododescripmarker"
                 android:layout_width="wrap_content"
@@ -154,5 +120,43 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/TVbotones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <Button
+        android:id="@+id/BTNeliminarmarker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="-28dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button"
+        android:text="ELIMINAR MARCADOR"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@+id/TVbotones"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <Button
+        android:id="@+id/BTNviajarmarker"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/button2"
+        android:text="INICIAR VIAJE"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/BTNeliminarmarker"
+        app:layout_constraintEnd_toStartOf="@+id/TVbotones"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="@+id/BTNeliminarmarker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
