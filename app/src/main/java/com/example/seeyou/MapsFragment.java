@@ -203,7 +203,6 @@ public class MapsFragment extends Fragment {
 
                             //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
-
                         }
                     }
                 })

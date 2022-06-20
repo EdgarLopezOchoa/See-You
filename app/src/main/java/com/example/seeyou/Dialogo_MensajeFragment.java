@@ -55,6 +55,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     RequestQueue requestQueue;
     //
 
+
     //variables normales
     private NotificationManagerCompat notificationManagerCompat;
     private EditText  mensaje,titulo1;
