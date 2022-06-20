@@ -221,8 +221,6 @@ public class MapsFragment extends Fragment {
 
     //HASTA AQUI TERMINA EL CODIGO DE UBICACION VIA GOOGLE
 
-
-
     public void Marcador() {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override

@@ -83,7 +83,6 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     }
 
-
     public void Ubicacion(String URL){
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
