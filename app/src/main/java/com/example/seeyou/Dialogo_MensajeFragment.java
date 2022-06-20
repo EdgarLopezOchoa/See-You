@@ -105,8 +105,6 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 params.put("direccion", direccion);
                 params.put("Longitud", Longitud);
                 params.put("Latitud", latitud);
-
-
                 return params;
             }
         };
