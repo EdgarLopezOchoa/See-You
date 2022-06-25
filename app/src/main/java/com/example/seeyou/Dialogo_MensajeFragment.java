@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +28,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.androidgamesdk.gametextinput.Listener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,11 +52,13 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     private String mParam2;
 
     //Toma las variables de otro fragmento
+    double a = 1;
+    double b = 1;
     public GoogleMap Mapa = MapsFragment.mMap;
     double LatitudDialogo = MapsFragment.LatitudDialogo;
     double LongitudDialogo = MapsFragment.LongitudDialogo;
     String direccion = MapsFragment.direccion;
-    String latitud = LatitudDialogo + "", Longitud = LongitudDialogo+"";
+    String latitud = LatitudDialogo + "", Longitud = LongitudDialogo+"",A=a+"",B=b+"";
     RequestQueue requestQueue;
     //
 
@@ -60,6 +67,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     private NotificationManagerCompat notificationManagerCompat;
     private EditText  mensaje,titulo1;
     private Button Registrar,cancelar;
+    public String idpunto;
 
     public Dialogo_MensajeFragment() {
         // Required empty public constructor
@@ -101,17 +109,54 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
             @Override
             protected Map<String, String > getParams() throws AuthFailureError {
                 Map<String, String > params= new HashMap<String, String>();
+
+
                 params.put("nombrePunto", titulo1.getText().toString());
                 params.put("direccion", direccion);
                 params.put("Longitud", Longitud);
                 params.put("Latitud", latitud);
+                params.put("idusuario",A);
+                params.put("idgrupo",B);
                 return params;
             }
+
         };
+
+////////////////////////////// En teoria esta chingadera muestra la informacion pero se ocupaba textview con id´s
+        /*
+        JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(URL, (response)->{
+            JSONObject jsonObject = null;
+            for (int i=0; i < response.length(); i++){
+                try{
+                    jsonObject = response.getJSONObject(i);
+                    idpunto = jsonObject.getString("IdPuntos");
+                    idpunto = jsonObject.getString("IdUsuarios");
+                    idpunto = jsonObject.getString("IdGrupos");
+                }catch (JSONException e ){
+                    Toast.makeText(Registrar.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        },(error) ->{
+            Toast.makeText(Registrar.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+        );
+        */
+//////////////////////////////
+
+
 
         requestQueue= Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
+
+
+
+
+
+
+
+
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
