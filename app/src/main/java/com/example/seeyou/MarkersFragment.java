@@ -80,14 +80,6 @@ public class MarkersFragment extends Fragment {
 
         List<Markers> markersList = new ArrayList<>();
 
-        for (int i = 0; i <20; i++)
-        {
-            markersList.add(new Markers(i,"CASITA NO. " + i,"San Carlos #" + i,
-                    "1244232122, -12421322"
-                    ,"ES LA COLONIA DONDE E VIVIDO TODA MI VIDA Y AQUI EN NOGALES UWU","MARCADOR NO. " + i));
-        }
-
-        recyclerView.setAdapter(new MakersAdapters(markersList,getContext()));
 
 
         return view;

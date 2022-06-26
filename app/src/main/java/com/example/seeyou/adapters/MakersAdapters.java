@@ -36,10 +36,10 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.titulo.setText(MarkerList.get(position).getName());
-        holder.descripcion.setText(MarkerList.get(position).getDescripction());
-        holder.coordenadas.setText(MarkerList.get(position).getCoordenadas());
-        holder.ubicacion.setText(MarkerList.get(position).getUbicacion());
+        holder.titulo.setText(MarkerList.get(position).getNombre());
+        holder.descripcion.setText(MarkerList.get(position).getDescripcion());
+        holder.coordenadas.setText(MarkerList.get(position).getLatitud() + " , " + MarkerList.get(position).getLongitud());
+        holder.ubicacion.setText(MarkerList.get(position).getDireccion());
 
 
         holder.iniciar_viaje.setOnClickListener(new View.OnClickListener() {

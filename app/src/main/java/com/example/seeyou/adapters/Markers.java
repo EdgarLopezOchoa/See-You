@@ -4,19 +4,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class Markers {
     private int id;
-    private String name;
-    private String Ubicacion;
-    private String coordenadas;
-    private String descripction;
-    private String titulo;
+    private String Nombre;
 
-    public Markers(int id, String name, String ubicacion, String coordenadas, String descripction, String titulo) {
+    private double Longitud;
+    private double Latitud;
+    private String direccion;
+    private String descripcion;
+
+    public Markers(int id, String nombre, double Longitud, double Latitud, String direccion, String descripcion) {
         this.id = id;
-        this.name = name;
-        Ubicacion = ubicacion;
-        this.coordenadas = coordenadas;
-        this.descripction = descripction;
-        this.titulo = titulo;
+        Nombre = nombre;
+        this.Longitud = Longitud;
+        this.Latitud = Latitud;
+        this.direccion = direccion;
+        this.descripcion = descripcion;
     }
 
     public int getId() {
@@ -27,55 +28,55 @@ public class Markers {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return Nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        Nombre = nombre;
     }
 
-    public String getUbicacion() {
-        return Ubicacion;
+    public double getLongitud() {
+        return Longitud;
     }
 
-    public void setUbicacion(String ubicacion) {
-        Ubicacion = ubicacion;
+    public void setLongitud(double longitud) {
+        this.Longitud = longitud;
     }
 
-    public String getCoordenadas() {
-        return coordenadas;
+    public double getLatitud() {
+        return Latitud;
     }
 
-    public void setCoordenadas(String coordenadas) {
-        this.coordenadas = coordenadas;
+    public void setLatitud(double latitud) {
+        this.Latitud = latitud;
     }
 
-    public String getDescripction() {
-        return descripction;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDescripction(String descripction) {
-        this.descripction = descripction;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override
     public String toString() {
         return "Markers{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", Ubicacion='" + Ubicacion + '\'' +
-                ", coordenadas='" + coordenadas + '\'' +
-                ", descripction='" + descripction + '\'' +
-                ", titulo='" + titulo + '\'' +
+                ", Nombre='" + Nombre + '\'' +
+                ", longitud='" + Longitud + '\'' +
+                ", latitud='" + Latitud + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", descripcion='" + descripcion + '\'' +
                 '}';
     }
 }

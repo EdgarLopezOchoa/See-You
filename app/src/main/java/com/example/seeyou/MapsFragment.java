@@ -5,12 +5,16 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -31,6 +35,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.seeyou.adapters.MakersAdapters;
 import com.example.seeyou.adapters.Markers;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -46,6 +55,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +73,8 @@ public class MapsFragment extends Fragment {
     private LinearLayout contenedor;
     private SearchView SVubicacion;
     private TextView titulo;
-    public static String direccion;
+    List<Markers> markerslist = new ArrayList<>();
+    public static String direccion = "";
     int tiempo = 5000;
     int bucleubicacion = 0;
     View view;
@@ -82,12 +96,19 @@ public class MapsFragment extends Fragment {
 
             try {
 
+                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
 
             mMap = googleMap;
 
+            PuntosRecycler();
+
             //startLocationUpdates();
 
-            getLastLocation();
+            if(ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED)
+            {
+                getLastLocation();
+            }
 
             LatLng sydney = new LatLng(31.233544, -110.979941);
             LatLng seguro = new LatLng(31.240626, -110.970661);
@@ -187,10 +208,61 @@ public class MapsFragment extends Fragment {
 
 
 
+    private void PuntosRecycler() {
+
+        StringRequest stringRequest=new StringRequest(Request.Method.GET,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=1", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+                    markerslist.clear();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject cajas = array.getJSONObject(i);
+
+                        markerslist.add(new Markers(
+
+                                cajas.getInt("IDpunto"),
+                                cajas.getString("Nombre"),
+                                cajas.getDouble("Longitud"),
+                                cajas.getDouble("Latitud"),
+                                cajas.getString("direccion"),
+                                cajas.getString("descripcion")
+                        ));
+                        MarkerOptions markerOptions = new MarkerOptions();
+
+
+                        LatLng puntoubicacion =
+                                new LatLng(cajas.getDouble("Latitud"),cajas.getDouble("Longitud"));
+                        markerOptions.position(puntoubicacion);
+                        mMap.addMarker(markerOptions);
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+
+    }
+
+
+
 
     @SuppressLint("MissingPermission")
     public void getLastLocation() {
         // Get last known recent location using new Google Play Services SDK (v11+)
+
+
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
 
         locationClient.getLastLocation()
@@ -239,6 +311,8 @@ public class MapsFragment extends Fragment {
 
                     Address address = (Address) addresses.get(0);
                     direccion += address.getAddressLine(0);
+
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -385,16 +459,12 @@ public class MapsFragment extends Fragment {
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                List<Markers> markersList = new ArrayList<>();
 
-                for (int i = 0; i <20; i++)
-                {
-                    markersList.add(new Markers(i,"CASITA NO. " + i,"San Carlos #" + i,
-                            "1244232122, -12421322"
-                            ,"ES LA COLONIA DONDE E VIVIDO TODA MI VIDA Y AQUI EN NOGALES UWU","MARCADOR NO. " + i));
-                }
-
-                recyclerView.setAdapter(new MakersAdapters(markersList,getContext()));
+                PuntosRecycler();
+                MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(adapter);
 
             }
         });

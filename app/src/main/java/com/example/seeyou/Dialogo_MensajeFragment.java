@@ -97,7 +97,8 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(Registrar.getContext(), "PUNTO REGISTRADO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Registrar.getContext(), response, Toast.LENGTH_SHORT).show();
+                titulo1.getText().clear();
             }
 
     }, new com.android.volley.Response.ErrorListener() {
@@ -197,6 +198,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(ubicacion1);
                 markerOptions.title(titulo1.getText().toString());
+
 
                 //añade el punto
                 Mapa.addMarker(markerOptions);
