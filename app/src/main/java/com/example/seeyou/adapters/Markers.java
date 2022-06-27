@@ -10,14 +10,16 @@ public class Markers {
     private double Latitud;
     private String direccion;
     private String descripcion;
+    private String habilitado;
 
-    public Markers(int id, String nombre, double Longitud, double Latitud, String direccion, String descripcion) {
+    public Markers(String habilitado,int id, String nombre, double longitud, double latitud, String direccion, String descripcion) {
         this.id = id;
         Nombre = nombre;
-        this.Longitud = Longitud;
-        this.Latitud = Latitud;
+        Longitud = longitud;
+        Latitud = latitud;
         this.direccion = direccion;
         this.descripcion = descripcion;
+        this.habilitado = habilitado;
     }
 
     public int getId() {
@@ -41,7 +43,7 @@ public class Markers {
     }
 
     public void setLongitud(double longitud) {
-        this.Longitud = longitud;
+        Longitud = longitud;
     }
 
     public double getLatitud() {
@@ -49,7 +51,7 @@ public class Markers {
     }
 
     public void setLatitud(double latitud) {
-        this.Latitud = latitud;
+        Latitud = latitud;
     }
 
     public String getDireccion() {
@@ -68,15 +70,24 @@ public class Markers {
         this.descripcion = descripcion;
     }
 
+    public String getHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(String habilitado) {
+        this.habilitado = habilitado;
+    }
+
     @Override
     public String toString() {
         return "Markers{" +
                 "id=" + id +
                 ", Nombre='" + Nombre + '\'' +
-                ", longitud='" + Longitud + '\'' +
-                ", latitud='" + Latitud + '\'' +
+                ", Longitud=" + Longitud +
+                ", Latitud=" + Latitud +
                 ", direccion='" + direccion + '\'' +
                 ", descripcion='" + descripcion + '\'' +
+                ", habilitado='" + habilitado + '\'' +
                 '}';
     }
 }

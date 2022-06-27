@@ -35,12 +35,13 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="80dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="80dp"
             android:layout_weight="1"
             android:ems="10"
             android:hint="Nombre De La Ubicacion"
             android:inputType="textPersonName"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TVmensaje" />
@@ -50,7 +51,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button"
@@ -62,15 +63,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/TVenviarbotones"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ETtituloubicacion" />
+            app:layout_constraintTop_toBottomOf="@+id/ETdescripcionubicacion" />
 
         <TextView
             android:id="@+id/TVenviarbotones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/ETtituloubicacion"
-            app:layout_constraintStart_toStartOf="@+id/ETtituloubicacion"
-            app:layout_constraintTop_toBottomOf="@+id/ETtituloubicacion" />
+            app:layout_constraintEnd_toEndOf="@+id/ETdescripcionubicacion"
+            app:layout_constraintStart_toStartOf="@+id/ETdescripcionubicacion"
+            app:layout_constraintTop_toBottomOf="@+id/ETdescripcionubicacion" />
 
         <TextView
             android:id="@+id/TVmensaje"
@@ -82,10 +83,23 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="24sp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/ETdescripcionubicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Descripcion"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/ETtituloubicacion"
+            app:layout_constraintStart_toStartOf="@+id/ETtituloubicacion"
+            app:layout_constraintTop_toBottomOf="@+id/ETtituloubicacion" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

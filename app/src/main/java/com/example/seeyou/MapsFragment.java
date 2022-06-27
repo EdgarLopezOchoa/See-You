@@ -35,7 +35,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -61,8 +63,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
@@ -72,12 +76,17 @@ public class MapsFragment extends Fragment {
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     private SearchView SVubicacion;
-    private TextView titulo;
+    private TextView titulo,nombremarcador;
     List<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
     int tiempo = 5000;
     int bucleubicacion = 0;
     View view;
+
+    RequestQueue requestQueue;
+
+    TextView ubicacionmarcador,coordenadamarcador,descripcionmarcador;
+    Switch habilitado;
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -100,7 +109,7 @@ public class MapsFragment extends Fragment {
 
             mMap = googleMap;
 
-            PuntosRecycler();
+            PuntosMapa();
 
             //startLocationUpdates();
 
@@ -110,13 +119,6 @@ public class MapsFragment extends Fragment {
                 getLastLocation();
             }
 
-            LatLng sydney = new LatLng(31.233544, -110.979941);
-            LatLng seguro = new LatLng(31.240626, -110.970661);
-
-            mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicacion de la escuela")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
-            mMap.addMarker(new MarkerOptions().position(seguro).title("IMMS")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
 
             //Habilita el ver la ubicacion actual
@@ -142,10 +144,13 @@ public class MapsFragment extends Fragment {
 
 
                     //Asigna los valores a los objetos dentro el bottomsheetdialog
-                    TextView nombre = bottomSheetDialog.findViewById(R.id.TVnombreubicacion);
-                    TextView ubicacion = bottomSheetDialog.findViewById(R.id.TVubicacion);
-                    TextView coordenada = bottomSheetDialog.findViewById(R.id.TVmasinformacion);
-                    TextView descripcion = bottomSheetDialog.findViewById(R.id.TVdescripcion);
+                    nombremarcador = bottomSheetDialog.findViewById(R.id.TVnombreubicacion);
+                     ubicacionmarcador = bottomSheetDialog.findViewById(R.id.TVubicacion);
+                     coordenadamarcador = bottomSheetDialog.findViewById(R.id.TVmasinformacion);
+                     descripcionmarcador = bottomSheetDialog.findViewById(R.id.TVdescripcion);
+                     habilitado = bottomSheetDialog.findViewById(R.id.SWhabilitar);
+
+                     habilitado.setChecked(true);
                     LatLng latLng = marker.getPosition();
                     double Latitud,logitud;
                     Latitud = latLng.latitude;
@@ -159,16 +164,21 @@ public class MapsFragment extends Fragment {
                     String addressStr = "";
                     addressStr += address.getAddressLine(0);
 
-                        ubicacion.setText(addressStr);
+                        ubicacionmarcador.setText(addressStr);
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    coordenada.setText("" + Latitud + " : " + logitud);
-                    nombre.setText(marker.getTitle());
+                    coordenadamarcador.setText("" + Latitud + " : " + logitud);
+                    nombremarcador.setText(marker.getTitle());
 
-                    descripcion.setText("AQUI PONDRE UNA DESCRIPCION CUANDO SE CONECTE A LA BD :D");
+                    Ubicacion(marker.getPosition().latitude + ""
+                            ,marker.getPosition().longitude + ""
+                            ,nombremarcador.getText().toString()
+                            ,ubicacionmarcador.getText().toString());
+
+
 
                     bottomSheetDialog.findViewById(R.id.BTNviajar).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -215,26 +225,65 @@ public class MapsFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONArray array = new JSONArray(response);
                     markerslist.clear();
+                    JSONArray array = new JSONArray(response);
+
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
 
                         markerslist.add(new Markers(
-
+                                cajas.getString("habilitado"),
                                 cajas.getInt("IDpunto"),
                                 cajas.getString("Nombre"),
                                 cajas.getDouble("Longitud"),
                                 cajas.getDouble("Latitud"),
                                 cajas.getString("direccion"),
                                 cajas.getString("descripcion")
+
                         ));
+
+
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+
+    }
+
+
+
+    private void PuntosMapa() {
+
+        StringRequest stringRequest=new StringRequest(Request.Method.GET,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=1", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject cajas = array.getJSONObject(i);
+
                         MarkerOptions markerOptions = new MarkerOptions();
 
 
                         LatLng puntoubicacion =
                                 new LatLng(cajas.getDouble("Latitud"),cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
+                                markerOptions.title(cajas.getString("Nombre"));
                         mMap.addMarker(markerOptions);
                     }
 
@@ -257,6 +306,55 @@ public class MapsFragment extends Fragment {
 
 
 
+    public void Ubicacion(String latitud1, String longitud1, String nombre, String ubicacion1){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/buscar_datos_de_marcador.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+
+                        JSONObject cajas = array.getJSONObject(0);
+
+
+                        descripcionmarcador.setText(cajas.getString("descripcion")+"\n De una vez pongo la ID: "+
+                                cajas.getString("IDpunto"));
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ubicacion.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String > getParams() throws AuthFailureError {
+                Map<String, String > params= new HashMap<String, String>();
+
+
+                params.put("nombrePunto", nombre);
+                params.put("direccion", ubicacion1);
+                params.put("latitud",latitud1);
+                params.put("longitud",longitud1);
+
+                return params;
+            }
+
+        };
+
+
+
+
+        requestQueue= Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+    }
 
     @SuppressLint("MissingPermission")
     public void getLastLocation() {
@@ -330,7 +428,7 @@ public class MapsFragment extends Fragment {
 
 
                 //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
 
                 //llama al fragmento dialogo
@@ -350,6 +448,8 @@ public class MapsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_maps, container, false);
 
+
+        //objetos de la pantalla de inicio de maps
         ubicacion = view.findViewById(R.id.IVubicacion);
         cancelar = view.findViewById(R.id.BTNcancelar);
         enviar = view.findViewById(R.id.BTNenviarmensaje);
@@ -359,6 +459,9 @@ public class MapsFragment extends Fragment {
         SVubicacion = view.findViewById(R.id.SVubicacion);
         titulo = view.findViewById(R.id.TVtituloseeyou);
         cambiarmapa = view.findViewById(R.id.IVcambiarmapa);
+
+
+
 
 
 
@@ -445,6 +548,8 @@ public class MapsFragment extends Fragment {
         vermarkers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog
                         (getContext(), R.style.BottomSheetDialog);
                 View bottomSheetView = LayoutInflater.from(getContext()).inflate(
@@ -465,6 +570,7 @@ public class MapsFragment extends Fragment {
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(adapter);
+
 
             }
         });

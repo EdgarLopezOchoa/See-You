@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,11 +44,25 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         holder.ubicacion.setText(MarkerList.get(position).getDireccion());
 
 
+
+        if (MarkerList.get(position).getHabilitado() == "habilitado") {
+            holder.habilitarmarcador.setChecked(true);
+        } else {
+            holder.habilitarmarcador.setChecked(false);
+        }
+
+        holder.habilitarmarcador.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Toast.makeText(context, MarkerList.get(position).getHabilitado(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
         holder.iniciar_viaje.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "ESTE BOTON HARA ALGO ALGUN DIA :D",
-                        Toast.LENGTH_SHORT).show();
+                prueba_de_id(MarkerList.get(position).getId());
             }
         });
 
@@ -69,6 +85,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView titulo,ubicacion,coordenadas,descripcion,header;
         private Button iniciar_viaje,eliminarmarker;
+        private Switch habilitarmarcador;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,7 +96,12 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             descripcion = itemView.findViewById(R.id.TVdescripcionmarker);
             iniciar_viaje = itemView.findViewById(R.id.BTNviajarmarker);
             eliminarmarker = itemView.findViewById(R.id.BTNeliminarmarker);
+            habilitarmarcador = itemView.findViewById(R.id.SWhabilitarmarker);
 
         }
+    }
+    private void prueba_de_id(int id){
+        Toast.makeText(context, "ESTE ES EL ID DE ESTE MARCADOR: "+ id,
+                Toast.LENGTH_SHORT).show();
     }
 }

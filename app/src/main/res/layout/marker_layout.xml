@@ -47,6 +47,7 @@
             android:elevation="10dp"
             android:text="TextView"
             android:textAlignment="center"
+            android:textColor="@color/gris_obscuro"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/SWhabilitar"
             app:layout_constraintTop_toBottomOf="@+id/TVdescripcion" />
@@ -59,12 +60,13 @@
             android:elevation="10dp"
             android:text="TextView"
             android:textAlignment="center"
+            android:textColor="@color/gris_obscuro"
             app:layout_constraintEnd_toEndOf="@+id/TVubicacion"
             app:layout_constraintStart_toStartOf="@+id/TVubicacion"
             app:layout_constraintTop_toBottomOf="@+id/TVubicacion" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/TVidubicacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -82,10 +84,12 @@
             android:layout_height="0dp"
             android:layout_marginTop="15dp"
             android:justificationMode="inter_word"
+            android:textAlignment="center"
+            android:textColor="@color/gris_obscuro"
             app:layout_constraintBottom_toBottomOf="@+id/TVacomodardescrip"
             app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
             app:layout_constraintStart_toStartOf="@+id/SWhabilitar"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+            app:layout_constraintTop_toBottomOf="@+id/TVidubicacion" />
 
         <Button
             android:id="@+id/BTNviajar"
@@ -110,9 +114,9 @@
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="@+id/textView12"
+            app:layout_constraintBottom_toBottomOf="@+id/TVidubicacion"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView12" />
+            app:layout_constraintTop_toTopOf="@+id/TVidubicacion" />
 
         <Button
             android:id="@+id/BTNeliminar"
@@ -143,8 +147,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            app:layout_constraintStart_toStartOf="@+id/textView12"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+            app:layout_constraintStart_toStartOf="@+id/TVidubicacion"
+            app:layout_constraintTop_toBottomOf="@+id/TVidubicacion" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

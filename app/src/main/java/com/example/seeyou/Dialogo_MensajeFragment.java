@@ -58,6 +58,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     double LatitudDialogo = MapsFragment.LatitudDialogo;
     double LongitudDialogo = MapsFragment.LongitudDialogo;
     String direccion = MapsFragment.direccion;
+    MapsFragment mapsFragment = new MapsFragment();
     String latitud = LatitudDialogo + "", Longitud = LongitudDialogo+"",A=a+"",B=b+"";
     RequestQueue requestQueue;
     //
@@ -65,7 +66,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     //variables normales
     private NotificationManagerCompat notificationManagerCompat;
-    private EditText  mensaje,titulo1;
+    private EditText  descripcion,titulo1;
     private Button Registrar,cancelar;
     public String idpunto;
 
@@ -99,6 +100,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
             public void onResponse(String response) {
                 Toast.makeText(Registrar.getContext(), response, Toast.LENGTH_SHORT).show();
                 titulo1.getText().clear();
+                descripcion.getText().clear();
             }
 
     }, new com.android.volley.Response.ErrorListener() {
@@ -114,6 +116,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
                 params.put("nombrePunto", titulo1.getText().toString());
                 params.put("direccion", direccion);
+                params.put("descripcion",descripcion.getText().toString());
                 params.put("Longitud", Longitud);
                 params.put("Latitud", latitud);
                 params.put("idusuario",A);
@@ -123,26 +126,6 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
         };
 
-////////////////////////////// En teoria esta chingadera muestra la informacion pero se ocupaba textview con id´s
-        /*
-        JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(URL, (response)->{
-            JSONObject jsonObject = null;
-            for (int i=0; i < response.length(); i++){
-                try{
-                    jsonObject = response.getJSONObject(i);
-                    idpunto = jsonObject.getString("IdPuntos");
-                    idpunto = jsonObject.getString("IdUsuarios");
-                    idpunto = jsonObject.getString("IdGrupos");
-                }catch (JSONException e ){
-                    Toast.makeText(Registrar.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        },(error) ->{
-            Toast.makeText(Registrar.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
-        );
-        */
-//////////////////////////////
 
 
 
@@ -173,6 +156,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
         Registrar = view.findViewById(R.id.BTNenviarmensaje);
         cancelar = view.findViewById(R.id.BTNenviarcancelar);
         titulo1 = view.findViewById(R.id.ETtituloubicacion);
+        descripcion = view.findViewById(R.id.ETdescripcionubicacion);
 
 
         cancelar.setOnClickListener(new View.OnClickListener() {
@@ -199,9 +183,9 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 markerOptions.position(ubicacion1);
                 markerOptions.title(titulo1.getText().toString());
 
-
                 //añade el punto
                 Mapa.addMarker(markerOptions);
+
 
                 //cierra el fragmento
                 getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
