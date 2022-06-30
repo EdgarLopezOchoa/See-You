@@ -77,8 +77,10 @@ public class MapsFragment extends Fragment {
     private LinearLayout contenedor;
     private SearchView SVubicacion;
     private TextView titulo,nombremarcador;
-    List<Markers> markerslist = new ArrayList<>();
+    public static RecyclerView recyclerViewmarker;
+    public static List<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
+    public static int id_usuario = 1;
     int tiempo = 5000;
     int bucleubicacion = 0;
     View view;
@@ -221,11 +223,13 @@ public class MapsFragment extends Fragment {
     private void PuntosRecycler() {
 
         StringRequest stringRequest=new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=1", new Response.Listener<String>() {
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id="+id_usuario, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+
                     markerslist.clear();
+
                     JSONArray array = new JSONArray(response);
 
                     for (int i = 0; i < array.length(); i++) {
@@ -244,6 +248,11 @@ public class MapsFragment extends Fragment {
 
 
                     }
+
+                    MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
+                    recyclerViewmarker.setHasFixedSize(true);
+                    recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
+                    recyclerViewmarker.setAdapter(adapter);
 
 
 
@@ -267,12 +276,13 @@ public class MapsFragment extends Fragment {
     private void PuntosMapa() {
 
         StringRequest stringRequest=new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=1", new Response.Listener<String>() {
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id="+id_usuario, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONArray array = new JSONArray(response);
 
+                    markerslist.clear();
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
@@ -284,6 +294,7 @@ public class MapsFragment extends Fragment {
                                 new LatLng(cajas.getDouble("Latitud"),cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
                                 markerOptions.title(cajas.getString("Nombre"));
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
                     }
 
@@ -557,19 +568,32 @@ public class MapsFragment extends Fragment {
                 );
                 bottomSheetDialog.setContentView(bottomSheetView);
 
-                bottomSheetDialog.show();
-                bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
-
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
 
                 PuntosRecycler();
+                bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                 recyclerViewmarker = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
+                 ImageView cargar = bottomSheetDialog.findViewById(R.id.IVcargarmarkers);
                 MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(adapter);
+                recyclerViewmarker.setHasFixedSize(true);
+                recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                 cargar.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                        markerslist.clear();
+                         recyclerViewmarker.setAdapter(adapter);
+                         PuntosRecycler();
+                     }
+                 });
+
+                recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+
+
+                bottomSheetDialog.show();
+
+
 
 
             }

@@ -7,35 +7,54 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/navegadormarker"
-        style="@style/BottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
-
-        android:background="@drawable/fondodegradado"
-
-        android:elevation="8dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
 
-        <SearchView
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/navegadormarker"
+            style="@style/BottomNavigation"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/searchbar"
+            android:layout_height="66dp"
 
-            android:focusable="auto"
-            android:foregroundTint="#FFFFFF"
-            android:soundEffectsEnabled="true"
+            android:background="@drawable/fondodegradado"
+
+            android:elevation="8dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/IVcargarmarkers"
+                    android:layout_width="49dp"
+
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/bookmarker_foreground" />
+
+                <SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="30dp"
+                    android:background="@drawable/searchbar"
+
+                    android:focusable="auto"
+                    android:foregroundTint="#FFFFFF"
+                    android:soundEffectsEnabled="true">
+
+                </SearchView>
 
 
-            />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-    </androidx.appcompat.widget.Toolbar>
+
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVmarkersbottomsheet"
@@ -44,5 +63,7 @@
         >
 
     </androidx.recyclerview.widget.RecyclerView>
+
+
 
 </LinearLayout>
