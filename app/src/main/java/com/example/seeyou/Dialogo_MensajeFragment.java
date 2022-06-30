@@ -101,6 +101,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 Toast.makeText(Registrar.getContext(), response, Toast.LENGTH_SHORT).show();
                 titulo1.getText().clear();
                 descripcion.getText().clear();
+                direccion ="";
             }
 
     }, new com.android.volley.Response.ErrorListener() {

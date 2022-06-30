@@ -323,7 +323,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                 new LatLng(cajas.getDouble("Latitud"),cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
                         markerOptions.title(cajas.getString("Nombre"));
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                       // markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
                     }
 

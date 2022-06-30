@@ -294,7 +294,7 @@ public class MapsFragment extends Fragment {
                                 new LatLng(cajas.getDouble("Latitud"),cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
                                 markerOptions.title(cajas.getString("Nombre"));
-                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                                //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
                     }
 
@@ -337,6 +337,7 @@ public class MapsFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
 
         }, new com.android.volley.Response.ErrorListener() {
@@ -365,6 +366,7 @@ public class MapsFragment extends Fragment {
 
         requestQueue= Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
+
     }
 
     @SuppressLint("MissingPermission")
@@ -417,6 +419,8 @@ public class MapsFragment extends Fragment {
                 Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                 try {
                     List<Address> addresses = geocoder.getFromLocation(latitud, longitud, 1);
+
+                    direccion = "";
 
                     Address address = (Address) addresses.get(0);
                     direccion += address.getAddressLine(0);
