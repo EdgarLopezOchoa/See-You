@@ -147,6 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/TVidubicacion"
             app:layout_constraintStart_toStartOf="@+id/TVidubicacion"
             app:layout_constraintTop_toBottomOf="@+id/TVidubicacion" />
     </androidx.constraintlayout.widget.ConstraintLayout>

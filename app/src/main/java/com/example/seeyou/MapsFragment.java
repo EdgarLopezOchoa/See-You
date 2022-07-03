@@ -698,19 +698,11 @@ public class MapsFragment extends Fragment {
                 PuntosRecycler();
                 bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                  recyclerViewmarker = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
-                 ImageView cargar = bottomSheetDialog.findViewById(R.id.IVcargarmarkers);
+
                 MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
                 recyclerViewmarker.setHasFixedSize(true);
                 recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                 cargar.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                        markerslist.clear();
-                         recyclerViewmarker.setAdapter(adapter);
-                         PuntosRecycler();
-                     }
-                 });
 
                 recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
 
