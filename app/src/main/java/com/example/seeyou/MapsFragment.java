@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -67,6 +68,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
@@ -76,7 +78,7 @@ public class MapsFragment extends Fragment {
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     private SearchView SVubicacion;
-    private TextView titulo,nombremarcador;
+    private TextView titulo,nombremarcador,TVidmarker;
     public static RecyclerView recyclerViewmarker;
     public static List<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
@@ -140,9 +142,10 @@ public class MapsFragment extends Fragment {
                     View bottomSheetView = LayoutInflater.from(getContext()).inflate(
                             R.layout.marker_layout, (LinearLayout) contenedor
                     );
+
                     bottomSheetDialog.setContentView(bottomSheetView);
 
-                    bottomSheetDialog.show();
+
 
 
                     //Asigna los valores a los objetos dentro el bottomsheetdialog
@@ -151,8 +154,11 @@ public class MapsFragment extends Fragment {
                      coordenadamarcador = bottomSheetDialog.findViewById(R.id.TVmasinformacion);
                      descripcionmarcador = bottomSheetDialog.findViewById(R.id.TVdescripcion);
                      habilitado = bottomSheetDialog.findViewById(R.id.SWhabilitar);
+                     TVidmarker = bottomSheetDialog.findViewById(R.id.TVacomodardescrip);
 
+                     habilitado.setText("habilitado");
                      habilitado.setChecked(true);
+
                     LatLng latLng = marker.getPosition();
                     double Latitud,logitud;
                     Latitud = latLng.latitude;
@@ -187,17 +193,35 @@ public class MapsFragment extends Fragment {
                         public void onClick(View v) {
                             Toast.makeText(getContext(), "ESTE BOTON HARA ALGO ALGUN DIA :D",
                                     Toast.LENGTH_SHORT).show();
+
+
                         }
                     });
 
                     bottomSheetDialog.findViewById(R.id.BTNeliminar).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(), "ESTE BOTON BORRARA EL MARCADOR ALGUN DIA :D",
-                                    Toast.LENGTH_SHORT).show();
+                           Eliminar(id_usuario,TVidmarker.getText().toString());
+                            bottomSheetDialog.cancel();
+
                         }
                     });
 
+                    habilitado.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (habilitado.getText().toString() == "habilitado") {
+                                Habilitar("deshabilitado", TVidmarker.getText().toString());
+
+                            } else {
+                                Habilitar("habilitado", TVidmarker.getText().toString());
+
+                            }
+                        }
+                    });
+
+
+                    bottomSheetDialog.show();
 
                     return true;
                 }
@@ -215,8 +239,106 @@ public class MapsFragment extends Fragment {
     };
 
 
-    //PROBANDO CODIGO DE UBICACION VIA GOOGLE
+    public void Eliminar(int id_usuario, String id_punto ){
 
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Toast.makeText(ubicacion.getContext(), "MARCADOR ELIMINADO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+
+                PuntosMapa();
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ubicacion.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String > getParams() throws AuthFailureError {
+                Map<String, String > params= new HashMap<String, String>();
+
+
+                params.put("idpunto", id_punto + "");
+                params.put("idusuario", id_usuario+"");
+
+
+                return params;
+            }
+
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+    }
+
+
+    public void Habilitar(String Habilitado1, String id ){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                if (Habilitado1 == "habilitado") {
+
+                    habilitado.setText("habilitado");
+                    Toast.makeText(ubicacion.getContext(), "ESTE MARCADOR AHORA APARECERA EN SU MAPA :D", Toast.LENGTH_SHORT).show();
+                    habilitado.setChecked(true);
+
+                } else  {
+
+                    habilitado.setText("deshabilitado");
+                    Toast.makeText(ubicacion.getContext(), "ESTE MARCADOR YA NO APARECERA EN SU MAPA... D:", Toast.LENGTH_SHORT).show();
+                    habilitado.setChecked(false);
+                }
+
+                PuntosMapa();
+
+
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ubicacion.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String > getParams() throws AuthFailureError {
+                Map<String, String > params= new HashMap<String, String>();
+
+
+                params.put("idpunto", id);
+                params.put("habilitado", Habilitado1);
+
+
+                return params;
+            }
+
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+    }
 
 
 
@@ -282,7 +404,7 @@ public class MapsFragment extends Fragment {
                 try {
                     JSONArray array = new JSONArray(response);
 
-                    markerslist.clear();
+                    mMap.clear();
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
@@ -329,8 +451,8 @@ public class MapsFragment extends Fragment {
                         JSONObject cajas = array.getJSONObject(0);
 
 
-                        descripcionmarcador.setText(cajas.getString("descripcion")+"\n De una vez pongo la ID: "+
-                                cajas.getString("IDpunto"));
+                        descripcionmarcador.setText(cajas.getString("descripcion"));
+                        TVidmarker.setText(cajas.getString("IDpunto"));
 
 
 
