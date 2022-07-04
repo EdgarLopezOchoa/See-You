@@ -111,6 +111,11 @@ public class MapsFragment extends Fragment {
 
                 ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
 
+                SVubicacion.setQuery("",false);
+                SVubicacion.setIconified(true);
+                SVubicacion.clearFocus();
+                SVubicacion.setEnabled(false);
+
             mMap = googleMap;
 
             PuntosMapa();
