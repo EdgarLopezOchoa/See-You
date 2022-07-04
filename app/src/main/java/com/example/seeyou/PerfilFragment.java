@@ -1,5 +1,6 @@
 package com.example.seeyou;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +48,9 @@ public class PerfilFragment extends Fragment {
         return fragment;
     }
 
+    //BORRAR DESPUES
+    Button btnRegistro, btnLogin;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,26 @@ public class PerfilFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //BORRAR DESPUES
+        btnLogin = getView().findViewById(R.id.btnLogin);
+        btnRegistro = getView().findViewById(R.id.btnRegistro);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i1 = new Intent(getContext(),Login.class);
+                startActivity(i1);
+            }
+        });
+
+        btnRegistro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i2 = new Intent(getContext(),Registro.class);
+                startActivity(i2);
+            }
+        });
     }
 
     @Override

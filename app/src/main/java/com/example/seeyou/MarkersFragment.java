@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.example.seeyou.adapters.MakersAdapters;
 import com.example.seeyou.adapters.Markers;
@@ -56,6 +57,8 @@ public class MarkersFragment extends Fragment {
         return fragment;
     }
 
+    SearchView searchView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +69,6 @@ public class MarkersFragment extends Fragment {
             getFragmentManager().beginTransaction().
                     remove(getFragmentManager().findFragmentById(R.id.MapsFragment)).commit();
         }
-
 
     }
 
