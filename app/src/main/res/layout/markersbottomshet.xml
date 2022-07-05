@@ -8,41 +8,68 @@
     android:orientation="vertical">
 
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/navegadormarker"
+        style="@style/BottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/navegadormarker"
-            style="@style/BottomNavigation"
+        android:background="@drawable/fondodegradado"
+
+        android:elevation="8dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="66dp"
-
-            android:background="@drawable/fondodegradado"
-
-            android:elevation="8dp"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
+            android:layout_height="match_parent"
+            >
 
             <SearchView
-                android:id="@+id/searchview"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:id="@+id/SVpunto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/searchbar"
+                android:layout_marginBottom="10dp"
                 android:foregroundTint="#FFFFFF"
-                android:soundEffectsEnabled="true">
+                android:searchIcon="@android:drawable/ic_menu_search"
+                android:soundEffectsEnabled="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
 
             </SearchView>
 
+            <TextView
+                android:id="@+id/TVtitulomarcadorrecicler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="MARCADORES"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="32sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        </androidx.appcompat.widget.Toolbar>
 
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVmarkersbottomsheet"

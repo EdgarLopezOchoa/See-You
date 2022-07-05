@@ -77,7 +77,7 @@ public class MapsFragment extends Fragment {
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
-    private SearchView SVubicacion;
+    private SearchView SVubicacion,SVpunto;
     private TextView titulo,nombremarcador,TVidmarker;
     public static RecyclerView recyclerViewmarker;
     public static List<Markers> markerslist = new ArrayList<>();
@@ -703,6 +703,26 @@ public class MapsFragment extends Fragment {
                 PuntosRecycler();
                 bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                  recyclerViewmarker = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
+                 TextView titulopuntos = bottomSheetDialog.findViewById(R.id.TVtitulomarcadorrecicler);
+                 SVpunto = bottomSheetDialog.findViewById(R.id.SVpunto);
+
+                SVpunto.setOnSearchClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        titulopuntos.setVisibility(View.INVISIBLE);
+                        SVpunto.setBackgroundResource(R.drawable.searchbar);
+
+                    }
+                });
+
+                SVpunto.setOnCloseListener(new SearchView.OnCloseListener() {
+                    @Override
+                    public boolean onClose() {
+                        titulopuntos.setVisibility(View.VISIBLE);
+                        SVpunto.setBackgroundResource(R.color.Trasparente);
+                        return false;
+                    }
+                });
 
                 MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
                 recyclerViewmarker.setHasFixedSize(true);
