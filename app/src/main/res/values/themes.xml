@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="Theme.SeeYou" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/morado</item>
         <item name="colorPrimaryVariant">#BE7100</item>
-        <item name="colorOnPrimary">@color/blanco_gris</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/azul_obscuro</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>

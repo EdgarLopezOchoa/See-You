@@ -60,8 +60,19 @@ public class PerfilFragment extends Fragment {
         }
 
         //BORRAR DESPUES
-        btnLogin = getView().findViewById(R.id.btnLogin);
-        btnRegistro = getView().findViewById(R.id.btnRegistro);
+
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+        btnLogin = view.findViewById(R.id.btnLogin);
+        btnRegistro = view.findViewById(R.id.btnRegistro);
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,12 +89,7 @@ public class PerfilFragment extends Fragment {
                 startActivity(i2);
             }
         });
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+        return view;
     }
 }

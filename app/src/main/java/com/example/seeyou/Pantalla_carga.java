@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 
 public class Pantalla_carga extends AppCompatActivity {
 
@@ -14,16 +15,16 @@ public class Pantalla_carga extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantalla_carga);
-
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 //         AQUI DEBE DE REDIRECCIONAR AL MAPSFRAGMENT :D
-                Intent intent = new Intent(Pantalla_carga.this,MapsFragment.class);
+                Intent intent = new Intent(Pantalla_carga.this,Login.class);
                 startActivity(intent);
                 finish();
             }
-        },3000);
+        },5000);
 
     }
 }

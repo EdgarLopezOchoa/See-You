@@ -56,7 +56,7 @@ public class Registro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
-        btnNota = findViewById(R.id.btnNota);
+
         btnGaleria = findViewById(R.id.btnGaleria);
         btnFoto = findViewById(R.id.btnFoto);
         btnEnviar = findViewById(R.id.btnEnviar);
@@ -67,13 +67,6 @@ public class Registro extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etContraseña = findViewById(R.id.etContraseña);
 
-        btnNota.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i1 = new Intent(Registro.this,Login.class);
-                startActivity(i1);
-            }
-        });
 
         btnGaleria.setOnClickListener(new View.OnClickListener() {
             @Override

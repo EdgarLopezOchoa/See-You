@@ -8,7 +8,8 @@
         android:id="@+id/RutasFragment"
         android:title="Rutas"
         android:icon="@drawable/routs_foreground"
-        android:iconTint="@color/white"></item>
+        android:iconTint="@color/black"
+        android:iconTintMode="multiply"></item>
 
     <item
         android:icon="@drawable/perfil_foreground"

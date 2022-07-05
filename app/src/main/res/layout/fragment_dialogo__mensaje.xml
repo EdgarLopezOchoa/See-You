@@ -12,7 +12,62 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="313dp"
+            android:layout_height="69dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/fondo_de_edittext"
+            app:counterEnabled="false"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TVmensaje">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ETtituloubicacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Nombre Del Punto"
+                android:inputType="textPersonName"
+                android:textColor="@color/black">
+
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/fondo_de_edittext"
+            app:counterEnabled="false"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ETdescripcionubicacion"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:hint="Descripcion Del Punto"
+                android:inputType="textPersonName"
+                android:textColor="@color/black">
+
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
         <Button
             android:id="@+id/BTNenviarmensaje"
             android:layout_width="0dp"
@@ -30,30 +85,13 @@
             app:layout_constraintStart_toEndOf="@+id/TVenviarbotones"
             app:layout_constraintTop_toTopOf="@+id/BTNenviarcancelar" />
 
-        <EditText
-            android:id="@+id/ETtituloubicacion"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="80dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Nombre De La Ubicacion"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TVmensaje" />
-
         <Button
             android:id="@+id/BTNenviarcancelar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="25dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="25dp"
             android:background="@drawable/button"
             android:ems="10"
             android:text="Cancelar"
@@ -63,15 +101,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/TVenviarbotones"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ETdescripcionubicacion" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
         <TextView
             android:id="@+id/TVenviarbotones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/ETdescripcionubicacion"
-            app:layout_constraintStart_toStartOf="@+id/ETdescripcionubicacion"
-            app:layout_constraintTop_toBottomOf="@+id/ETdescripcionubicacion" />
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
         <TextView
             android:id="@+id/TVmensaje"
@@ -87,19 +125,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/ETdescripcionubicacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="Descripcion"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="@+id/ETtituloubicacion"
-            app:layout_constraintStart_toStartOf="@+id/ETtituloubicacion"
-            app:layout_constraintTop_toBottomOf="@+id/ETtituloubicacion" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
