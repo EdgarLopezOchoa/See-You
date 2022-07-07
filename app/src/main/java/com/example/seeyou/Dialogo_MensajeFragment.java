@@ -35,6 +35,9 @@ import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Dialogo_MensajeFragment#newInstance} factory method to
@@ -95,19 +98,50 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     public void Ubicacion(String URL){
 
+        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Loading ...");
+        pDialog.setCancelable(true);
+        pDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(Registrar.getContext(), response, Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+                new SweetAlertDialog(Registrar.getContext(),
+                        SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Buen Trabajo!")
+                        .setContentText("El Marcando a Sido Registrado Correctamente")
+                        .show();
                 titulo1.getText().clear();
                 descripcion.getText().clear();
                 direccion ="";
+
+                LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
+
+                //Crea todos los valores que lleva el punto
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(ubicacion1);
+                markerOptions.title(titulo1.getText().toString());
+
+                //añade el punto
+                Mapa.addMarker(markerOptions);
+
+
+                //cierra el fragmento
+                getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
             }
 
     }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Registrar.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+                new SweetAlertDialog(Registrar.getContext(),
+                        SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Ops...Algo Salio Mal..")
+                        .setContentText("El Marcando a No Pudo Ser Registrado...")
+                        .show();
+
+                getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
             }
         }) {
             @Override
@@ -177,19 +211,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 Ubicacion("https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_marcador.php");
 
                 //Crea la ubicacion con los valores de longitud y latitud que se le proporciona
-                LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
 
-                //Crea todos los valores que lleva el punto
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(ubicacion1);
-                markerOptions.title(titulo1.getText().toString());
-
-                //añade el punto
-                Mapa.addMarker(markerOptions);
-
-
-                //cierra el fragmento
-                getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
 
 
                 //Codigo de notificaciones por si lo necesitamos

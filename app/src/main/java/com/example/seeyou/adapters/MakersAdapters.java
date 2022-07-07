@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHolder> {
 
 
@@ -52,6 +54,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     private List<Markers> markerslistpuntos = new ArrayList<>();
     private int id_usuario = MapsFragment.id_usuario;
     private GoogleMap mMap = MapsFragment.mMap;
+    SweetAlertDialog Eliminar_Marcador_recycler;
 
     public MakersAdapters(List<Markers> markerList, Context context) {
         MarkerList = markerList;
@@ -116,7 +119,20 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         holder.eliminarmarker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Eliminar(id_usuario,holder.id);
+
+                Eliminar_Marcador_recycler = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                Eliminar_Marcador_recycler.setTitleText("¿Estas Seguro?");
+                Eliminar_Marcador_recycler.setContentText("Este Marcador Ya no Se Podra Recuperar..");
+                Eliminar_Marcador_recycler.setConfirmText("Eliminar");
+                Eliminar_Marcador_recycler.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        Eliminar(id_usuario,holder.id);
+                        Eliminar_Marcador_recycler.dismiss();
+                    }
+                });
+                Eliminar_Marcador_recycler.show();
+
             }
         });
 
@@ -158,13 +174,19 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                     if (Habilitado1 == "habilitado") {
 
                         holder.habilitarmarcador.setText("habilitado");
-                        Toast.makeText(context, "ESTE MARCADOR AHORA APARECERA EN SU MAPA :D", Toast.LENGTH_SHORT).show();
+                        new SweetAlertDialog(context)
+                                .setTitleText("Habilitado")
+                                .setContentText("Este Marcador Ahora Aparecera En Su Mapa :D")
+                                .show();
                         holder.habilitarmarcador.setChecked(true);
 
                     } else  {
 
                         holder.habilitarmarcador.setText("deshabilitado");
-                        Toast.makeText(context, "ESTE MARCADOR YA NO APARECERA EN SU MAPA... D:", Toast.LENGTH_SHORT).show();
+                        new SweetAlertDialog(context)
+                                .setTitleText("Deshabilitado")
+                                .setContentText("Este Marcador Ya No Aparecera En Su Mapa... D:")
+                                .show();
                         holder.habilitarmarcador.setChecked(false);
                     }
 
@@ -265,7 +287,11 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             @Override
             public void onResponse(String response) {
 
-                Toast.makeText(context, "MARCADOR ELIMINADO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                new SweetAlertDialog(context,
+                        SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Eliminado")
+                        .setContentText("El Marcado Ha Sido Eliminado Correctamente")
+                        .show();
 
                 PuntosRecycler(2);
                 PuntosMapa();

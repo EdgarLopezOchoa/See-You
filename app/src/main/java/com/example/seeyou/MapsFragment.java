@@ -71,6 +71,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
     LocationManager locManager;
@@ -86,6 +88,7 @@ public class MapsFragment extends Fragment {
     public static int id_usuario = 0;
     int tiempo = 5000;
     int bucleubicacion = 0;
+    SweetAlertDialog Eliminar_Marcador;
     View view;
 
     RequestQueue requestQueue;
@@ -210,8 +213,20 @@ public class MapsFragment extends Fragment {
                     bottomSheetDialog.findViewById(R.id.BTNeliminar).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                           Eliminar(id_usuario,TVidmarker.getText().toString());
-                            bottomSheetDialog.cancel();
+                           Eliminar_Marcador = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
+                            Eliminar_Marcador.setTitleText("¿Estas Seguro?");
+                            Eliminar_Marcador.setContentText("Este Marcador Ya no Se Podra Recuperar..");
+                            Eliminar_Marcador.setConfirmText("Eliminar");
+                            Eliminar_Marcador.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog) {
+                                            Eliminar(id_usuario,TVidmarker.getText().toString());
+                                            bottomSheetDialog.cancel();
+                                            Eliminar_Marcador.dismiss();
+                                        }
+                                    });
+                            Eliminar_Marcador.show();
+
 
                         }
                     });
@@ -237,8 +252,11 @@ public class MapsFragment extends Fragment {
             });
 
             }catch (Exception e){
-                Toast.makeText(getContext(), "NECESITAS ACTIVAR LA UBICACION Y " +
-                        "DAR PERMISOS A LA APP", Toast.LENGTH_SHORT).show();
+                new SweetAlertDialog(getContext(),
+                        SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Ops...Algo Salio Mal..")
+                        .setContentText("NECESITAS ACTIVAR LA UBICACION Y DAR PERMISOS A LA APP...")
+                        .show();
             }
         }
 
@@ -250,12 +268,23 @@ public class MapsFragment extends Fragment {
 
     public void Eliminar(int id_usuario, String id_punto ){
 
+        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Loading ...");
+        pDialog.setCancelable(true);
+        pDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                pDialog.dismiss();
+                new SweetAlertDialog(getContext(),
+                        SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Eliminado")
+                        .setContentText("El Marcado Ha Sido Eliminado Correctamente")
+                        .show();
 
-                Toast.makeText(ubicacion.getContext(), "MARCADOR ELIMINADO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+
 
                 PuntosMapa();
 
@@ -264,7 +293,12 @@ public class MapsFragment extends Fragment {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ubicacion.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+                new SweetAlertDialog(getContext(),
+                        SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Ops...Algo Salio Mal..")
+                        .setContentText("No Hemos Podido Eliminar El Marcador...")
+                        .show();
             }
         }) {
             @Override
@@ -303,13 +337,19 @@ public class MapsFragment extends Fragment {
                 if (Habilitado1 == "habilitado") {
 
                     habilitado.setText("habilitado");
-                    Toast.makeText(ubicacion.getContext(), "ESTE MARCADOR AHORA APARECERA EN SU MAPA :D", Toast.LENGTH_SHORT).show();
+                    new SweetAlertDialog(getContext())
+                            .setTitleText("Habilitado")
+                            .setContentText("Este Marcador Ahora Aparecera En Su Mapa :D")
+                            .show();
                     habilitado.setChecked(true);
 
                 } else  {
 
                     habilitado.setText("deshabilitado");
-                    Toast.makeText(ubicacion.getContext(), "ESTE MARCADOR YA NO APARECERA EN SU MAPA... D:", Toast.LENGTH_SHORT).show();
+                    new SweetAlertDialog(getContext())
+                            .setTitleText("Deshabilitado")
+                            .setContentText("Este Marcador Ya No Aparecera En Su Mapa... D:")
+                            .show();
                     habilitado.setChecked(false);
                 }
 
@@ -322,7 +362,11 @@ public class MapsFragment extends Fragment {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ubicacion.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                new SweetAlertDialog(getContext(),
+                        SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Ops...Algo Salio Mal..")
+                        .setContentText("No Hemos Podido Cambiar El Estado Del Marcador...")
+                        .show();
             }
         }) {
             @Override
@@ -395,7 +439,10 @@ public class MapsFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
                     }
                 });
         Volley.newRequestQueue(getContext()).add(stringRequest);
@@ -439,7 +486,10 @@ public class MapsFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
                     }
                 });
         Volley.newRequestQueue(getContext()).add(stringRequest);
@@ -474,7 +524,10 @@ public class MapsFragment extends Fragment {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ubicacion.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Algo Salio Mal..")
+                        .setContentText("Por Favor Habilite Su Internet...")
+                        .show();
             }
         }) {
             @Override
@@ -523,8 +576,10 @@ public class MapsFragment extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "NO SE A PODIDO OBTENER TU ULTIMA UBICACION",
-                                Toast.LENGTH_SHORT).show();
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Active Su Ubicacion O Permita Que La App Accesada A Ella...")
+                                .show();
                     }
                 });
     }
@@ -642,10 +697,15 @@ public class MapsFragment extends Fragment {
                         LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                     }catch (Exception e){
-                        Toast.makeText(getContext(), "UBICACION NO ENCONTRADA....", Toast.LENGTH_SHORT).show();
+                        new SweetAlertDialog(getContext())
+                                .setTitleText("Ubicacion No Encontrada...")
+                                .setContentText("Asegurece De Seguir Esta Estructura   Ciudad + Lugar/calle/Local/Establecimineto")
+                                .show();
                     }
                     }else{
-                    Toast.makeText(getContext(), "FAVOR DE INTRODUCIR UN NOMBRE VALIDO.", Toast.LENGTH_SHORT).show();
+                    new SweetAlertDialog(getContext())
+                            .setTitleText("Favor De Introducir Una Ubicaion")
+                            .show();
 
 
                 }

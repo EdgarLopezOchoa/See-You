@@ -12,9 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="¿No te has registrado?"
+        android:text="¿NO TE HAS REGISTRADO?"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/btnIngresar"
         app:layout_constraintTop_toBottomOf="@+id/btnIngresar" />
 
@@ -25,15 +25,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:background="@drawable/fondo_de_edittext"
         app:counterEnabled="false"
         app:endIconMode="clear_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323">
+        app:layout_constraintVertical_bias="0.469">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEmail2"
@@ -54,9 +53,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="40dp"
-        android:background="@drawable/fondo_de_edittext"
         app:counterEnabled="true"
         app:counterMaxLength="15"
         app:endIconMode="password_toggle"
@@ -82,7 +80,7 @@
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-condensed-light"
         android:gravity="center"
         android:text="INICIAR SESION"
@@ -90,7 +88,7 @@
         android:textSize="40sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.554"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -132,5 +130,19 @@
         android:text="Mantener Sesion Iniciada"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/sin_t_tulo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

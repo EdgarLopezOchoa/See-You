@@ -1,5 +1,6 @@
 package com.example.seeyou;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONArray;
@@ -47,6 +49,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class Login extends AppCompatActivity {
 
@@ -89,7 +94,8 @@ public class Login extends AppCompatActivity {
                 bottomSheetDialog.setContentView(bottomSheetView);
                 bottomSheetDialog.show();
 
-                enviar = bottomSheetDialog.findViewById(R.id.btnEnviar);
+
+                    enviar = bottomSheetDialog.findViewById(R.id.btnEnviar);
                 Nombre = bottomSheetDialog.findViewById(R.id.etNombre);
                 Contraseña = bottomSheetDialog.findViewById(R.id.etContraseña);
                 Apellido = bottomSheetDialog.findViewById(R.id.etApellido);
@@ -134,6 +140,8 @@ public class Login extends AppCompatActivity {
 
 
     }
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -225,10 +233,10 @@ public class Login extends AppCompatActivity {
         } else {
 
 
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Estamos procesando su solicitud...");
-
-            progressDialog.show();
+            SweetAlertDialog pDialog = new SweetAlertDialog(Login.this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.setTitleText("Loading ...");
+            pDialog.setCancelable(true);
+            pDialog.show();
 
             str_email = etEmail.getText().toString().trim();
             str_password = etContraseña.getText().toString().trim();
@@ -237,7 +245,8 @@ public class Login extends AppCompatActivity {
             StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    progressDialog.dismiss();
+                    pDialog.dismiss();
+
 
                     try {
                         JSONArray array = new JSONArray(response);
@@ -246,31 +255,52 @@ public class Login extends AppCompatActivity {
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
 
-                            if (response.equalsIgnoreCase("[]")) {
-
-                                Toast.makeText(Login.this, "No Se A Podido Iniciar Sesion", Toast.LENGTH_SHORT).show();
-
-                            } else {
-
-                                etEmail.setText("");
-                                etContraseña.setText("");
+                            id = cajas.getInt("idusuario");
 
 
-                                if (sesion.isChecked() == true) {
-                                    SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
-                                    boolean sesion = true;
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putBoolean("sesion_usuario", sesion);
-                                    editor.putInt("id", cajas.getInt("idusuario"));
-                                    editor.commit();
 
-                                }
 
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                finish();
-                                Toast.makeText(Login.this, "Se Inicio Sesion Correctamente", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        if (Objects.equals(response, "[]")) {
+
+                            SweetAlertDialog error = new SweetAlertDialog(Login.this,
+                                    SweetAlertDialog.ERROR_TYPE);
+                            error.setTitleText("Op...Algo Salio Mal...");
+                            error.setContentText("Revise los datos y vuelva a intentarlo");
+                            error.show();
+
+
+
+                        } else {
+
+                            etEmail.setText("");
+                            etContraseña.setText("");
+
+
+                            if (sesion.isChecked() == true) {
+                                SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                                boolean sesion = true;
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putBoolean("sesion_usuario", sesion);
+                                editor.putInt("id", id);
+                                editor.commit();
+
                             }
 
+
+                            new SweetAlertDialog(Login.this,
+                                    SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("Se Ha Iniciado Sesion Correctamente")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                            finish();
+                                        }
+                                    })
+                                    .show();
                         }
 
                     } catch (JSONException e) {
@@ -284,8 +314,12 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    progressDialog.dismiss();
-                    Toast.makeText(Login.this, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                    pDialog.dismiss();
+                    new SweetAlertDialog(Login.this,
+                            SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Ops...Algo Salio Mal..")
+                            .setContentText("El Marcando a No Pudo Ser Registrado...")
+                            .show();
                 }
             }
 
