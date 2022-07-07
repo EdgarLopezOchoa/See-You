@@ -83,6 +83,9 @@ public class PerfilFragment extends Fragment {
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("sesion_usuario",false);
+                editor.putInt("id",0);
+                editor.putString("Nombre","");
+                editor.putString("Apellido","");
                 editor.commit();
                 Intent intent = new Intent(getContext(), Login.class);
                 startActivity(intent);

@@ -70,6 +70,7 @@ public class Login extends AppCompatActivity {
     Bitmap bitmap;
     String url = "https://wwwutntrabajos.000webhostapp.com/SEEYOU/login.php";
     private boolean esVisible = true;
+    public static String Apellido1,Nombre1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,6 +257,8 @@ public class Login extends AppCompatActivity {
                             JSONObject cajas = array.getJSONObject(i);
 
                             id = cajas.getInt("idusuario");
+                            Nombre1 = cajas.getString("Nombre");
+                            Apellido1 = cajas.getString("Apellido");
 
 
 
@@ -284,11 +287,15 @@ public class Login extends AppCompatActivity {
                                 boolean sesion = true;
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putBoolean("sesion_usuario", sesion);
-                                editor.putInt("id", id);
                                 editor.commit();
 
                             }
-
+                            SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putInt("id", id);
+                            editor.putString("Nombre",Nombre1);
+                            editor.putString("Apellido",Apellido1);
+                            editor.commit();
 
                             new SweetAlertDialog(Login.this,
                                     SweetAlertDialog.SUCCESS_TYPE)
