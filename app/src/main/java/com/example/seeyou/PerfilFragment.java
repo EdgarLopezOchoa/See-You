@@ -1,6 +1,8 @@
 package com.example.seeyou;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -71,24 +73,22 @@ public class PerfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
         btnLogin = view.findViewById(R.id.btnLogin);
-        btnRegistro = view.findViewById(R.id.btnRegistro);
+
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i1 = new Intent(getContext(),Login.class);
-                startActivity(i1);
+                SharedPreferences preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("sesion_usuario",false);
+                editor.commit();
+                Intent intent = new Intent(getContext(), Login.class);
+                startActivity(intent);
             }
         });
 
-        btnRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i2 = new Intent(getContext(),Registro.class);
-                startActivity(i2);
-            }
-        });
 
         return view;
     }

@@ -98,7 +98,7 @@
         android:id="@+id/btnIngresar"
         android:layout_width="303dp"
         android:layout_height="43dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button2"
         android:elevation="8dp"
         android:onClick="Validar"
@@ -106,7 +106,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/CBsesion" />
 
     <TextView
         android:id="@+id/TVirregistro"
@@ -119,8 +119,18 @@
         android:text="Registrarse"
         android:textColor="@color/azul"
         android:textColorLink="@color/azul"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvNota"
         app:layout_constraintStart_toEndOf="@+id/tvNota"
         app:layout_constraintTop_toTopOf="@+id/tvNota" />
+
+    <CheckBox
+        android:id="@+id/CBsesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Mantener Sesion Iniciada"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

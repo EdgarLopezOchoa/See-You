@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -82,7 +83,7 @@ public class MapsFragment extends Fragment {
     public static RecyclerView recyclerViewmarker;
     public static List<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
-    public static int id_usuario = 1;
+    public static int id_usuario = 0;
     int tiempo = 5000;
     int bucleubicacion = 0;
     View view;
@@ -108,6 +109,9 @@ public class MapsFragment extends Fragment {
         public void onMapReady(GoogleMap googleMap) {
 
             try {
+                SharedPreferences preferences =getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+
+                   id_usuario = preferences.getInt("id", 0);
 
                 ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
 

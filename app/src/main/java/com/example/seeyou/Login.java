@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +33,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,7 +54,8 @@ public class Login extends AppCompatActivity {
     private LinearLayout contenedor;
     EditText etEmail, etContraseña;
     ImageView imgUsuario;
-    int PICK_IMAGE_REQUEST = 1;
+    CheckBox sesion;
+    int PICK_IMAGE_REQUEST = 1 , id = 0;
     String str_email,str_password;
     TextView irregistro;
     RequestQueue requestQueue;
@@ -62,6 +72,7 @@ public class Login extends AppCompatActivity {
         etContraseña = findViewById(R.id.etContraseña2);
         irregistro = findViewById(R.id.TVirregistro);
         contenedor = findViewById(R.id.Contenedormarker);
+        sesion = findViewById(R.id.CBsesion);
 
         irregistro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,15 +210,45 @@ public class Login extends AppCompatActivity {
                 public void onResponse(String response) {
                     progressDialog.dismiss();
 
-                    if (response.equalsIgnoreCase("Se ingreso correctamente")) {
+                    try {
+                        JSONArray array = new JSONArray(response);
 
-                        etEmail.setText("");
-                        etContraseña.setText("");
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        Toast.makeText(Login.this, response, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(Login.this, response, Toast.LENGTH_SHORT).show();
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+
+                            if (response.equalsIgnoreCase("[]")) {
+
+                                Toast.makeText(Login.this, "No Se A Podido Iniciar Sesion", Toast.LENGTH_SHORT).show();
+
+                            } else {
+
+                                etEmail.setText("");
+                                etContraseña.setText("");
+
+
+                                if (sesion.isChecked() == true) {
+                                    SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                                    boolean sesion = true;
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putBoolean("sesion_usuario", sesion);
+                                    editor.putInt("id", cajas.getInt("idusuario"));
+                                    editor.commit();
+
+                                }
+
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                                Toast.makeText(Login.this, "Se Inicio Sesion Correctamente", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+
+
 
                 }
             }, new Response.ErrorListener() {
