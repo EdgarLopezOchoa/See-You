@@ -86,6 +86,7 @@ public class PerfilFragment extends Fragment {
                 editor.commit();
                 Intent intent = new Intent(getContext(), Login.class);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 
