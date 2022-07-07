@@ -86,9 +86,8 @@ public class MapsFragment extends Fragment {
     public static List<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
     public static int id_usuario = 0;
-    private String NombreUsuario =Login.Nombre1, ApellidoUsuario = Login.Apellido1;
     int tiempo = 5000;
-    int bucleubicacion = 0;
+    int bucleubicacion = 0, mensaje = 0;
     SweetAlertDialog Eliminar_Marcador;
     View view;
 
@@ -116,12 +115,16 @@ public class MapsFragment extends Fragment {
                 SharedPreferences preferences =getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
                    id_usuario = preferences.getInt("id", 0);
-                new SweetAlertDialog(getContext())
-                        .setTitleText("Bienvenido!!!!")
-                        .setContentText("Bienvenido De Vuelta " + NombreUsuario + " " + ApellidoUsuario+
-                                ", \n Siempre Es Un Gusto Tenerte Aqui :D")
-                        .show();
 
+                   if (mensaje == 0) {
+                       new SweetAlertDialog(getContext())
+                               .setTitleText("Bienvenido!!!!")
+                               .setContentText("Bienvenido De Vuelta " + preferences.getString("Nombre","") + " "
+                                       + preferences.getString("Apellido","") +
+                                       ", \n Siempre Es Un Gusto Tenerte Aqui :D")
+                               .show();
+                       mensaje = 1;
+                   }
                 ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
 
                 SVubicacion.setQuery("",false);

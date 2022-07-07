@@ -70,7 +70,7 @@ public class Login extends AppCompatActivity {
     Bitmap bitmap;
     String url = "https://wwwutntrabajos.000webhostapp.com/SEEYOU/login.php";
     private boolean esVisible = true;
-    public static String Apellido1,Nombre1;
+     String Apellido1,Nombre1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

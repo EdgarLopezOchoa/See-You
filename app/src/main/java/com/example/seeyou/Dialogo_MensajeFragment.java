@@ -112,9 +112,6 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                         .setTitleText("Buen Trabajo!")
                         .setContentText("El Marcando a Sido Registrado Correctamente")
                         .show();
-                titulo1.getText().clear();
-                descripcion.getText().clear();
-                direccion ="";
 
                 LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
 
@@ -125,6 +122,12 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
                 //añade el punto
                 Mapa.addMarker(markerOptions);
+
+                titulo1.getText().clear();
+                descripcion.getText().clear();
+                direccion ="";
+
+
 
 
                 //cierra el fragmento
