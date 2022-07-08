@@ -12,8 +12,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
@@ -57,7 +59,7 @@ public class Login extends AppCompatActivity {
 
     Button btnNota, btnIngresar;
     //borrar despues
-    Button button,enviar,cancelar,btnGaleria;
+    Button button,enviar,cancelar,btnGaleria,btningresarsesion;
     EditText Nombre,Contraseña,Apellido,Celular,Email;
     private LinearLayout contenedor;
     EditText etEmail, etContraseña;
@@ -71,6 +73,7 @@ public class Login extends AppCompatActivity {
     String url = "https://wwwutntrabajos.000webhostapp.com/SEEYOU/login.php";
     private boolean esVisible = true;
      String Apellido1,Nombre1;
+    SweetAlertDialog Eliminar_Marcador,CambiarSesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,14 @@ public class Login extends AppCompatActivity {
         irregistro = findViewById(R.id.TVirregistro);
         contenedor = findViewById(R.id.Contenedormarker);
         sesion = findViewById(R.id.CBsesion);
+        btnIngresar = findViewById(R.id.btnIngresar);
+
+        btnIngresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validacion();
+            }
+        });
 
         irregistro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,23 +159,30 @@ public class Login extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == event.KEYCODE_BACK) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("¿Desea Salir De See You?").setPositiveButton("si", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Intent.ACTION_MAIN);
-                            intent.addCategory(Intent.CATEGORY_HOME);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                    })
-                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            builder.show();
+            Eliminar_Marcador = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+            Eliminar_Marcador.setTitleText("¿Estas Seguro?");
+            Eliminar_Marcador.setContentText("Estas Apunto De Salir De See You...,\n " +
+                    "See You Seguira Trabajando En Segundo Plano.");
+            Eliminar_Marcador.setConfirmText("Salir");
+            Eliminar_Marcador.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sDialog) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    Eliminar_Marcador.dismiss();
+
+                }
+            });
+            Eliminar_Marcador.setCancelText("Cancelar");
+            Eliminar_Marcador.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    Eliminar_Marcador.dismiss();
+                }
+            });
+            Eliminar_Marcador.show();
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -191,6 +209,46 @@ public class Login extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void validacion(){
+        if (etEmail.getText().toString().equals("")) {
+            SweetAlertDialog error = new SweetAlertDialog(Login.this,
+                    SweetAlertDialog.ERROR_TYPE);
+            error.setTitleText("Op...Algo Salio Mal...");
+            error.setContentText("Por Favor Intruduzca Un Email...");
+            error.show();
+        } else if (etContraseña.getText().toString().equals("")) {
+            SweetAlertDialog error = new SweetAlertDialog(Login.this,
+                    SweetAlertDialog.ERROR_TYPE);
+            error.setTitleText("Op...Algo Salio Mal...");
+            error.setContentText("Por Favor Introduzca Una Contraseña...");
+            error.show();
+        } else if(sesion.isChecked() == false) {
+            CambiarSesion = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+            CambiarSesion.setTitleText("La Casilla De Mantener Sesion No Esta Marcada...");
+            CambiarSesion.setContentText("¿Desea Mantener Su Sesion Activa?");
+            CambiarSesion.setConfirmText("SI");
+            CambiarSesion.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sDialog) {
+                    sesion.setChecked(true);
+                    Validar();
+                    CambiarSesion.dismiss();
+
+                }
+            });
+            CambiarSesion.setCancelText("NO");
+            CambiarSesion.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    Validar();
+                    CambiarSesion.dismiss();
+
+                }
+            });
+            CambiarSesion.show();
         }
     }
 
@@ -225,13 +283,7 @@ public class Login extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public void Validar(View view) {
-
-        if (etEmail.getText().toString().equals("")) {
-            Toast.makeText(this, "INTRODUZCA EL EMAIL", Toast.LENGTH_SHORT).show();
-        } else if (etContraseña.getText().toString().equals("")) {
-            Toast.makeText(this, "INTRODUZCA UNA CONTRASEÑA", Toast.LENGTH_SHORT).show();
-        } else {
+    public void Validar() {
 
 
             SweetAlertDialog pDialog = new SweetAlertDialog(Login.this, SweetAlertDialog.PROGRESS_TYPE);
@@ -325,7 +377,7 @@ public class Login extends AppCompatActivity {
                     new SweetAlertDialog(Login.this,
                             SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Ops...Algo Salio Mal..")
-                            .setContentText("El Marcando a No Pudo Ser Registrado...")
+                            .setContentText("No Hemos Podido Iniciar Sesion...")
                             .show();
                 }
             }
@@ -345,6 +397,6 @@ public class Login extends AppCompatActivity {
             requestQueue.add(request);
 
 
-        }
+
     }
 }

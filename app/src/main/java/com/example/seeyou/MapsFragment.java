@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.usage.NetworkStatsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,6 +21,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -76,23 +79,27 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
     LocationManager locManager;
-    private ImageView ubicacion, location,vermarkers, cambiarmapa;
+    private ImageView ubicacion, location, vermarkers, cambiarmapa;
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
-    private SearchView SVubicacion,SVpunto;
-    private TextView titulo,nombremarcador,TVidmarker;
+    private SearchView SVubicacion, SVpunto;
+    private TextView titulo, nombremarcador, TVidmarker;
     public static RecyclerView recyclerViewmarker;
     public static List<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
     public static int id_usuario = 0;
     int tiempo = 5000;
+    public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker;
     int bucleubicacion = 0, mensaje = 0;
     SweetAlertDialog Eliminar_Marcador;
     View view;
+    SweetAlertDialog pDialog;
+    LocationManager locationManager;
 
     RequestQueue requestQueue;
-
+    ConnectivityManager locationManagerinternet;
+    NetworkInfo networkInfo;
     TextView ubicacionmarcador,coordenadamarcador,descripcionmarcador;
     Switch habilitado;
 
@@ -107,14 +114,21 @@ public class MapsFragment extends Fragment {
 
 
 
-        @SuppressLint("MissingPermission")
+        @SuppressLint({"MissingPermission"})
         @Override
         public void onMapReady(GoogleMap googleMap) {
 
             try {
+                pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+                pDialog.setTitleText("Cargando ...");
+                pDialog.setCancelable(true);
                 SharedPreferences preferences =getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
                    id_usuario = preferences.getInt("id", 0);
+
+                   locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
+                locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
+                 networkInfo = locationManagerinternet.getActiveNetworkInfo();
 
                    if (mensaje == 0) {
                        new SweetAlertDialog(getContext())
@@ -158,24 +172,24 @@ public class MapsFragment extends Fragment {
 
 
                     //asigna el contenedor y el layout donde se mostrara el cuadro de dialogo
-                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog
+                    bottomSheetDialogmarker = new BottomSheetDialog
                             (getContext(), R.style.BottomSheetDialog);
                     View bottomSheetView = LayoutInflater.from(getContext()).inflate(
                             R.layout.marker_layout, (LinearLayout) contenedor
                     );
 
-                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialogmarker.setContentView(bottomSheetView);
 
 
 
 
                     //Asigna los valores a los objetos dentro el bottomsheetdialog
-                    nombremarcador = bottomSheetDialog.findViewById(R.id.TVnombreubicacion);
-                     ubicacionmarcador = bottomSheetDialog.findViewById(R.id.TVubicacion);
-                     coordenadamarcador = bottomSheetDialog.findViewById(R.id.TVmasinformacion);
-                     descripcionmarcador = bottomSheetDialog.findViewById(R.id.TVdescripcion);
-                     habilitado = bottomSheetDialog.findViewById(R.id.SWhabilitar);
-                     TVidmarker = bottomSheetDialog.findViewById(R.id.TVacomodardescrip);
+                    nombremarcador = bottomSheetDialogmarker.findViewById(R.id.TVnombreubicacion);
+                     ubicacionmarcador = bottomSheetDialogmarker.findViewById(R.id.TVubicacion);
+                     coordenadamarcador = bottomSheetDialogmarker.findViewById(R.id.TVmasinformacion);
+                     descripcionmarcador = bottomSheetDialogmarker.findViewById(R.id.TVdescripcion);
+                     habilitado = bottomSheetDialogmarker.findViewById(R.id.SWhabilitar);
+                     TVidmarker = bottomSheetDialogmarker.findViewById(R.id.TVbotonesmarker);
 
                      habilitado.setText("habilitado");
                      habilitado.setChecked(true);
@@ -209,7 +223,7 @@ public class MapsFragment extends Fragment {
 
 
 
-                    bottomSheetDialog.findViewById(R.id.BTNviajar).setOnClickListener(new View.OnClickListener() {
+                    bottomSheetDialogmarker.findViewById(R.id.BTNviajar).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(getContext(), "ESTE BOTON HARA ALGO ALGUN DIA :D",
@@ -219,7 +233,7 @@ public class MapsFragment extends Fragment {
                         }
                     });
 
-                    bottomSheetDialog.findViewById(R.id.BTNeliminar).setOnClickListener(new View.OnClickListener() {
+                    bottomSheetDialogmarker.findViewById(R.id.BTNeliminar).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                            Eliminar_Marcador = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
@@ -254,7 +268,7 @@ public class MapsFragment extends Fragment {
                     });
 
 
-                    bottomSheetDialog.show();
+
 
                     return true;
                 }
@@ -277,9 +291,6 @@ public class MapsFragment extends Fragment {
 
     public void Eliminar(int id_usuario, String id_punto ){
 
-        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.setTitleText("Loading ...");
-        pDialog.setCancelable(true);
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -300,14 +311,23 @@ public class MapsFragment extends Fragment {
             }
 
         }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
                 pDialog.dismiss();
-                new SweetAlertDialog(getContext(),
-                        SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Ops...Algo Salio Mal..")
-                        .setContentText("No Hemos Podido Eliminar El Marcador...")
-                        .show();
+                if (locationManagerinternet.getActiveNetworkInfo() != null
+                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Eliminar Su Marcador...")
+                            .show();
+                }else {
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
             }
         }) {
             @Override
@@ -336,12 +356,13 @@ public class MapsFragment extends Fragment {
 
 
     public void Habilitar(String Habilitado1, String id ){
+        pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                pDialog.dismiss();
 
                 if (Habilitado1 == "habilitado") {
 
@@ -369,13 +390,29 @@ public class MapsFragment extends Fragment {
             }
 
         }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
-                new SweetAlertDialog(getContext(),
-                        SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Ops...Algo Salio Mal..")
-                        .setContentText("No Hemos Podido Cambiar El Estado Del Marcador...")
-                        .show();
+                pDialog.dismiss();
+                if (Habilitado1 == "habilitado") {
+                    habilitado.setChecked(false);
+
+                }else{
+                    habilitado.setChecked(true);
+                }
+                if (locationManagerinternet.getActiveNetworkInfo() != null
+                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
+                            .show();
+                }else {
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
             }
         }) {
             @Override
@@ -406,11 +443,14 @@ public class MapsFragment extends Fragment {
 
     private void PuntosRecycler() {
 
+        pDialog.show();
+
         StringRequest stringRequest=new StringRequest(Request.Method.GET,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id="+id_usuario, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    pDialog.dismiss();
 
                     markerslist.clear();
 
@@ -437,7 +477,7 @@ public class MapsFragment extends Fragment {
                     recyclerViewmarker.setHasFixedSize(true);
                     recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerViewmarker.setAdapter(adapter);
-
+                    bottomSheetDialog.show();
 
 
                 } catch (JSONException e) {
@@ -446,14 +486,30 @@ public class MapsFragment extends Fragment {
             }
         },
                 new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("Por Favor Habilite Su Internet...")
-                                .show();
+                        pDialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                        if (locationManagerinternet.getActiveNetworkInfo() != null
+                                && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("No Hemos Podido Cargar Los Marcadores...")
+                                    .show();
+                        }else {
+                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Por Favor Habilite Su Internet...")
+                                    .show();
+                        }
                     }
                 });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
     }
@@ -493,14 +549,29 @@ public class MapsFragment extends Fragment {
             }
         },
                 new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("Por Favor Habilite Su Internet...")
-                                .show();
+
+                        if (locationManagerinternet.getActiveNetworkInfo() != null
+                                && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                    .show();
+                        }else {
+                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                    .show();
+                        }
                     }
                 });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
     }
@@ -509,11 +580,14 @@ public class MapsFragment extends Fragment {
 
     public void Ubicacion(String latitud1, String longitud1, String nombre, String ubicacion1){
 
+        pDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/buscar_datos_de_marcador.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    pDialog.dismiss();
                     JSONArray array = new JSONArray(response);
 
                         JSONObject cajas = array.getJSONObject(0);
@@ -521,7 +595,7 @@ public class MapsFragment extends Fragment {
 
                         descripcionmarcador.setText(cajas.getString("descripcion"));
                         TVidmarker.setText(cajas.getString("IDpunto"));
-
+                    bottomSheetDialogmarker.show();
 
 
                 } catch (JSONException e) {
@@ -531,12 +605,26 @@ public class MapsFragment extends Fragment {
             }
 
         }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
-                new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Algo Salio Mal..")
-                        .setContentText("Por Favor Habilite Su Internet...")
-                        .show();
+                pDialog.dismiss();
+
+
+                if (locationManagerinternet.getActiveNetworkInfo() != null
+                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
+                            .show();
+                }else {
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
+
             }
         }) {
             @Override
@@ -555,7 +643,10 @@ public class MapsFragment extends Fragment {
         };
 
 
-
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         requestQueue= Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
@@ -579,6 +670,13 @@ public class MapsFragment extends Fragment {
 
                             //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 14));
+                        }else{
+                            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false){
+                                new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Por Favor Habilite Su Ubicacion...")
+                                        .show();
+                            }
                         }
                     }
                 })
@@ -708,7 +806,7 @@ public class MapsFragment extends Fragment {
                     }catch (Exception e){
                         new SweetAlertDialog(getContext())
                                 .setTitleText("Ubicacion No Encontrada...")
-                                .setContentText("Asegurece De Seguir Esta Estructura   Ciudad + Lugar/calle/Local/Establecimineto")
+                                .setContentText("Asegurece De Seguir Esta Estructura: \n  Ciudad + Lugar/calle/Local/Establecimineto")
                                 .show();
                     }
                     }else{
@@ -765,7 +863,7 @@ public class MapsFragment extends Fragment {
             public void onClick(View v) {
 
 
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog
+                 bottomSheetDialog = new BottomSheetDialog
                         (getContext(), R.style.BottomSheetDialog);
                 View bottomSheetView = LayoutInflater.from(getContext()).inflate(
                         R.layout.markersbottomshet, (LinearLayout) view.findViewById(R.id.ContenedorTarjeta)
@@ -807,7 +905,7 @@ public class MapsFragment extends Fragment {
 
 
 
-                bottomSheetDialog.show();
+
 
 
 

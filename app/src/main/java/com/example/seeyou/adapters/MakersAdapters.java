@@ -1,6 +1,10 @@
 package com.example.seeyou.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,11 +59,20 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     private List<Markers> markerslistpuntos = new ArrayList<>();
     private int id_usuario = MapsFragment.id_usuario;
     private GoogleMap mMap = MapsFragment.mMap;
-    SweetAlertDialog Eliminar_Marcador_recycler;
+    SweetAlertDialog Eliminar_Marcador_recycler,pDialog;
+    LocationManager locationManager;
+    ConnectivityManager locationManagerinternet;
+    BottomSheetDialog bottomSheetDialog = MapsFragment.bottomSheetDialog;
+
 
     public MakersAdapters(List<Markers> markerList, Context context) {
         MarkerList = markerList;
         this.context = context;
+        locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+        locationManagerinternet = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Cargando ...");
+        pDialog.setCancelable(true);
     }
 
     @NonNull
@@ -165,11 +179,16 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     }
     public void Habilitar(String Habilitado1, int id, ViewHolder holder ){
 
+        SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Loading ...");
+        pDialog.setCancelable(true);
+        pDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                pDialog.dismiss();
 
                     if (Habilitado1 == "habilitado") {
 
@@ -198,9 +217,30 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             }
 
         }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+
+                if (Habilitado1 == "habilitado") {
+                    holder.habilitarmarcador.setChecked(false);
+
+                }else{
+                    holder.habilitarmarcador.setChecked(true);
+                }
+                if (locationManagerinternet.getActiveNetworkInfo() != null
+                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                    new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
+                            .show();
+                }else {
+                    new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
             }
         }) {
             @Override
@@ -229,12 +269,13 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
     private void PuntosRecycler(int accion) {
 
+        pDialog.show();
         StringRequest stringRequest=new StringRequest(Request.Method.GET,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id="+id_usuario, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-
+                    pDialog.dismiss();
                     markerslist.clear();
 
                     JSONArray array = new JSONArray(response);
@@ -270,22 +311,47 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             }
         },
                 new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                        if (locationManagerinternet.getActiveNetworkInfo() != null
+                                && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                            new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("No Hemos Podido Cargar Los Marcadores...")
+                                    .show();
+                        }else {
+                            new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Por Favor Habilite Su Internet...")
+                                    .show();
+                        }
 
                     }
                 });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(context).add(stringRequest);
 
     }
 
 
     public void Eliminar(int id_usuario, int id_punto ){
+        SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Loading ...");
+        pDialog.setCancelable(true);
+        pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                pDialog.dismiss();
 
                 new SweetAlertDialog(context,
                         SweetAlertDialog.SUCCESS_TYPE)
@@ -299,9 +365,23 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             }
 
         }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+                if (locationManagerinternet.getActiveNetworkInfo() != null
+                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                    new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Eliminar Su Marcador...")
+                            .show();
+                }else {
+                    new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
             }
         }) {
             @Override
@@ -361,11 +441,29 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             }
         },
                 new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        if (locationManagerinternet.getActiveNetworkInfo() != null
+                                && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                            new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("No Hemos Podido Actualizar Su Mapa...")
+                                    .show();
+                        }else {
+                            new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                    .show();
+                        }
                     }
                 });
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(context).add(stringRequest);
 
     }

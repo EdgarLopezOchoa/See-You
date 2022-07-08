@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login2"
+    android:background="@drawable/fondoblanco4"
     tools:context=".Login">
 
     <TextView
@@ -99,7 +99,6 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/button2"
         android:elevation="8dp"
-        android:onClick="Validar"
         android:text="Ingresar"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout"

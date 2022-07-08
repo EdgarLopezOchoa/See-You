@@ -29,6 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MainActivity extends AppCompatActivity {
 
     RutasFragment RutasFragment = new RutasFragment();
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    SweetAlertDialog Eliminar_Marcador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,23 +102,32 @@ public class MainActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == event.KEYCODE_BACK) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("¿Desea Salir De See You?").setPositiveButton("si", new DialogInterface.OnClickListener() {
+
+            Eliminar_Marcador = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+            Eliminar_Marcador.setTitleText("¿Estas Seguro?");
+            Eliminar_Marcador.setContentText("Estas Apunto De Salir De See You...,\n " +
+                    "See You Seguira Trabajando En Segundo Plano.");
+            Eliminar_Marcador.setConfirmText("Salir");
+            Eliminar_Marcador.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(SweetAlertDialog sDialog) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    Eliminar_Marcador.dismiss();
                 }
-            })
-                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            builder.show();
+            });
+            Eliminar_Marcador.setCancelText("Cancelar");
+            Eliminar_Marcador.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    Eliminar_Marcador.dismiss();
+                }
+            });
+            Eliminar_Marcador.show();
+
+
         }
         return super.onKeyDown(keyCode, event);
     }

@@ -13,9 +13,9 @@
         style="@style/BottomNavigation"
         android:layout_width="0dp"
         android:background="@drawable/fondodegradado"
-
+        app:backgroundTint="@null"
         android:layout_height="wrap_content"
-
+        android:backgroundTint="@null"
         android:elevation="8dp"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="sans-serif-condensed-light"
                 android:text="SEE YOU"
                 android:textAlignment="center"
@@ -60,16 +62,14 @@
             <SearchView
                 android:id="@+id/SVubicacion"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="40dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
                 android:searchIcon="@android:drawable/ic_menu_search"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/TVtituloseeyou"
                 app:layout_constraintEnd_toStartOf="@+id/IVmensajes"
                 app:layout_constraintHorizontal_bias="0.808"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/TVtituloseeyou"
                 app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -92,7 +92,7 @@
 
     <ImageView
         android:id="@+id/IVubicacion"
-        android:layout_width="39dp"
+        android:layout_width="45dp"
         android:layout_height="42dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
@@ -118,8 +118,8 @@
 
     <ImageView
         android:id="@+id/IVlocation"
-        android:layout_width="42dp"
-        android:layout_height="36dp"
+        android:layout_width="45dp"
+        android:layout_height="42dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:src="@drawable/marcador_round"
@@ -128,8 +128,8 @@
 
     <ImageView
         android:id="@+id/IVvermarkers"
-        android:layout_width="39dp"
-        android:layout_height="37dp"
+        android:layout_width="45dp"
+        android:layout_height="42dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/bookmarkers"
@@ -139,8 +139,8 @@
 
     <ImageView
         android:id="@+id/IVcambiarmapa"
-        android:layout_width="39dp"
-        android:layout_height="37dp"
+        android:layout_width="45dp"
+        android:layout_height="42dp"
         android:layout_marginBottom="5dp"
         android:src="@drawable/maps"
         app:layout_constraintBottom_toTopOf="@+id/IVvermarkers"

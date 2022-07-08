@@ -21,15 +21,20 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navegador"
         style="@style/BottomNavigation"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/white"
         android:elevation="8dp"
+        app:backgroundTint="@null"
+        app:itemIconSize="145px"
+        app:itemIconTint="@color/gris_obscuro"
+        app:itemPaddingBottom="10dp"
+        app:itemPaddingTop="-7dp"
+        app:itemTextColor="@color/gris_obscuro"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation"
-        android:background="@drawable/fondodegradado">
+        app:menu="@menu/bottom_navigation">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

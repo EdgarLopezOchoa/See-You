@@ -13,19 +13,20 @@
         style="@style/BottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@drawable/fondodegradado"
+        android:backgroundTint="@null"
+
+        android:backgroundTintMode="@null"
 
         android:elevation="8dp"
-
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
             <SearchView
                 android:id="@+id/SVpunto"
@@ -62,8 +63,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

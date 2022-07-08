@@ -2,12 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/MapsFragment"
-        android:icon="@drawable/mapa_foreground"
+        android:icon="@mipmap/mapicon_foreground"
+        android:iconTint="@color/black"
         android:title="Mapa"></item>
     <item
         android:id="@+id/RutasFragment"
         android:title="Rutas"
-        android:icon="@drawable/routs_foreground"
+        android:icon="@mipmap/routeicon_foreground"
         android:iconTint="@color/black"
         android:iconTintMode="multiply"></item>
 
