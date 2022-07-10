@@ -1,11 +1,14 @@
 package com.example.seeyou;
 
+import static android.view.View.VISIBLE;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +16,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
@@ -65,7 +71,7 @@ public class Login extends AppCompatActivity {
     EditText etEmail, etContraseña;
     ImageView imgUsuario;
     CheckBox sesion;
-    int PICK_IMAGE_REQUEST = 1 , id = 0;
+    int PICK_IMAGE_REQUEST = 1 , id = 0,registro = 0;
     String str_email,str_password;
     TextView irregistro;
     RequestQueue requestQueue;
@@ -74,11 +80,23 @@ public class Login extends AppCompatActivity {
     private boolean esVisible = true;
      String Apellido1,Nombre1;
     SweetAlertDialog Eliminar_Marcador,CambiarSesion;
+    BottomSheetDialog bottomSheetDialog;
+    ConnectivityManager locationManagerinternet;
+    SweetAlertDialog pDialog;
+    LocationManager locationManager;
+    TextView Asterisco1,Asterisco2,Asterisco3,Asterisco4,Asterisco5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
+        locationManagerinternet = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+
+        pDialog = new SweetAlertDialog(Login.this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Cargando ...");
+        pDialog.setCancelable(true);
+
 
         etEmail = findViewById(R.id.etEmail2);
         etContraseña = findViewById(R.id.etContraseña2);
@@ -86,6 +104,7 @@ public class Login extends AppCompatActivity {
         contenedor = findViewById(R.id.Contenedormarker);
         sesion = findViewById(R.id.CBsesion);
         btnIngresar = findViewById(R.id.btnIngresar);
+
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +116,7 @@ public class Login extends AppCompatActivity {
         irregistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog
+                 bottomSheetDialog = new BottomSheetDialog
                         (Login.this, R.style.BottomSheetDialog);
                 View bottomSheetView = LayoutInflater.from(Login.this).inflate(
                         R.layout.activity_registro, (LinearLayout) contenedor
@@ -116,6 +135,11 @@ public class Login extends AppCompatActivity {
                 cancelar = bottomSheetDialog.findViewById(R.id.btncancelarregistro);
                 btnGaleria = bottomSheetDialog.findViewById(R.id.btnGaleria);
                 imgUsuario = bottomSheetDialog.findViewById(R.id.imgUsuario);
+                Asterisco1 = bottomSheetDialog.findViewById(R.id.TVasterisco1);
+                Asterisco2 = bottomSheetDialog.findViewById(R.id.TVasterisco2);
+                Asterisco3 = bottomSheetDialog.findViewById(R.id.TVasterisco3);
+                Asterisco4 = bottomSheetDialog.findViewById(R.id.TVasterisco4);
+                Asterisco5 = bottomSheetDialog.findViewById(R.id.TVasterisco5);
 
 
                 btnGaleria.setOnClickListener(new View.OnClickListener() {
@@ -136,9 +160,7 @@ public class Login extends AppCompatActivity {
                 enviar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        registrarUsuarios(Nombre.getText().toString(),Apellido.getText().toString(),
-                                Celular.getText().toString(),Email.getText().toString(),Contraseña.getText().toString()
-                                );
+                        ValidarRegistro();
                     }
                 });
             }
@@ -216,13 +238,13 @@ public class Login extends AppCompatActivity {
         if (etEmail.getText().toString().equals("")) {
             SweetAlertDialog error = new SweetAlertDialog(Login.this,
                     SweetAlertDialog.ERROR_TYPE);
-            error.setTitleText("Op...Algo Salio Mal...");
+            error.setTitleText("Campo Vacio!!...");
             error.setContentText("Por Favor Intruduzca Un Email...");
             error.show();
         } else if (etContraseña.getText().toString().equals("")) {
             SweetAlertDialog error = new SweetAlertDialog(Login.this,
                     SweetAlertDialog.ERROR_TYPE);
-            error.setTitleText("Op...Algo Salio Mal...");
+            error.setTitleText("Campo Vacio!!...");
             error.setContentText("Por Favor Introduzca Una Contraseña...");
             error.show();
         } else if(sesion.isChecked() == false) {
@@ -234,7 +256,10 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onClick(SweetAlertDialog sDialog) {
                     sesion.setChecked(true);
-                    Validar();
+                    str_email = etEmail.getText().toString().trim();
+                    str_password = etContraseña.getText().toString().trim();
+
+                    Validar(str_email, str_password);
                     CambiarSesion.dismiss();
 
                 }
@@ -243,28 +268,108 @@ public class Login extends AppCompatActivity {
             CambiarSesion.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    Validar();
+                    str_email = etEmail.getText().toString().trim();
+                    str_password = etContraseña.getText().toString().trim();
+
+                    Validar(str_email, str_password);
                     CambiarSesion.dismiss();
 
                 }
             });
             CambiarSesion.show();
+        } else if (sesion.isChecked() == true){
+            str_email = etEmail.getText().toString().trim();
+            str_password = etContraseña.getText().toString().trim();
+
+            Validar(str_email, str_password);
+        }
+    }
+
+    public void ValidarRegistro(){
+        if (Nombre.getText().toString().equals("")){
+            Asterisco1.setVisibility(View.VISIBLE);
+
+        }else{
+            Asterisco1.setVisibility(View.INVISIBLE);
+        }
+
+        if (Apellido.getText().toString().equals("")){
+            Asterisco2.setVisibility(VISIBLE);
+        } else{
+            Asterisco2.setVisibility(View.INVISIBLE);
+        }
+
+        if (Celular.getText().toString().equals("")){
+            Asterisco3.setVisibility(VISIBLE);
+        }else{
+            Asterisco3.setVisibility(View.INVISIBLE);
+        }
+        if (Email.getText().toString().equals("")){
+            Asterisco4.setVisibility(VISIBLE);
+        } else{
+            Asterisco4.setVisibility(View.INVISIBLE);
+        }
+        if (Contraseña.getText().toString().equals("")){
+            Asterisco5.setVisibility(VISIBLE);
+        } else{
+            Asterisco5.setVisibility(View.INVISIBLE);
+        }
+
+
+        if (!Nombre.getText().toString().equals("") && !Apellido.getText().toString().equals("")
+                && !Contraseña.getText().toString().equals("") && !Celular.getText().toString().equals("")
+        && !Email.getText().toString().equals("") && !Contraseña.getText().toString().equals("")){
+
+            registrarUsuarios(Nombre.getText().toString(),Apellido.getText().toString(),
+                    Celular.getText().toString(),Email.getText().toString(),Contraseña.getText().toString()
+            );
+            registro = 1;
+        } else{
+            SweetAlertDialog error = new SweetAlertDialog(Login.this,
+                    SweetAlertDialog.ERROR_TYPE);
+            error.setTitleText("Campo(s) Vacio(s)!!...");
+            error.setContentText("Por Favor Llene Los Campos Marcados...");
+            error.show();
         }
     }
 
     public void registrarUsuarios(String Nombre,String Apellido,String Celular,String Email, String Contraseña){
+        pDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, 
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_usuarios.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+
+                pDialog.dismiss();
+
+                SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                boolean sesion = true;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("sesion_usuario", sesion);
+                editor.commit();
+
+                Validar(Email,Contraseña);
                 //limpiar();
             }
         }, new Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "Algo salio mal", Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+                if (locationManagerinternet.getActiveNetworkInfo() != null
+                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                    new SweetAlertDialog(Login.this,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Cargar Los Marcadores...")
+                            .show();
+                }else {
+                    new SweetAlertDialog(Login.this,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
             }
         }){
             @Override
@@ -283,7 +388,7 @@ public class Login extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public void Validar() {
+    public void Validar(String Email_usuario, String Contraseña_usuario) {
 
 
             SweetAlertDialog pDialog = new SweetAlertDialog(Login.this, SweetAlertDialog.PROGRESS_TYPE);
@@ -345,21 +450,39 @@ public class Login extends AppCompatActivity {
                             SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putInt("id", id);
-                            editor.putString("Nombre",Nombre1);
-                            editor.putString("Apellido",Apellido1);
+                            editor.putString("Nombre", Nombre1);
+                            editor.putString("Apellido", Apellido1);
                             editor.commit();
 
-                            new SweetAlertDialog(Login.this,
-                                    SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("Se Ha Iniciado Sesion Correctamente")
-                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                        @Override
-                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                            finish();
-                                        }
-                                    })
-                                    .show();
+
+                            if (registro != 1) {
+                                new SweetAlertDialog(Login.this,
+                                        SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Se Ha Iniciado Sesion Correctamente")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                registro = 0;
+                                                finish();
+
+                                            }
+                                        })
+                                        .show();
+                            } else{
+                                new SweetAlertDialog(Login.this,
+                                        SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Se Ha Registrado Correctamente")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                registro = 0;
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
                         }
 
                     } catch (JSONException e) {
@@ -386,8 +509,8 @@ public class Login extends AppCompatActivity {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("email", str_email);
-                    params.put("password", str_password);
+                    params.put("email", Email_usuario);
+                    params.put("password", Contraseña_usuario);
                     return params;
 
                 }

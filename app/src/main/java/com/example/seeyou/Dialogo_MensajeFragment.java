@@ -2,6 +2,9 @@ package com.example.seeyou;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationManagerCompat;
@@ -55,15 +58,18 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     private String mParam2;
 
     //Toma las variables de otro fragmento
-    double a = 1;
-    double b = 1;
+    int a = 1;
+    int b = 1;
     public GoogleMap Mapa = MapsFragment.mMap;
     double LatitudDialogo = MapsFragment.LatitudDialogo;
     double LongitudDialogo = MapsFragment.LongitudDialogo;
     String direccion = MapsFragment.direccion;
     MapsFragment mapsFragment = new MapsFragment();
-    String latitud = LatitudDialogo + "", Longitud = LongitudDialogo+"",A=a+"",B=b+"";
+    String latitud = LatitudDialogo + "", Longitud = LongitudDialogo+"";
+    LocationManager locationManager;
+
     RequestQueue requestQueue;
+    ConnectivityManager locationManagerinternet;
     //
 
 
@@ -138,13 +144,21 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 pDialog.dismiss();
-                new SweetAlertDialog(Registrar.getContext(),
-                        SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Ops...Algo Salio Mal..")
-                        .setContentText("El Marcando a No Pudo Ser Registrado...")
-                        .show();
+                if (locationManagerinternet.getActiveNetworkInfo() != null
+                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
+                            .show();
+                }else {
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
 
-                getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
+
             }
         }) {
             @Override
@@ -157,8 +171,8 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 params.put("descripcion",descripcion.getText().toString());
                 params.put("Longitud", Longitud);
                 params.put("Latitud", latitud);
-                params.put("idusuario",A);
-                params.put("idgrupo",B);
+                params.put("idusuario",a+"");
+                params.put("idgrupo",b+"");
                 return params;
             }
 
@@ -183,7 +197,11 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationManagerCompat = NotificationManagerCompat.from(getContext());
+        SharedPreferences preferences =getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
+        a = preferences.getInt("id", 0);
+        locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
+        locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
     }
 
     @Override
