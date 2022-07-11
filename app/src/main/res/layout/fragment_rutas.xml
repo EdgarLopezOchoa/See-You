@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".RutasFragment">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/navegador4"
         style="@style/BottomNavigation"
         android:layout_width="0dp"
@@ -24,7 +24,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/fondodegradado">
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="6dp">
 
             <TextView
                 android:id="@+id/TVtitulorutas"
@@ -45,6 +46,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+    </androidx.appcompat.widget.Toolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

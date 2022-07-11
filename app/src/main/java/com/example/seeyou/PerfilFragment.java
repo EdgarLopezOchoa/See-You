@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.seeyou.adapters.MakersAdapters;
 import com.example.seeyou.adapters.Markers;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -55,14 +58,17 @@ public class PerfilFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     SweetAlertDialog pDialog;
-    int id_usuario, validacion = 0;;
+    int id_usuario, validacion = 0;
+    ImageView fondo1,fondo2,fondo3;
+    ;
     LocationManager locationManager;
-    String NombreUsuario,CorreoUsuario,ContraseñaUsuario,TelefonoUsuario,ApellidoUsuario;
-
+    String NombreUsuario, CorreoUsuario, ContraseñaUsuario, TelefonoUsuario, ApellidoUsuario;
+    Toolbar navegadorperfil;
+    SharedPreferences preferences;
     RequestQueue requestQueue;
     ConnectivityManager locationManagerinternet;
-
-    TextInputEditText nombre,correo,contraseña,telefono,apellido;
+    SharedPreferences.Editor editor;
+    TextInputEditText nombre, correo, contraseña, telefono, apellido;
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -98,9 +104,7 @@ public class PerfilFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
 
 
-
         }
-
 
 
     }
@@ -117,6 +121,70 @@ public class PerfilFragment extends Fragment {
         telefono = view.findViewById(R.id.ETCelularUsuario);
         apellido = view.findViewById(R.id.ETApellidoUsuario);
         btnCambiar = view.findViewById(R.id.BTNcambiardatos);
+        fondo1 = view.findViewById(R.id.IVfondo1);
+        fondo2 = view.findViewById(R.id.IVfondo2);
+        navegadorperfil = view.findViewById(R.id.navegador2);
+        fondo3 = view.findViewById(R.id.IVfondo3);
+
+        preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+
+
+        if (preferences.getBoolean("fondo2", false) == true){
+            navegadorperfil.setBackgroundResource(R.drawable.fondodegradado2);
+            btnCambiar.setBackgroundResource(R.drawable.buttonfondo2);
+            btnLogin.setBackgroundResource(R.drawable.buttonfondo2);
+
+        }else if(preferences.getBoolean("fondo", false) == true){
+            navegadorperfil.setBackgroundResource(R.drawable.fondodegradado);
+            btnCambiar.setBackgroundResource(R.drawable.button2);
+            btnLogin.setBackgroundResource(R.drawable.button2);
+        }else if(preferences.getBoolean("fondo3", false) == true){
+            navegadorperfil.setBackgroundResource(R.drawable.fondodegradado3);
+            btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
+            btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
+        }
+
+        fondo1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navegadorperfil.setBackgroundResource(R.drawable.fondodegradado);
+                editor = preferences.edit();
+                editor.putBoolean("fondo", true);
+                editor.putBoolean("fondo2", false);
+                editor.putBoolean("fondo3", false);
+                editor.commit();
+                btnCambiar.setBackgroundResource(R.drawable.button2);
+                btnLogin.setBackgroundResource(R.drawable.button2);
+            }
+        });
+
+        fondo2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navegadorperfil.setBackgroundResource(R.drawable.fondodegradado2);
+                editor = preferences.edit();
+                editor.putBoolean("fondo", false);
+                editor.putBoolean("fondo2", true);
+                editor.putBoolean("fondo3", false);
+                editor.commit();
+                btnCambiar.setBackgroundResource(R.drawable.buttonfondo2);
+                btnLogin.setBackgroundResource(R.drawable.buttonfondo2);
+            }
+        });
+
+        fondo3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navegadorperfil.setBackgroundResource(R.drawable.fondodegradado3);
+                editor = preferences.edit();
+                editor.putBoolean("fondo", false);
+                editor.putBoolean("fondo2", false);
+                editor.putBoolean("fondo3", true);
+                editor.commit();
+                btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
+                btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
+            }
+        });
 
         Usuario();
 
@@ -127,7 +195,6 @@ public class PerfilFragment extends Fragment {
             }
         });
 
-        SharedPreferences preferences =getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
         locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
@@ -141,10 +208,10 @@ public class PerfilFragment extends Fragment {
                 SharedPreferences preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("sesion_usuario",false);
-                editor.putInt("id",0);
-                editor.putString("Nombre","");
-                editor.putString("Apellido","");
+                editor.putBoolean("sesion_usuario", false);
+                editor.putInt("id", 0);
+                editor.putString("Nombre", "");
+                editor.putString("Apellido", "");
                 editor.commit();
                 Intent intent = new Intent(getContext(), Login.class);
                 startActivity(intent);
@@ -164,7 +231,7 @@ public class PerfilFragment extends Fragment {
 
         pDialog.show();
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/datos_usuario.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -189,10 +256,8 @@ public class PerfilFragment extends Fragment {
                         TelefonoUsuario = cajas.getString("Celular");
                         telefono.setText(TelefonoUsuario);
 
-                        ContraseñaUsuario =cajas.getString("Contraseña");
+                        ContraseñaUsuario = cajas.getString("Contraseña");
                         contraseña.setText(ContraseñaUsuario);
-
-
 
 
                     }
@@ -211,13 +276,13 @@ public class PerfilFragment extends Fragment {
 
                         if (locationManagerinternet.getActiveNetworkInfo() != null
                                 && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                && locationManagerinternet.getActiveNetworkInfo().isConnected()){
-                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("No Hemos Podido Cargar Los Datos Del Usuario...")
                                     .show();
-                        }else {
-                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                        } else {
+                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Por Favor Habilite Su Internet...")
                                     .show();
@@ -225,11 +290,11 @@ public class PerfilFragment extends Fragment {
                     }
                 }) {
             @Override
-            protected Map<String, String > getParams() throws AuthFailureError {
-                Map<String, String > params= new HashMap<String, String>();
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
 
 
-                params.put("idusuario", id_usuario+"");
+                params.put("idusuario", id_usuario + "");
 
 
                 return params;
@@ -245,31 +310,30 @@ public class PerfilFragment extends Fragment {
 
     }
 
-    public void validacion(){
+    public void validacion() {
 
 
-
-        if (!Objects.equals(nombre.getText().toString(), NombreUsuario)){
-            validacion ++;
+        if (!Objects.equals(nombre.getText().toString(), NombreUsuario)) {
+            validacion++;
         }
-        if (!Objects.equals(apellido.getText().toString(), ApellidoUsuario)){
-            validacion ++;
+        if (!Objects.equals(apellido.getText().toString(), ApellidoUsuario)) {
+            validacion++;
         }
-        if(!Objects.equals(correo.getText().toString(), CorreoUsuario)){
-            validacion ++;
+        if (!Objects.equals(correo.getText().toString(), CorreoUsuario)) {
+            validacion++;
         }
-        if (!Objects.equals(telefono.getText().toString(), TelefonoUsuario)){
-            validacion ++;
+        if (!Objects.equals(telefono.getText().toString(), TelefonoUsuario)) {
+            validacion++;
         }
-        if(!Objects.equals(contraseña.getText().toString(), ContraseñaUsuario)){
-            validacion ++;
+        if (!Objects.equals(contraseña.getText().toString(), ContraseñaUsuario)) {
+            validacion++;
         }
-        if (validacion == 0){
-            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+        if (validacion == 0) {
+            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("No Hay Cambios..")
                     .setContentText("Ningun Campo Ha Cambiado...")
                     .show();
-        } else{
+        } else {
             CambiosDatos();
 
         }
@@ -284,7 +348,7 @@ public class PerfilFragment extends Fragment {
 
         pDialog.show();
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/cambiar_usuario.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -292,8 +356,8 @@ public class PerfilFragment extends Fragment {
                     pDialog.dismiss();
 
                     validacion = 0;
-                    if (Objects.equals(response, "Cambios Realizados")){
-                        new SweetAlertDialog(getContext(),SweetAlertDialog.SUCCESS_TYPE)
+                    if (Objects.equals(response, "Cambios Realizados")) {
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("Cambios Realizados Con Exito!!!!!")
                                 .show();
                     }
@@ -310,13 +374,13 @@ public class PerfilFragment extends Fragment {
 
                         if (locationManagerinternet.getActiveNetworkInfo() != null
                                 && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                && locationManagerinternet.getActiveNetworkInfo().isConnected()){
-                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("No Hemos Podido Hacer Los Cambios...")
                                     .show();
-                        }else {
-                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                        } else {
+                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Por Favor Habilite Su Internet...")
                                     .show();
@@ -324,8 +388,8 @@ public class PerfilFragment extends Fragment {
                     }
                 }) {
             @Override
-            protected Map<String, String > getParams() throws AuthFailureError {
-                Map<String, String > params= new HashMap<String, String>();
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
 
 
                 params.put("Nombre", nombre.getText().toString());
@@ -333,7 +397,7 @@ public class PerfilFragment extends Fragment {
                 params.put("Email", correo.getText().toString());
                 params.put("Telefono", telefono.getText().toString());
                 params.put("Contraseña", contraseña.getText().toString());
-                params.put("idusuario", id_usuario+"");
+                params.put("idusuario", id_usuario + "");
 
 
                 return params;

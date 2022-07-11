@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Console;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -69,10 +70,10 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     double LongitudDialogo = MapsFragment.LongitudDialogo;
     String direccion = MapsFragment.direccion;
     MapsFragment mapsFragment = new MapsFragment();
-    String latitud = LatitudDialogo + "", Longitud = LongitudDialogo+"";
+    String latitud = LatitudDialogo + "", Longitud = LongitudDialogo + "";
     LocationManager locationManager;
     NetworkInfo networkInfo;
-
+    SharedPreferences preferences;
     RequestQueue requestQueue;
     ConnectivityManager locationManagerinternet;
     //
@@ -80,8 +81,8 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     //variables normales
     private NotificationManagerCompat notificationManagerCompat;
-    private EditText  descripcion,titulo1;
-    private Button Registrar,cancelar;
+    private EditText descripcion, titulo1;
+    private Button Registrar, cancelar;
     public String idpunto;
 
     public Dialogo_MensajeFragment() {
@@ -107,26 +108,26 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     }
 
-    public void validar(){
-        if(Objects.equals(titulo1.getText().toString(), "")){
+    public void validar() {
+        if (Objects.equals(titulo1.getText().toString(), "")) {
             new SweetAlertDialog(Registrar.getContext(),
                     SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Campo(s) Vacio(s)!")
                     .setContentText("Rellene Todos Los Campos Por Favor")
                     .show();
-        }else if(Objects.equals(descripcion.getText().toString(), "")){
+        } else if (Objects.equals(descripcion.getText().toString(), "")) {
             new SweetAlertDialog(Registrar.getContext(),
                     SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Campo(s) Vacio(s)!")
                     .setContentText("Rellene Todos Los Campos Por Favor")
                     .show();
 
-        }else {
+        } else {
             Ubicacion("https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_marcador.php");
         }
     }
 
-    public void Ubicacion(String URL){
+    public void Ubicacion(String URL) {
 
         SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Loading ...");
@@ -155,93 +156,71 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
                 titulo1.getText().clear();
                 descripcion.getText().clear();
-                direccion ="";
-
-
+                direccion = "";
 
 
                 //cierra el fragmento
                 getFragmentManager().beginTransaction().remove(Dialogo_MensajeFragment.this).commit();
             }
 
-    }, new com.android.volley.Response.ErrorListener() {
+        }, new com.android.volley.Response.ErrorListener() {
             @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
                 pDialog.dismiss();
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1){
 
-                    if (networkInfo.isConnected()){
-                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
-                                .show();
-                    }else {
-                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("Por Favor Habilite Su Internet...")
-                                .show();
-                    }
-
-                } else{
-                    // para versiones anteriores a android 6.0
-
+                try {
                     if (locationManagerinternet.getActiveNetworkInfo() != null
                             && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                            && locationManagerinternet.getActiveNetworkInfo().isConnected()){
-                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
                                 .show();
-                    }else {
-                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                    } else {
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("Por Favor Habilite Su Internet...")
                                 .show();
                     }
 
+                } catch (Exception e) {
+                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
                 }
 
             }
         }) {
             @Override
-            protected Map<String, String > getParams() throws AuthFailureError {
-                Map<String, String > params= new HashMap<String, String>();
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
 
 
                 params.put("nombrePunto", titulo1.getText().toString());
                 params.put("direccion", direccion);
-                params.put("descripcion",descripcion.getText().toString());
+                params.put("descripcion", descripcion.getText().toString());
                 params.put("Longitud", Longitud);
                 params.put("Latitud", latitud);
-                params.put("idusuario",a+"");
-                params.put("idgrupo",b+"");
+                params.put("idusuario", a + "");
+                params.put("idgrupo", b + "");
                 return params;
             }
 
         };
 
 
-
-
-        requestQueue= Volley.newRequestQueue(getContext());
+        requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
-
-
-
-
-
-
-
-
 
 
     @SuppressLint("MissingPermission")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationManagerCompat = NotificationManagerCompat.from(getContext());
-        SharedPreferences preferences =getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        SharedPreferences preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
         a = preferences.getInt("id", 0);
         locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
@@ -258,6 +237,18 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
         cancelar = view.findViewById(R.id.BTNenviarcancelar);
         titulo1 = view.findViewById(R.id.ETtituloubicacion);
         descripcion = view.findViewById(R.id.ETdescripcionubicacion);
+
+        preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+
+
+        if (preferences.getBoolean("fondo2", false) == true){
+           Registrar.setBackgroundResource(R.drawable.buttonfondo2);
+
+        }else if(preferences.getBoolean("fondo", false) == true){
+            Registrar.setBackgroundResource(R.drawable.button2);
+        }else if(preferences.getBoolean("fondo3", false) == true){
+            Registrar.setBackgroundResource(R.drawable.buttonfondo3);
+        }
 
 
         cancelar.setOnClickListener(new View.OnClickListener() {
@@ -277,7 +268,6 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 validar();
 
                 //Crea la ubicacion con los valores de longitud y latitud que se le proporciona
-
 
 
                 //Codigo de notificaciones por si lo necesitamos

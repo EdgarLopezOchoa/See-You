@@ -1,7 +1,10 @@
 package com.example.seeyou;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -19,6 +22,8 @@ public class RutasFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    Toolbar navegadorperfil2;
+    SharedPreferences preferences;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -59,6 +64,18 @@ public class RutasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rutas, container, false);
+        View view = inflater.inflate(R.layout.fragment_rutas, container, false);
+        navegadorperfil2 = view.findViewById(R.id.navegador4);
+        preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        if (preferences.getBoolean("fondo2", false) == true){
+            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado2);
+
+        }else if(preferences.getBoolean("fondo", false) == true){
+            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado);
+        }else if(preferences.getBoolean("fondo3", false) == true){
+            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado3);
+        }
+
+        return view;
     }
 }

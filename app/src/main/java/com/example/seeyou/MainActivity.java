@@ -10,10 +10,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     MapsFragment mapsFragment = new MapsFragment();
     PerfilFragment perfilFragment = new PerfilFragment();
     MarkersFragment markersFragment = new MarkersFragment();
+    SharedPreferences preferences;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -50,13 +54,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         startLocationUpdates();
 
+        preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+
         Window window = getWindow();
 
-        window.setBackgroundDrawableResource(R.drawable.statusbar);
+        window.setBackgroundDrawableResource(R.drawable.fondodegradado);
 
         Toolbar toolbar = findViewById(R.id.navegador1);
 
         setSupportActionBar(toolbar);
+
+        ejecutar();
 
         //llama al fragmento de mapa y lo pone en el FrameLayout
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -131,6 +139,45 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void ejecutar(){
+        final Handler handler= new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (preferences.getBoolean("fondo2", false) == true){
+                    Window window = getWindow();
+
+                    window.setBackgroundDrawableResource(R.drawable.fondodegradado2);
+
+                    Toolbar toolbar = findViewById(R.id.navegador1);
+
+                    setSupportActionBar(toolbar);
+
+                }else if(preferences.getBoolean("fondo", false) == true){
+                    Window window = getWindow();
+
+                    window.setBackgroundDrawableResource(R.drawable.fondodegradado);
+
+                    Toolbar toolbar = findViewById(R.id.navegador1);
+
+                    setSupportActionBar(toolbar);
+                }
+                else if(preferences.getBoolean("fondo3", false) == true){
+                    Window window = getWindow();
+
+                    window.setBackgroundDrawableResource(R.drawable.fondodegradado3);
+
+                    Toolbar toolbar = findViewById(R.id.navegador1);
+
+                    setSupportActionBar(toolbar);
+                }
+                handler.postDelayed(this,100);//se ejecutara cada 10 segundos
+            }
+        },5000);//empezara a ejecutarse después de 5 milisegundos
+    }
+
+
 
     @SuppressLint("MissingPermission")
     protected void startLocationUpdates() {
