@@ -23,6 +23,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -102,7 +103,7 @@ public class MapsFragment extends Fragment {
     NetworkInfo networkInfo;
     TextView ubicacionmarcador,coordenadamarcador,descripcionmarcador;
     Switch habilitado;
-
+    String version = Build.VERSION.RELEASE;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -241,13 +242,12 @@ public class MapsFragment extends Fragment {
                         public void onClick(View v) {
                            Eliminar_Marcador = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
                             Eliminar_Marcador.setTitleText("¿Estas Seguro?");
-                            Eliminar_Marcador.setContentText("Este Marcador Ya no Se Podra Recuperar..");
+                            Eliminar_Marcador.setContentText("Este Marcador Ya No Se Podra Recuperar..");
                             Eliminar_Marcador.setConfirmText("Eliminar");
                             Eliminar_Marcador.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
                                         public void onClick(SweetAlertDialog sDialog) {
                                             Eliminar(id_usuario,TVidmarker.getText().toString());
-                                            bottomSheetDialog.cancel();
                                             Eliminar_Marcador.dismiss();
                                         }
                                     });
@@ -307,6 +307,7 @@ public class MapsFragment extends Fragment {
                         .setTitleText("Eliminado")
                         .setContentText("El Marcado Ha Sido Eliminado Correctamente")
                         .show();
+                bottomSheetDialogmarker.dismiss();
 
 
 
@@ -890,22 +891,39 @@ try{
                     }catch (Exception e){
                         new SweetAlertDialog(getContext())
                                 .setTitleText("Ubicacion No Encontrada...")
-                                .setContentText("Asegurece De Seguir Esta Estructura: \n  Ciudad + Lugar/calle/Local/Establecimineto")
+                                .setContentText("Asegurece De Seguir Esta Estructura: \n  Ciudad + Lugar/calle/Local/Establecimineto o Viceversa.")
                                 .show();
                     }
-                    }else{
+                }else{
                     new SweetAlertDialog(getContext())
-                            .setTitleText("Favor De Introducir Una Ubicaion")
+                            .setTitleText("Favor De Introducir Una Ubicaion Valida!!")
                             .show();
 
 
                 }
-                return false;
+               return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+/*
+                String location = SVubicacion.getQuery().toString();
+                List<Address> addressList = null;
+                if (location != null & !location.equals("")){
+                    Geocoder geocoder = new Geocoder(getContext());
+                    try {
+                        addressList = geocoder.getFromLocationName(location,1);
+                        Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                    }catch (Exception e){
 
+                    }
+                }else{
+
+
+
+                }*/
                 return false;
             }
         });

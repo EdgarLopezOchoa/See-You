@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationManagerCompat;
@@ -38,6 +40,7 @@ import org.json.JSONObject;
 import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -53,7 +56,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    String version = Build.VERSION.RELEASE;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -68,6 +71,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     MapsFragment mapsFragment = new MapsFragment();
     String latitud = LatitudDialogo + "", Longitud = LongitudDialogo+"";
     LocationManager locationManager;
+    NetworkInfo networkInfo;
 
     RequestQueue requestQueue;
     ConnectivityManager locationManagerinternet;
@@ -103,6 +107,25 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     }
 
+    public void validar(){
+        if(Objects.equals(titulo1.getText().toString(), "")){
+            new SweetAlertDialog(Registrar.getContext(),
+                    SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Campo(s) Vacio(s)!")
+                    .setContentText("Rellene Todos Los Campos Por Favor")
+                    .show();
+        }else if(Objects.equals(descripcion.getText().toString(), "")){
+            new SweetAlertDialog(Registrar.getContext(),
+                    SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Campo(s) Vacio(s)!")
+                    .setContentText("Rellene Todos Los Campos Por Favor")
+                    .show();
+
+        }else {
+            Ubicacion("https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_marcador.php");
+        }
+    }
+
     public void Ubicacion(String URL){
 
         SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
@@ -117,7 +140,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 new SweetAlertDialog(Registrar.getContext(),
                         SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Buen Trabajo!")
-                        .setContentText("El Marcando a Sido Registrado Correctamente")
+                        .setContentText("El Marcandor Ha Sido Registrado Correctamente")
                         .show();
 
                 LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
@@ -146,20 +169,38 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 pDialog.dismiss();
-                if (locationManagerinternet.getActiveNetworkInfo() != null
-                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                        && locationManagerinternet.getActiveNetworkInfo().isConnected()){
-                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
-                            .show();
-                }else {
-                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("Por Favor Habilite Su Internet...")
-                            .show();
-                }
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1){
 
+                    if (networkInfo.isConnected()){
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
+                                .show();
+                    }else {
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
+                    }
+
+                } else{
+                    // para versiones anteriores a android 6.0
+
+                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                            && locationManagerinternet.getActiveNetworkInfo().isConnected()){
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
+                                .show();
+                    }else {
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
+                    }
+
+                }
 
             }
         }) {
@@ -196,6 +237,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
 
 
+    @SuppressLint("MissingPermission")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationManagerCompat = NotificationManagerCompat.from(getContext());
@@ -204,6 +246,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
         a = preferences.getInt("id", 0);
         locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
+        networkInfo = locationManagerinternet.getActiveNetworkInfo();
     }
 
     @Override
@@ -231,7 +274,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                Ubicacion("https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_marcador.php");
+                validar();
 
                 //Crea la ubicacion con los valores de longitud y latitud que se le proporciona
 

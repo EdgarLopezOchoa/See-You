@@ -8,17 +8,15 @@
     android:background="@drawable/fondonaranaja2"
     android:orientation="vertical">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="-25dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/gris_muyclaro"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,22 +27,6 @@
             android:layout_width="match_parent"
 
             android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/TVnombreubicacionmarker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:elevation="10dp"
-                android:text="Titulo"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/Rojo_fuerte"
-                android:textSize="24sp"
-                android:textStyle="bold|italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/TVubicacionmarker"
@@ -65,26 +47,31 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="50dp"
                 android:elevation="10dp"
                 android:textAlignment="center"
                 android:textColor="@color/gris_obscuro"
                 android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/TVubicacionmarker"
                 app:layout_constraintStart_toStartOf="@+id/TVubicacionmarker"
                 app:layout_constraintTop_toBottomOf="@+id/TVubicacionmarker" />
 
             <TextView
                 android:id="@+id/TVidubicacion"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="10dp"
                 android:text="DESCRIPCION"
+                android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/TVdescripcionmarker"
+                app:layout_constraintEnd_toStartOf="@+id/SWhabilitarmarker"
+                app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="@+id/TVdescripcionmarker"
-                app:layout_constraintTop_toBottomOf="@+id/TVnombreubicacionmarker" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/TVdescripcionmarker"
@@ -105,24 +92,22 @@
                 android:id="@+id/SWhabilitarmarker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="50dp"
                 android:text="Habilitar"
                 android:textAlignment="textEnd"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/TVmasinformacionmarker"
-                app:layout_constraintTop_toBottomOf="@+id/TVmasinformacionmarker" />
+                app:layout_constraintBottom_toBottomOf="@+id/TVidubicacion"
+                app:layout_constraintEnd_toEndOf="@+id/TVdescripcionmarker"
+                app:layout_constraintTop_toTopOf="@+id/TVidubicacion" />
 
             <TextView
                 android:id="@+id/TVtitulodireccion"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="DIRECCION"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -139,6 +124,35 @@
         app:layout_constraintEnd_toEndOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="-30dp"
+        app:cardBackgroundColor="@color/gris_muyclaro"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/TVnombreubicacionmarker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="10dp"
+            android:text="Titulo"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/Rojo_fuerte"
+            android:textSize="28sp"
+            android:textStyle="bold|italic" />
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/BTNeliminarmarker"
