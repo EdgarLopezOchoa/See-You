@@ -66,14 +66,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/button2"
                 android:text="Cerrar Sesion"
                 app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout4"
-                app:layout_constraintEnd_toStartOf="@+id/textInputLayout4"
-                app:layout_constraintStart_toStartOf="@+id/imageView3"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/BTNcambiardatos"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/BTNcambiardatos"
+                app:layout_constraintTop_toBottomOf="@+id/BTNcambiardatos" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -179,12 +180,10 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="100dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="15"
                 app:endIconMode="password_toggle"
                 app:helperTextEnabled="true"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
@@ -236,13 +235,15 @@
                 android:id="@+id/BTNcambiardatos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/button2"
                 android:text="Cambiar Datos"
                 app:backgroundTint="@null"
-                app:layout_constraintEnd_toEndOf="@+id/btnLogin"
-                app:layout_constraintStart_toStartOf="@+id/btnLogin"
-                app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -257,22 +258,21 @@
                 android:id="@+id/IVfondo1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="-30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="-25dp"
                 android:src="@drawable/fondodegradado"
-                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout5"
-                app:layout_constraintEnd_toEndOf="@+id/BTNcambiardatos"
-                app:layout_constraintStart_toStartOf="@+id/BTNcambiardatos"
-                app:layout_constraintTop_toBottomOf="@+id/BTNcambiardatos" />
+                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout4"
+                app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toStartOf="@+id/imageView3"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
             <ImageView
                 android:id="@+id/IVfondo2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="-10dp"
                 android:src="@drawable/fondodegradado2"
-                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout6"
+                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout5"
                 app:layout_constraintEnd_toEndOf="@+id/IVfondo1"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/IVfondo1"
@@ -283,12 +283,23 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:src="@drawable/fondodegradado3"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout6"
                 app:layout_constraintEnd_toEndOf="@+id/IVfondo2"
                 app:layout_constraintStart_toStartOf="@+id/IVfondo2"
                 app:layout_constraintTop_toBottomOf="@+id/IVfondo2" />
+
+            <ImageView
+                android:id="@+id/IVfondo4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-10dp"
+                android:src="@drawable/fondodegradado4"
+                app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+                app:layout_constraintEnd_toEndOf="@+id/IVfondo3"
+                app:layout_constraintStart_toStartOf="@+id/IVfondo3"
+                app:layout_constraintTop_toBottomOf="@+id/IVfondo3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

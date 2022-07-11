@@ -18,6 +18,10 @@ import android.app.usage.NetworkStatsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -136,8 +140,7 @@ public class MapsFragment extends Fragment {
                 if (mensaje == 0) {
                     new SweetAlertDialog(getContext())
                             .setTitleText("Bienvenido!!!!")
-                            .setContentText("Bienvenido De Vuelta " + preferences.getString("Nombre", "") + " "
-                                    + preferences.getString("Apellido", "") +
+                            .setContentText("Bienvenido De Vuelta " + preferences.getString("Nombre", "") +
                                     ", \n Siempre Es Un Gusto Tenerte Aqui :D")
                             .show();
                     mensaje = 1;
@@ -192,14 +195,86 @@ public class MapsFragment extends Fragment {
                         Button btneliminar = bottomSheetDialogmarker.findViewById(R.id.BTNeliminar);
                         Button iniciarviaje = bottomSheetDialogmarker.findViewById(R.id.BTNviajar);
 
+
+
+
+
                         if (preferences.getBoolean("fondo2", false) == true){
                             iniciarviaje.setBackgroundResource(R.drawable.buttonfondo2);
 
+                            ColorStateList buttonStates = new ColorStateList(
+                                    new int[][]{
+                                            new int[]{-android.R.attr.state_enabled},
+                                            new int[]{android.R.attr.state_checked},
+                                            new int[]{}
+                                    },
+                                    new int[]{
+                                            Color.BLUE,
+                                            Color.MAGENTA,
+                                            Color.RED
+                                    }
+                            );
+
+                            habilitado.getThumbDrawable().setTintList(buttonStates);
+                            habilitado.getTrackDrawable().setTintList(buttonStates);
+
                         }else if(preferences.getBoolean("fondo", false) == true){
                             iniciarviaje.setBackgroundResource(R.drawable.button2);
+                            ColorStateList buttonStates = new ColorStateList(
+                                    new int[][]{
+                                            new int[]{-android.R.attr.state_enabled},
+                                            new int[]{android.R.attr.state_checked},
+                                            new int[]{}
+                                    },
+                                    new int[]{
+                                            Color.BLUE,
+                                            Color.BLUE,
+                                            Color.RED
+                                    }
+                            );
+
+                            habilitado.getThumbDrawable().setTintList(buttonStates);
+                            habilitado.getTrackDrawable().setTintList(buttonStates);
                         }else if(preferences.getBoolean("fondo3", false) == true){
                             iniciarviaje.setBackgroundResource(R.drawable.buttonfondo3);
+                            ColorStateList buttonStates = new ColorStateList(
+                                    new int[][]{
+                                            new int[]{-android.R.attr.state_enabled},
+                                            new int[]{android.R.attr.state_checked},
+                                            new int[]{}
+                                    },
+                                    new int[]{
+                                            Color.BLUE,
+                                            Color.RED,
+                                            Color.DKGRAY
+                                    }
+                            );
+
+                            habilitado.getThumbDrawable().setTintList(buttonStates);
+                            habilitado.getTrackDrawable().setTintList(buttonStates);
+                        }else if(preferences.getBoolean("fondo4", false) == true){
+                            iniciarviaje.setBackgroundResource(R.drawable.buttonfondo4);
+                            ColorStateList buttonStates = new ColorStateList(
+                                    new int[][]{
+                                            new int[]{-android.R.attr.state_enabled},
+                                            new int[]{android.R.attr.state_checked},
+                                            new int[]{}
+                                    },
+                                    new int[]{
+                                            Color.BLUE,
+                                            Color.GREEN,
+                                            Color.RED
+                                    }
+                            );
+
+                            habilitado.getThumbDrawable().setTintList(buttonStates);
+                            habilitado.getTrackDrawable().setTintList(buttonStates);
                         }
+
+
+
+
+
 
                         habilitado.setText("habilitado");
                         habilitado.setChecked(true);
@@ -862,6 +937,9 @@ public class MapsFragment extends Fragment {
         else if(preferences.getBoolean("fondo3", false) == true){
             toolbar.setBackgroundResource(R.drawable.fondodegradado3);
         }
+        else if(preferences.getBoolean("fondo4", false) == true){
+            toolbar.setBackgroundResource(R.drawable.fondodegradado4);
+        }
 
         cambiarmapa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -990,6 +1068,9 @@ public class MapsFragment extends Fragment {
 
                     }else if(preferences.getBoolean("fondo3", false) == true){
                         marker.setBackgroundResource(R.drawable.fondodegradado3);
+                    }
+                    else if(preferences.getBoolean("fondo4", false) == true){
+                        marker.setBackgroundResource(R.drawable.fondodegradado4);
                     }
 
 

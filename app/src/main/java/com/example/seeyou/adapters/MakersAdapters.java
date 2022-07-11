@@ -3,6 +3,8 @@ package com.example.seeyou.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
@@ -114,11 +116,73 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
         if (preferences.getBoolean("fondo2", false) == true){
             holder.iniciar_viaje.setBackgroundResource(R.drawable.buttonfondo2);
+            ColorStateList buttonStates = new ColorStateList(
+                    new int[][]{
+                            new int[]{-android.R.attr.state_enabled},
+                            new int[]{android.R.attr.state_checked},
+                            new int[]{}
+                    },
+                    new int[]{
+                            Color.BLUE,
+                            Color.MAGENTA,
+                            Color.RED
+                    }
+            );
+
+            holder.habilitarmarcador.getThumbDrawable().setTintList(buttonStates);
+            holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
 
         }else if(preferences.getBoolean("fondo", false) == true){
             holder.iniciar_viaje.setBackgroundResource(R.drawable.button2);
+            ColorStateList buttonStates = new ColorStateList(
+                    new int[][]{
+                            new int[]{-android.R.attr.state_enabled},
+                            new int[]{android.R.attr.state_checked},
+                            new int[]{}
+                    },
+                    new int[]{
+                            Color.BLUE,
+                            Color.BLUE,
+                            Color.RED
+                    }
+            );
+            holder.habilitarmarcador.getThumbDrawable().setTintList(buttonStates);
+            holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
+
         }else if(preferences.getBoolean("fondo3", false) == true){
             holder.iniciar_viaje.setBackgroundResource(R.drawable.buttonfondo3);
+            ColorStateList buttonStates = new ColorStateList(
+                    new int[][]{
+                            new int[]{-android.R.attr.state_enabled},
+                            new int[]{android.R.attr.state_checked},
+                            new int[]{}
+                    },
+                    new int[]{
+                            Color.BLUE,
+                            Color.RED,
+                            Color.DKGRAY
+                    }
+            );
+
+            holder.habilitarmarcador.getThumbDrawable().setTintList(buttonStates);
+            holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
+        }
+        else if(preferences.getBoolean("fondo4", false) == true){
+            holder.iniciar_viaje.setBackgroundResource(R.drawable.buttonfondo4);
+            ColorStateList buttonStates = new ColorStateList(
+                    new int[][]{
+                            new int[]{-android.R.attr.state_enabled},
+                            new int[]{android.R.attr.state_checked},
+                            new int[]{}
+                    },
+                    new int[]{
+                            Color.BLUE,
+                            Color.GREEN,
+                            Color.RED
+                    }
+            );
+            holder.habilitarmarcador.getThumbDrawable().setTintList(buttonStates);
+            holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
         }
 
 
@@ -127,7 +191,9 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             holder.fondo.setBackgroundResource(R.drawable.fondodegradado);
 
         }else if(preferences.getBoolean("fondo", false) == true){
-            holder.fondo.setBackgroundResource(R.drawable.fondodegradado3);
+            holder.fondo.setBackgroundResource(R.drawable.fondonaranaja2);
+        }else if(preferences.getBoolean("fondo3", false) == true){
+            holder.fondo.setBackgroundResource(R.drawable.fondodegradado);
         }else if(preferences.getBoolean("fondo3", false) == true){
             holder.fondo.setBackgroundResource(R.drawable.fondonaranaja2);
         }

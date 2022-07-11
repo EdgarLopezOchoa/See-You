@@ -59,7 +59,7 @@ public class PerfilFragment extends Fragment {
     private String mParam2;
     SweetAlertDialog pDialog;
     int id_usuario, validacion = 0;
-    ImageView fondo1,fondo2,fondo3;
+    ImageView fondo1,fondo2,fondo3,fondo4;
     ;
     LocationManager locationManager;
     String NombreUsuario, CorreoUsuario, ContraseñaUsuario, TelefonoUsuario, ApellidoUsuario;
@@ -125,6 +125,7 @@ public class PerfilFragment extends Fragment {
         fondo2 = view.findViewById(R.id.IVfondo2);
         navegadorperfil = view.findViewById(R.id.navegador2);
         fondo3 = view.findViewById(R.id.IVfondo3);
+        fondo4 = view.findViewById(R.id.IVfondo4);
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
@@ -143,6 +144,11 @@ public class PerfilFragment extends Fragment {
             btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
         }
+        else if(preferences.getBoolean("fondo4", false) == true){
+            navegadorperfil.setBackgroundResource(R.drawable.fondodegradado4);
+            btnCambiar.setBackgroundResource(R.drawable.buttonfondo4);
+            btnLogin.setBackgroundResource(R.drawable.buttonfondo4);
+        }
 
         fondo1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +158,7 @@ public class PerfilFragment extends Fragment {
                 editor.putBoolean("fondo", true);
                 editor.putBoolean("fondo2", false);
                 editor.putBoolean("fondo3", false);
+                editor.putBoolean("fondo4", false);
                 editor.commit();
                 btnCambiar.setBackgroundResource(R.drawable.button2);
                 btnLogin.setBackgroundResource(R.drawable.button2);
@@ -166,6 +173,7 @@ public class PerfilFragment extends Fragment {
                 editor.putBoolean("fondo", false);
                 editor.putBoolean("fondo2", true);
                 editor.putBoolean("fondo3", false);
+                editor.putBoolean("fondo4", false);
                 editor.commit();
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo2);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo2);
@@ -180,9 +188,24 @@ public class PerfilFragment extends Fragment {
                 editor.putBoolean("fondo", false);
                 editor.putBoolean("fondo2", false);
                 editor.putBoolean("fondo3", true);
+                editor.putBoolean("fondo4", false);
                 editor.commit();
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
+            }
+        });
+        fondo4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navegadorperfil.setBackgroundResource(R.drawable.fondodegradado4);
+                editor = preferences.edit();
+                editor.putBoolean("fondo", false);
+                editor.putBoolean("fondo2", false);
+                editor.putBoolean("fondo3", false);
+                editor.putBoolean("fondo4", true);
+                editor.commit();
+                btnCambiar.setBackgroundResource(R.drawable.buttonfondo4);
+                btnLogin.setBackgroundResource(R.drawable.buttonfondo4);
             }
         });
 

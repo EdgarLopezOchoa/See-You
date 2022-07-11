@@ -56,13 +56,42 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
-        Window window = getWindow();
+        if (preferences.getBoolean("fondo2", false) == true){
+            Window window = getWindow();
 
-        window.setBackgroundDrawableResource(R.drawable.fondodegradado);
+            window.setBackgroundDrawableResource(R.drawable.fondodegradado2);
 
-        Toolbar toolbar = findViewById(R.id.navegador1);
+            Toolbar toolbar = findViewById(R.id.navegador1);
 
-        setSupportActionBar(toolbar);
+            setSupportActionBar(toolbar);
+
+        }else if(preferences.getBoolean("fondo", false) == true){
+            Window window = getWindow();
+
+            window.setBackgroundDrawableResource(R.drawable.fondodegradado);
+
+            Toolbar toolbar = findViewById(R.id.navegador1);
+
+            setSupportActionBar(toolbar);
+        }
+        else if(preferences.getBoolean("fondo3", false) == true){
+            Window window = getWindow();
+
+            window.setBackgroundDrawableResource(R.drawable.fondodegradado3);
+
+            Toolbar toolbar = findViewById(R.id.navegador1);
+
+            setSupportActionBar(toolbar);
+        }
+        else if(preferences.getBoolean("fondo4", false) == true){
+            Window window = getWindow();
+
+            window.setBackgroundDrawableResource(R.drawable.fondodegradado4);
+
+            Toolbar toolbar = findViewById(R.id.navegador1);
+
+            setSupportActionBar(toolbar);
+        }
 
         ejecutar();
 
@@ -167,6 +196,15 @@ public class MainActivity extends AppCompatActivity {
                     Window window = getWindow();
 
                     window.setBackgroundDrawableResource(R.drawable.fondodegradado3);
+
+                    Toolbar toolbar = findViewById(R.id.navegador1);
+
+                    setSupportActionBar(toolbar);
+                }
+                else if(preferences.getBoolean("fondo4", false) == true){
+                    Window window = getWindow();
+
+                    window.setBackgroundDrawableResource(R.drawable.fondodegradado4);
 
                     Toolbar toolbar = findViewById(R.id.navegador1);
 
