@@ -86,7 +86,7 @@ public class MapsFragment extends Fragment {
     private SearchView SVubicacion, SVpunto;
     private TextView titulo, nombremarcador, TVidmarker;
     public static RecyclerView recyclerViewmarker;
-    public static List<Markers> markerslist = new ArrayList<>();
+    public static ArrayList<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
     public static int id_usuario = 0;
     int tiempo = 5000;
@@ -96,7 +96,7 @@ public class MapsFragment extends Fragment {
     View view;
     SweetAlertDialog pDialog;
     LocationManager locationManager;
-
+    MakersAdapters adapter;
     RequestQueue requestQueue;
     ConnectivityManager locationManagerinternet;
     NetworkInfo networkInfo;
@@ -117,7 +117,7 @@ public class MapsFragment extends Fragment {
         @SuppressLint({"MissingPermission"})
         @Override
         public void onMapReady(GoogleMap googleMap) {
-
+             adapter = new MakersAdapters(markerslist, getContext());
             try {
                 pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
                 pDialog.setTitleText("Cargando ...");
@@ -210,7 +210,10 @@ public class MapsFragment extends Fragment {
                         ubicacionmarcador.setText(addressStr);
 
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                                .show();
                     }
 
                     coordenadamarcador.setText("" + Latitud + " : " + logitud);
@@ -275,10 +278,9 @@ public class MapsFragment extends Fragment {
             });
 
             }catch (Exception e){
-                new SweetAlertDialog(getContext(),
-                        SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Ops...Algo Salio Mal..")
-                        .setContentText("NECESITAS ACTIVAR LA UBICACION Y DAR PERMISOS A LA APP...")
+                new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Algo Salio Mal..")
+                        .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                         .show();
             }
         }
@@ -297,6 +299,8 @@ public class MapsFragment extends Fragment {
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
+                try{
                 pDialog.dismiss();
                 new SweetAlertDialog(getContext(),
                         SweetAlertDialog.SUCCESS_TYPE)
@@ -308,12 +312,21 @@ public class MapsFragment extends Fragment {
 
                 PuntosMapa();
 
+                }catch (Exception e){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
+                }
             }
+
 
         }, new com.android.volley.Response.ErrorListener() {
             @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                try{
                 pDialog.dismiss();
                 if (locationManagerinternet.getActiveNetworkInfo() != null
                         && locationManagerinternet.getActiveNetworkInfo().isAvailable()
@@ -326,6 +339,12 @@ public class MapsFragment extends Fragment {
                     new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
+                }catch (Exception e){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
                 }
             }
@@ -362,6 +381,7 @@ public class MapsFragment extends Fragment {
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                try{
                 pDialog.dismiss();
 
                 if (Habilitado1 == "habilitado") {
@@ -385,7 +405,12 @@ public class MapsFragment extends Fragment {
 
                 PuntosMapa();
 
-
+                }catch (Exception e){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
+                }
 
             }
 
@@ -393,6 +418,7 @@ public class MapsFragment extends Fragment {
             @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
+                try{
                 pDialog.dismiss();
                 if (Habilitado1 == "habilitado") {
                     habilitado.setChecked(false);
@@ -411,6 +437,12 @@ public class MapsFragment extends Fragment {
                     new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
+                }catch (Exception e){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
                 }
             }
@@ -450,7 +482,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
-                    pDialog.dismiss();
+
 
                     markerslist.clear();
 
@@ -472,16 +504,25 @@ public class MapsFragment extends Fragment {
 
 
                     }
-
-                    MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
-                    recyclerViewmarker.setHasFixedSize(true);
-                    recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
-                    recyclerViewmarker.setAdapter(adapter);
-                    bottomSheetDialog.show();
-
+                    pDialog.dismiss();
+                    if(Objects.equals(response, "[]")){
+                        new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("No Cuentas Con Marcadores..")
+                                .setContentText("Registra Marcadores Para Que Puedas Observarlos Aqui :D!!")
+                                .show();
+                    } else {
+                        MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
+                        recyclerViewmarker.setHasFixedSize(true);
+                        recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
+                        recyclerViewmarker.setAdapter(adapter);
+                        bottomSheetDialog.show();
+                    }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
                 }
             }
         },
@@ -489,6 +530,7 @@ public class MapsFragment extends Fragment {
                     @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        try{
                         pDialog.dismiss();
                         bottomSheetDialog.dismiss();
                         if (locationManagerinternet.getActiveNetworkInfo() != null
@@ -502,6 +544,12 @@ public class MapsFragment extends Fragment {
                             new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Por Favor Habilite Su Internet...")
+                                    .show();
+                        }
+                        }catch (Exception e){
+                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                                     .show();
                         }
                     }
@@ -544,7 +592,10 @@ public class MapsFragment extends Fragment {
 
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
                 }
             }
         },
@@ -552,6 +603,7 @@ public class MapsFragment extends Fragment {
                     @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        try{
 
                         if (locationManagerinternet.getActiveNetworkInfo() != null
                                 && locationManagerinternet.getActiveNetworkInfo().isAvailable()
@@ -564,6 +616,12 @@ public class MapsFragment extends Fragment {
                             new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                    .show();
+                        }
+                        }catch (Exception e){
+                            new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                                     .show();
                         }
                     }
@@ -599,7 +657,10 @@ public class MapsFragment extends Fragment {
 
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
                 }
 
             }
@@ -608,6 +669,7 @@ public class MapsFragment extends Fragment {
             @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
+                try{
                 pDialog.dismiss();
 
 
@@ -622,6 +684,12 @@ public class MapsFragment extends Fragment {
                     new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
+                }catch (Exception e){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
                 }
 
@@ -656,7 +724,7 @@ public class MapsFragment extends Fragment {
     @SuppressLint("MissingPermission")
     public void getLastLocation() {
         // Get last known recent location using new Google Play Services SDK (v11+)
-
+try{
 
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
 
@@ -689,6 +757,12 @@ public class MapsFragment extends Fragment {
                                 .show();
                     }
                 });
+}catch (Exception e){
+    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+            .setTitleText("Algo Salio Mal..")
+            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+            .show();
+}
     }
 
     //HASTA AQUI TERMINA EL CODIGO DE UBICACION VIA GOOGLE
@@ -697,7 +771,7 @@ public class MapsFragment extends Fragment {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
-
+                try{
 
                 //Guarda los valores de longitud y latitud en variables
                 double latitud = latLng.latitude;
@@ -721,7 +795,10 @@ public class MapsFragment extends Fragment {
 
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
                 }
 
 
@@ -743,9 +820,16 @@ public class MapsFragment extends Fragment {
                 Dialogo_MensajeFragment dialogofragment = new Dialogo_MensajeFragment();
                 dialogofragment.show(getFragmentManager(), "MyFragment");
 
-
+                }catch (Exception e){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
+                }
             }
+
         });
+
     }
 
 
@@ -862,6 +946,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                try {
 
                  bottomSheetDialog = new BottomSheetDialog
                         (getContext(), R.style.BottomSheetDialog);
@@ -895,22 +980,39 @@ public class MapsFragment extends Fragment {
                     }
                 });
 
-                MakersAdapters adapter = new MakersAdapters(markerslist, getContext());
-                recyclerViewmarker.setHasFixedSize(true);
-                recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
-                recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
+                SVpunto.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
 
 
 
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
 
 
+                        ArrayList<Markers> lista = new ArrayList<>();
+                        lista = adapter.filtrado(newText);
+                        MakersAdapters adapter = new MakersAdapters(lista, getContext());
+                        recyclerViewmarker.setHasFixedSize(true);
+                        recyclerViewmarker.setLayoutManager(new LinearLayoutManager(getContext()));
+                        recyclerViewmarker.setAdapter(adapter);
+                        return false;
+                    }
 
+                });
 
-
+                }catch (Exception e){
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
+                }
 
             }
+
         });
 
 
@@ -963,6 +1065,7 @@ public class MapsFragment extends Fragment {
         }
 
     }
+
 
 }
 

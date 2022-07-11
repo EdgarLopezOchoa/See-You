@@ -2,7 +2,6 @@ package com.example.seeyou.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
@@ -24,13 +23,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.seeyou.MapsFragment;
 import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -39,24 +36,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHolder> {
 
 
-    List<Markers> MarkerList;
+    ArrayList<Markers> MarkerList;
+
+    ArrayList<Markers> Modificar;
+
     private Context context;
     private RecyclerView recyclerViewmarker = MapsFragment.recyclerViewmarker;
     private int MY_DEFAULT_TIMEOUT = 15000;
-    private List<Markers> markerslist = MapsFragment.markerslist;
-    private List<Markers> markerslistpuntos = new ArrayList<>();
     private int id_usuario = MapsFragment.id_usuario;
     private GoogleMap mMap = MapsFragment.mMap;
     SweetAlertDialog Eliminar_Marcador_recycler,pDialog;
@@ -65,8 +63,12 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     BottomSheetDialog bottomSheetDialog = MapsFragment.bottomSheetDialog;
 
 
-    public MakersAdapters(List<Markers> markerList, Context context) {
-        MarkerList = markerList;
+    public MakersAdapters(ArrayList<Markers> markerList, Context context) {
+        this.MarkerList = markerList;
+        this.Modificar = new ArrayList<>();
+        Modificar.addAll(markerList);
+
+
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
@@ -151,7 +153,10 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         });
 
 
+
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -267,6 +272,47 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         requestQueue.add(stringRequest);
     }
 
+    public ArrayList<Markers> filtrado(String Buscar){
+
+        try{
+        int longitud = Buscar.length();
+
+        if (longitud == 0 || Buscar == null || Buscar == "" || Buscar.isEmpty()){
+
+            Modificar.clear();
+            Modificar.addAll(MarkerList);
+
+        } else{
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                List<Markers> collection = MarkerList.stream().filter(i -> i.getNombre().toLowerCase().
+                                contains(Buscar.toLowerCase()))
+                        .collect(Collectors.toList());
+                Modificar.clear();
+
+                if (Objects.equals(Modificar, "[]")){
+                    Modificar.addAll(MarkerList);
+                } else {
+                    Modificar.addAll(collection);
+                }
+
+                ArrayList<Markers> vacio = new ArrayList<Markers>();
+               vacio.clear();
+
+            }
+
+        }
+        } catch (Exception e){
+            new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Algo Salio Mal..")
+                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                    .show();
+        }
+        return Modificar;
+
+
+    }
+
     private void PuntosRecycler(int accion) {
 
         pDialog.show();
@@ -275,15 +321,15 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             @Override
             public void onResponse(String response) {
                 try {
-                    pDialog.dismiss();
-                    markerslist.clear();
+
+                    MarkerList.clear();
 
                     JSONArray array = new JSONArray(response);
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
 
-                        markerslist.add(new Markers(
+                        MarkerList.add(new Markers(
                                 cajas.getString("habilitado"),
                                 cajas.getInt("IDpunto"),
                                 cajas.getString("Nombre"),
@@ -296,9 +342,9 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
 
                     }
-
+                    pDialog.dismiss();
                     if(accion == 2) {
-                        MakersAdapters adapter = new MakersAdapters(markerslist, context);
+                        MakersAdapters adapter = new MakersAdapters(MarkerList, context);
                         recyclerViewmarker.setHasFixedSize(true);
                         recyclerViewmarker.setLayoutManager(new LinearLayoutManager(context));
                         recyclerViewmarker.setAdapter(adapter);
@@ -306,7 +352,10 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
                 }
             }
         },
@@ -356,7 +405,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 new SweetAlertDialog(context,
                         SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Eliminado")
-                        .setContentText("El Marcado Ha Sido Eliminado Correctamente")
+                        .setContentText("El Marcador Ha Sido Eliminado Correctamente")
                         .show();
 
                 PuntosRecycler(2);
@@ -369,6 +418,8 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             @Override
             public void onErrorResponse(VolleyError error) {
                 pDialog.dismiss();
+
+                try{
                 if (locationManagerinternet.getActiveNetworkInfo() != null
                         && locationManagerinternet.getActiveNetworkInfo().isAvailable()
                         && locationManagerinternet.getActiveNetworkInfo().isConnected()){
@@ -380,6 +431,12 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                     new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Por Favor Habilite Su Internet...")
+                            .show();
+                }
+                }catch (Exception e){
+                    new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
                 }
             }
@@ -436,7 +493,10 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .show();
                 }
             }
         },
@@ -444,6 +504,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                     @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        try{
                         if (locationManagerinternet.getActiveNetworkInfo() != null
                                 && locationManagerinternet.getActiveNetworkInfo().isAvailable()
                                 && locationManagerinternet.getActiveNetworkInfo().isConnected()){
@@ -455,6 +516,12 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                             new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                    .show();
+                        }
+                        }catch (Exception e){
+                            new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                                     .show();
                         }
                     }
