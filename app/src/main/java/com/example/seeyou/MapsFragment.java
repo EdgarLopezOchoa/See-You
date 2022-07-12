@@ -138,7 +138,7 @@ public class MapsFragment extends Fragment {
                 networkInfo = locationManagerinternet.getActiveNetworkInfo();
 
                 if (mensaje == 0) {
-                    new SweetAlertDialog(getContext())
+                     new SweetAlertDialog(getContext())
                             .setTitleText("Bienvenido!!!!")
                             .setContentText("Bienvenido De Vuelta " + preferences.getString("Nombre", "") +
                                     ", \n Siempre Es Un Gusto Tenerte Aqui :D")
@@ -442,13 +442,9 @@ public class MapsFragment extends Fragment {
 
         };
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
 
@@ -540,13 +536,10 @@ public class MapsFragment extends Fragment {
 
         };
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
 
@@ -632,10 +625,7 @@ public class MapsFragment extends Fragment {
                         }
                     }
                 });
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
     }
@@ -702,10 +692,7 @@ public class MapsFragment extends Fragment {
                         }
                     }
                 });
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
     }
@@ -786,10 +773,6 @@ public class MapsFragment extends Fragment {
         };
 
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
