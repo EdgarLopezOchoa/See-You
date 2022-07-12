@@ -295,7 +295,7 @@ public class MapsFragment extends Fragment {
                             ubicacionmarcador.setText(addressStr);
 
                         } catch (IOException e) {
-                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                                     .show();
@@ -359,7 +359,7 @@ public class MapsFragment extends Fragment {
                 });
 
             } catch (Exception e) {
-                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Algo Salio Mal..")
                         .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                         .show();
@@ -392,7 +392,7 @@ public class MapsFragment extends Fragment {
                     PuntosMapa();
 
                 } catch (Exception e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -415,13 +415,13 @@ public class MapsFragment extends Fragment {
                                 .setContentText("No Hemos Podido Eliminar Su Marcador...")
                                 .show();
                     } else {
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("Por Favor Habilite Su Internet...")
                                 .show();
                     }
                 } catch (Exception e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -485,7 +485,7 @@ public class MapsFragment extends Fragment {
                     PuntosMapa();
 
                 } catch (Exception e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -513,13 +513,13 @@ public class MapsFragment extends Fragment {
                                 .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
                                 .show();
                     } else {
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("Por Favor Habilite Su Internet...")
                                 .show();
                     }
                 } catch (Exception e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -597,7 +597,7 @@ public class MapsFragment extends Fragment {
                     }
 
                 } catch (JSONException e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -625,7 +625,7 @@ public class MapsFragment extends Fragment {
                                         .show();
                             }
                         } catch (Exception e) {
-                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                                     .show();
@@ -668,7 +668,7 @@ public class MapsFragment extends Fragment {
 
 
                 } catch (JSONException e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -695,7 +695,7 @@ public class MapsFragment extends Fragment {
                                         .show();
                             }
                         } catch (Exception e) {
-                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                                     .show();
@@ -732,7 +732,7 @@ public class MapsFragment extends Fragment {
 
 
                 } catch (JSONException e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -762,7 +762,7 @@ public class MapsFragment extends Fragment {
                                 .show();
                     }
                 } catch (Exception e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -833,7 +833,7 @@ public class MapsFragment extends Fragment {
                         }
                     });
         } catch (Exception e) {
-            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Algo Salio Mal..")
                     .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                     .show();
@@ -869,7 +869,7 @@ public class MapsFragment extends Fragment {
 
 
                     } catch (IOException e) {
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                                 .show();
@@ -895,7 +895,7 @@ public class MapsFragment extends Fragment {
                     dialogofragment.show(getFragmentManager(), "MyFragment");
 
                 } catch (Exception e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();
@@ -969,13 +969,13 @@ public class MapsFragment extends Fragment {
                         LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                     } catch (Exception e) {
-                        new SweetAlertDialog(getContext())
+                        new SweetAlertDialog(ubicacion.getContext())
                                 .setTitleText("Ubicacion No Encontrada...")
                                 .setContentText("Asegurece De Seguir Esta Estructura: \n  Ciudad + Lugar/calle/Local/Establecimineto o Viceversa.")
                                 .show();
                     }
                 } else {
-                    new SweetAlertDialog(getContext())
+                    new SweetAlertDialog(ubicacion.getContext())
                             .setTitleText("Favor De Introducir Una Ubicaion Valida!!")
                             .show();
 
@@ -1116,7 +1116,7 @@ public class MapsFragment extends Fragment {
                     });
 
                 } catch (Exception e) {
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
                             .show();

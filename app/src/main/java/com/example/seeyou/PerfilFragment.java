@@ -295,20 +295,24 @@ public class PerfilFragment extends Fragment {
                     @SuppressLint("MissingPermission")
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        pDialog.dismiss();
+                        try {
+                            pDialog.dismiss();
 
-                        if (locationManagerinternet.getActiveNetworkInfo() != null
-                                && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
-                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Algo Salio Mal..")
-                                    .setContentText("No Hemos Podido Cargar Los Datos Del Usuario...")
-                                    .show();
-                        } else {
-                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Por Favor Habilite Su Internet...")
-                                    .show();
+                            if (locationManagerinternet.getActiveNetworkInfo() != null
+                                    && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                    && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("No Hemos Podido Cargar Los Datos Del Usuario...")
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Por Favor Habilite Su Internet...")
+                                        .show();
+                            }
+                        } catch (Exception e){
+
                         }
                     }
                 }) {
