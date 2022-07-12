@@ -400,7 +400,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         } catch (Exception e) {
             new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Algo Salio Mal..")
-                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                     .show();
         }
         return Modificar;
@@ -449,7 +449,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 } catch (JSONException e) {
                     new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -531,7 +531,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 } catch (Exception e) {
                     new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -589,7 +589,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 } catch (JSONException e) {
                     new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -615,7 +615,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                         } catch (Exception e) {
                             new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                     .show();
                         }
                     }

@@ -287,7 +287,10 @@ public class PerfilFragment extends Fragment {
 
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
                 }
             }
         },
@@ -312,7 +315,10 @@ public class PerfilFragment extends Fragment {
                                         .show();
                             }
                         } catch (Exception e){
-
+                            new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .show();
                         }
                     }
                 }) {
@@ -386,7 +392,10 @@ public class PerfilFragment extends Fragment {
                                 .show();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
                 }
             }
         },

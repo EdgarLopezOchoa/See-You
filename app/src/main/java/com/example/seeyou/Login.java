@@ -225,7 +225,10 @@ public class Login extends AppCompatActivity {
                 //Configuración del mapa de bits en ImageView
                 imgUsuario.setImageBitmap(bitmap);
             } catch (IOException e) {
-                e.printStackTrace();
+                new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Algo Salio Mal..")
+                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                        .show();
             }
         }
     }
@@ -474,11 +477,19 @@ public class Login extends AppCompatActivity {
                                         }
                                     })
                                     .show();
+                            preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                            boolean sesion = true;
+                            editor = preferences.edit();
+                            editor.putBoolean("sesion_usuario", sesion);
+                            editor.commit();
                         }
                     }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
                 }
 
 

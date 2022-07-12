@@ -175,7 +175,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                             && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
                         new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("No Hemos Podido Cambiar El Estado De Su Marcador...")
+                                .setContentText("No Hemos Podido Registrar El Marcador...")
                                 .show();
                     } else {
                         new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
@@ -187,7 +187,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
 

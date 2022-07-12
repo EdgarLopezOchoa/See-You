@@ -5,7 +5,7 @@
     android:id="@+id/BottomSheetRegister"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondoblanco4"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".Registro">
 
@@ -19,7 +19,7 @@
         android:gravity="center"
         android:text="REGISTRO"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/azul_obscuro"
         android:textSize="40sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"

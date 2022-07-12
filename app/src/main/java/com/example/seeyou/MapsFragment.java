@@ -138,7 +138,7 @@ public class MapsFragment extends Fragment {
                 networkInfo = locationManagerinternet.getActiveNetworkInfo();
 
                 if (mensaje == 0) {
-                     new SweetAlertDialog(getContext())
+                    new SweetAlertDialog(getContext())
                             .setTitleText("Bienvenido!!!!")
                             .setContentText("Bienvenido De Vuelta " + preferences.getString("Nombre", "") +
                                     ", \n Siempre Es Un Gusto Tenerte Aqui :D")
@@ -196,10 +196,7 @@ public class MapsFragment extends Fragment {
                         Button iniciarviaje = bottomSheetDialogmarker.findViewById(R.id.BTNviajar);
 
 
-
-
-
-                        if (preferences.getBoolean("fondo2", false) == true){
+                        if (preferences.getBoolean("fondo2", false) == true) {
                             iniciarviaje.setBackgroundResource(R.drawable.buttonfondo2);
 
                             ColorStateList buttonStates = new ColorStateList(
@@ -218,7 +215,7 @@ public class MapsFragment extends Fragment {
                             habilitado.getThumbDrawable().setTintList(buttonStates);
                             habilitado.getTrackDrawable().setTintList(buttonStates);
 
-                        }else if(preferences.getBoolean("fondo", false) == true){
+                        } else if (preferences.getBoolean("fondo", false) == true) {
                             iniciarviaje.setBackgroundResource(R.drawable.button2);
                             ColorStateList buttonStates = new ColorStateList(
                                     new int[][]{
@@ -235,7 +232,7 @@ public class MapsFragment extends Fragment {
 
                             habilitado.getThumbDrawable().setTintList(buttonStates);
                             habilitado.getTrackDrawable().setTintList(buttonStates);
-                        }else if(preferences.getBoolean("fondo3", false) == true){
+                        } else if (preferences.getBoolean("fondo3", false) == true) {
                             iniciarviaje.setBackgroundResource(R.drawable.buttonfondo3);
                             ColorStateList buttonStates = new ColorStateList(
                                     new int[][]{
@@ -252,7 +249,7 @@ public class MapsFragment extends Fragment {
 
                             habilitado.getThumbDrawable().setTintList(buttonStates);
                             habilitado.getTrackDrawable().setTintList(buttonStates);
-                        }else if(preferences.getBoolean("fondo4", false) == true){
+                        } else if (preferences.getBoolean("fondo4", false) == true) {
                             iniciarviaje.setBackgroundResource(R.drawable.buttonfondo4);
                             ColorStateList buttonStates = new ColorStateList(
                                     new int[][]{
@@ -270,10 +267,6 @@ public class MapsFragment extends Fragment {
                             habilitado.getThumbDrawable().setTintList(buttonStates);
                             habilitado.getTrackDrawable().setTintList(buttonStates);
                         }
-
-
-
-
 
 
                         habilitado.setText("habilitado");
@@ -297,7 +290,7 @@ public class MapsFragment extends Fragment {
                         } catch (IOException e) {
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                     .show();
                         }
 
@@ -361,7 +354,7 @@ public class MapsFragment extends Fragment {
             } catch (Exception e) {
                 new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Algo Salio Mal..")
-                        .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                         .show();
             }
         }
@@ -394,7 +387,7 @@ public class MapsFragment extends Fragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -423,7 +416,7 @@ public class MapsFragment extends Fragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -441,7 +434,6 @@ public class MapsFragment extends Fragment {
             }
 
         };
-
 
 
         requestQueue = Volley.newRequestQueue(getContext());
@@ -483,7 +475,7 @@ public class MapsFragment extends Fragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
 
@@ -517,7 +509,7 @@ public class MapsFragment extends Fragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -537,9 +529,7 @@ public class MapsFragment extends Fragment {
         };
 
 
-
-
-         requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
 
@@ -592,7 +582,7 @@ public class MapsFragment extends Fragment {
                 } catch (JSONException e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -620,7 +610,7 @@ public class MapsFragment extends Fragment {
                         } catch (Exception e) {
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                     .show();
                         }
                     }
@@ -660,7 +650,7 @@ public class MapsFragment extends Fragment {
                 } catch (JSONException e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -687,7 +677,7 @@ public class MapsFragment extends Fragment {
                         } catch (Exception e) {
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                     .show();
                         }
                     }
@@ -721,7 +711,7 @@ public class MapsFragment extends Fragment {
                 } catch (JSONException e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
 
@@ -751,7 +741,7 @@ public class MapsFragment extends Fragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
 
@@ -771,7 +761,6 @@ public class MapsFragment extends Fragment {
             }
 
         };
-
 
 
         requestQueue = Volley.newRequestQueue(getContext());
@@ -818,7 +807,7 @@ public class MapsFragment extends Fragment {
         } catch (Exception e) {
             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Algo Salio Mal..")
-                    .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                     .show();
         }
     }
@@ -854,7 +843,7 @@ public class MapsFragment extends Fragment {
                     } catch (IOException e) {
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                 .show();
                     }
 
@@ -880,7 +869,7 @@ public class MapsFragment extends Fragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -911,16 +900,14 @@ public class MapsFragment extends Fragment {
         toolbar = view.findViewById(R.id.navegador1);
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        if (preferences.getBoolean("fondo2", false) == true){
+        if (preferences.getBoolean("fondo2", false) == true) {
             toolbar.setBackgroundResource(R.drawable.fondodegradado2);
 
-        }else if(preferences.getBoolean("fondo", false) == true){
+        } else if (preferences.getBoolean("fondo", false) == true) {
             toolbar.setBackgroundResource(R.drawable.fondodegradado);
-        }
-        else if(preferences.getBoolean("fondo3", false) == true){
+        } else if (preferences.getBoolean("fondo3", false) == true) {
             toolbar.setBackgroundResource(R.drawable.fondodegradado3);
-        }
-        else if(preferences.getBoolean("fondo4", false) == true){
+        } else if (preferences.getBoolean("fondo4", false) == true) {
             toolbar.setBackgroundResource(R.drawable.fondodegradado4);
         }
 
@@ -1043,16 +1030,15 @@ public class MapsFragment extends Fragment {
                     Toolbar marker = bottomSheetDialog.findViewById(R.id.navegadormarker);
 
 
-                    if (preferences.getBoolean("fondo2", false) == true){
+                    if (preferences.getBoolean("fondo2", false) == true) {
                         marker.setBackgroundResource(R.drawable.fondodegradado2);
 
-                    }else if(preferences.getBoolean("fondo", false) == true){
+                    } else if (preferences.getBoolean("fondo", false) == true) {
                         marker.setBackgroundResource(R.drawable.fondodegradado);
 
-                    }else if(preferences.getBoolean("fondo3", false) == true){
+                    } else if (preferences.getBoolean("fondo3", false) == true) {
                         marker.setBackgroundResource(R.drawable.fondodegradado3);
-                    }
-                    else if(preferences.getBoolean("fondo4", false) == true){
+                    } else if (preferences.getBoolean("fondo4", false) == true) {
                         marker.setBackgroundResource(R.drawable.fondodegradado4);
                     }
 
@@ -1101,7 +1087,7 @@ public class MapsFragment extends Fragment {
                 } catch (Exception e) {
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Espere Un Momento....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
 
