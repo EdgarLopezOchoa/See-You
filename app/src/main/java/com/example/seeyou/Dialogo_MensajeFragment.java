@@ -4,12 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -69,7 +73,6 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     double LatitudDialogo = MapsFragment.LatitudDialogo;
     double LongitudDialogo = MapsFragment.LongitudDialogo;
     String direccion = MapsFragment.direccion;
-    MapsFragment mapsFragment = new MapsFragment();
     String latitud = LatitudDialogo + "", Longitud = LongitudDialogo + "";
     LocationManager locationManager;
     NetworkInfo networkInfo;
@@ -237,6 +240,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
         cancelar = view.findViewById(R.id.BTNenviarcancelar);
         titulo1 = view.findViewById(R.id.ETtituloubicacion);
         descripcion = view.findViewById(R.id.ETdescripcionubicacion);
+
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 

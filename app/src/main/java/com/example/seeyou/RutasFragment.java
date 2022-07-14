@@ -77,6 +77,8 @@ public class RutasFragment extends Fragment {
         }
         else if(preferences.getBoolean("fondo4", false) == true){
             navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado4);
+        } else{
+            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado);
         }
 
         return view;

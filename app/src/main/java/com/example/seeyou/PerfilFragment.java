@@ -148,6 +148,8 @@ public class PerfilFragment extends Fragment {
             navegadorperfil.setBackgroundResource(R.drawable.fondodegradado4);
             btnCambiar.setBackgroundResource(R.drawable.buttonfondo4);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo4);
+        }else {
+            navegadorperfil.setBackgroundResource(R.drawable.fondodegradado);
         }
 
         fondo1.setOnClickListener(new View.OnClickListener() {

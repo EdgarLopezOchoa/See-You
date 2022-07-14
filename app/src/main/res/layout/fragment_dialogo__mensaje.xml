@@ -4,9 +4,11 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    app:backgroundTint="@null"
     android:layout_height="wrap_content"
     android:background="@drawable/fondo_de_edittext"
+    app:backgroundTint="@null"
+    app:cardBackgroundColor="@color/Trasparente"
+    app:cardCornerRadius="30dp"
     tools:context=".Dialogo_MensajeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

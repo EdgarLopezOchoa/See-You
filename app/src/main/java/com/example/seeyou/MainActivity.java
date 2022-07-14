@@ -169,6 +169,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+
+
+
     private void ejecutar(){
         final Handler handler= new Handler();
         handler.postDelayed(new Runnable() {
@@ -210,9 +213,9 @@ public class MainActivity extends AppCompatActivity {
 
                     setSupportActionBar(toolbar);
                 }
-                handler.postDelayed(this,100);//se ejecutara cada 10 segundos
+                handler.postDelayed(this,10);//se ejecutara cada 10 segundos
             }
-        },5000);//empezara a ejecutarse después de 5 milisegundos
+        },50);
     }
 
 

@@ -147,4 +147,30 @@
         app:layout_constraintEnd_toEndOf="@+id/IVvermarkers"
         app:layout_constraintStart_toStartOf="@+id/IVvermarkers" />
 
+    <ImageView
+        android:id="@+id/IVgrupos"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:src="@drawable/user"
+        app:layout_constraintBottom_toBottomOf="@+id/IVlocation"
+        app:layout_constraintEnd_toStartOf="@+id/IVlocation"
+        app:layout_constraintTop_toTopOf="@+id/IVlocation"
+        app:layout_constraintVertical_bias="0.26"
+        app:srcCompat="@drawable/user" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RBgrupos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/fondo_de_edittext"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/IVgrupos"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/BTNcancelar"
+        app:layout_constraintTop_toTopOf="@+id/IVgrupos"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

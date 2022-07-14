@@ -5,7 +5,6 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -14,14 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.usage.NetworkStatsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -30,14 +26,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -46,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -60,7 +52,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -85,18 +76,20 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
     LocationManager locManager;
-    private ImageView ubicacion, location, vermarkers, cambiarmapa;
+    private ImageView ubicacion, location, vermarkers, cambiarmapa,grupos;
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     private SearchView SVubicacion, SVpunto;
     private TextView titulo, nombremarcador, TVidmarker;
-    public static RecyclerView recyclerViewmarker;
+    public static RecyclerView recyclerViewmarker, recyclerviewgrupos;
     public static ArrayList<Markers> markerslist = new ArrayList<>();
     public static String direccion = "";
     public static int id_usuario = 0;
+    String addressStr;
     int tiempo = 5000;
     public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker;
+
     int bucleubicacion = 0, mensaje = 0;
     SweetAlertDialog Eliminar_Marcador;
     View view;
@@ -168,6 +161,9 @@ public class MapsFragment extends Fragment {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setCompassEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+
+
 
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -282,7 +278,7 @@ public class MapsFragment extends Fragment {
                             List<Address> addresses = geocoder.getFromLocation(Latitud, logitud, 1);
 
                             Address address = (Address) addresses.get(0);
-                            String addressStr = "";
+                            addressStr = "";
                             addressStr += address.getAddressLine(0);
 
                             ubicacionmarcador.setText(addressStr);
@@ -820,6 +816,7 @@ public class MapsFragment extends Fragment {
             public void onMapClick(@NonNull LatLng latLng) {
                 try {
 
+
                     //Guarda los valores de longitud y latitud en variables
                     double latitud = latLng.latitude;
                     double longitud = latLng.longitude;
@@ -879,6 +876,7 @@ public class MapsFragment extends Fragment {
     }
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -898,6 +896,9 @@ public class MapsFragment extends Fragment {
         titulo = view.findViewById(R.id.TVtituloseeyou);
         cambiarmapa = view.findViewById(R.id.IVcambiarmapa);
         toolbar = view.findViewById(R.id.navegador1);
+        grupos = view.findViewById(R.id.IVgrupos);
+        recyclerviewgrupos = view.findViewById(R.id.RBgrupos);
+
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
         if (preferences.getBoolean("fondo2", false) == true) {
@@ -909,7 +910,18 @@ public class MapsFragment extends Fragment {
             toolbar.setBackgroundResource(R.drawable.fondodegradado3);
         } else if (preferences.getBoolean("fondo4", false) == true) {
             toolbar.setBackgroundResource(R.drawable.fondodegradado4);
+        } else {
+            toolbar.setBackgroundResource(R.drawable.fondodegradado);
         }
+
+
+        grupos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerviewgrupos.setVisibility(View.VISIBLE);
+            }
+        });
+
 
         cambiarmapa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1026,6 +1038,8 @@ public class MapsFragment extends Fragment {
                     recyclerViewmarker = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
                     TextView titulopuntos = bottomSheetDialog.findViewById(R.id.TVtitulomarcadorrecicler);
                     SVpunto = bottomSheetDialog.findViewById(R.id.SVpunto);
+
+
 
                     Toolbar marker = bottomSheetDialog.findViewById(R.id.navegadormarker);
 
