@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -95,6 +98,7 @@ public class MapsFragment extends Fragment {
     public static int id_usuario = 0, id_grupo = 1, IDUsuarios;
     String addressStr;
     int tiempo = 5000;
+    private ObjectAnimator animacionDesvanecido, animacionX,animacionRotation;
     public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker;
     FrameLayout mapa;
 
@@ -130,6 +134,13 @@ public class MapsFragment extends Fragment {
                 pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
                 pDialog.setTitleText("Cargando ...");
                 pDialog.setCancelable(true);
+
+                pDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        pDialog.dismiss();
+                    }
+                });
 
 
 
@@ -653,9 +664,7 @@ public class MapsFragment extends Fragment {
                         JSONObject cajas = array.getJSONObject(i);
                         int height = 85;
                         int width = 85;
-                        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.mipmap.markers_round);
-                        Bitmap b = bitmapdraw.getBitmap();
-                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
 
                         MarkerOptions markerOptions = new MarkerOptions();
 
@@ -664,8 +673,8 @@ public class MapsFragment extends Fragment {
                                 new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
                         markerOptions.title(cajas.getString("Nombre"));
-                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+
+                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.markers_round));
                         mMap.addMarker(markerOptions);
                     }
 
@@ -845,13 +854,34 @@ public class MapsFragment extends Fragment {
                             codigo
                     ));
 
-                    recyclerviewgrupos.setVisibility(View.VISIBLE);
-                    closerecycler.setVisibility(View.VISIBLE);
+
+
+
+
                     pDialog.dismiss();
                     GruposAdapters adapter = new GruposAdapters(gruposlist, getContext());
                     recyclerviewgrupos.setHasFixedSize(true);
                     recyclerviewgrupos.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerviewgrupos.setAdapter(adapter);
+                    recyclerviewgrupos.setVisibility(View.VISIBLE);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,0.0f,1.0f);
+                    animacionDesvanecido.setDuration(600);
+                    animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+                    animatorSet.start();
+
+
+
+                    closerecycler.setVisibility(View.VISIBLE);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,0.0f,1.0f);
+                    animacionDesvanecido.setDuration(600);
+
+                    animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
+                    animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+                    animatorSet.start();
+
 
                 } catch (JSONException e) {
                     pDialog.dismiss();
@@ -1135,8 +1165,24 @@ public class MapsFragment extends Fragment {
             public void onClick(View v) {
 
 
-                closerecycler.setVisibility(View.INVISIBLE);
-                recyclerviewgrupos.setVisibility(View.INVISIBLE);
+                animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,1.0f,0.0f);
+                animacionDesvanecido.setDuration(600);
+                animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+                animatorSet.start();
+
+
+
+                animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,1.0f,0.0f);
+                animacionDesvanecido.setDuration(600);
+                animatorSet = new AnimatorSet();
+
+                animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
+                animatorSet = new AnimatorSet();
+                animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+                animatorSet.start();
+
             }
         });
 
