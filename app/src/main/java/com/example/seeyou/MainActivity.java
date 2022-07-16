@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -15,12 +16,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationCallback;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     PerfilFragment perfilFragment = new PerfilFragment();
     MarkersFragment markersFragment = new MarkersFragment();
     SharedPreferences preferences;
+    ConstraintLayout constraintLayout;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -54,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         startLocationUpdates();
 
+
+
+        constraintLayout = findViewById(R.id.Fondobottomnavigation);
+
         preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
         if (preferences.getBoolean("fondo2", false) == true){
@@ -65,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
             setSupportActionBar(toolbar);
 
+            constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
+
         }else if(preferences.getBoolean("fondo", false) == true){
             Window window = getWindow();
 
@@ -73,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             Toolbar toolbar = findViewById(R.id.navegador1);
 
             setSupportActionBar(toolbar);
+            constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
         }
         else if(preferences.getBoolean("fondo3", false) == true){
             Window window = getWindow();
@@ -82,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             Toolbar toolbar = findViewById(R.id.navegador1);
 
             setSupportActionBar(toolbar);
+            constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
         }
         else if(preferences.getBoolean("fondo4", false) == true){
             Window window = getWindow();
@@ -91,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             Toolbar toolbar = findViewById(R.id.navegador1);
 
             setSupportActionBar(toolbar);
+            constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
         }
 
         ejecutar();
@@ -185,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     Toolbar toolbar = findViewById(R.id.navegador1);
 
                     setSupportActionBar(toolbar);
+                    constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
 
                 }else if(preferences.getBoolean("fondo", false) == true){
                     Window window = getWindow();
@@ -194,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
                     Toolbar toolbar = findViewById(R.id.navegador1);
 
                     setSupportActionBar(toolbar);
+
+                    constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
                 }
                 else if(preferences.getBoolean("fondo3", false) == true){
                     Window window = getWindow();
@@ -203,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                     Toolbar toolbar = findViewById(R.id.navegador1);
 
                     setSupportActionBar(toolbar);
+                    constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
                 }
                 else if(preferences.getBoolean("fondo4", false) == true){
                     Window window = getWindow();
@@ -212,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
                     Toolbar toolbar = findViewById(R.id.navegador1);
 
                     setSupportActionBar(toolbar);
+
+                    constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
                 }
                 handler.postDelayed(this,10);//se ejecutara cada 10 segundos
             }

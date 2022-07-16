@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
@@ -34,6 +36,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.androidgamesdk.gametextinput.Listener;
@@ -68,7 +72,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     //Toma las variables de otro fragmento
     int a = 1;
-    int b = 1;
+    int b = 2;
     public GoogleMap Mapa = MapsFragment.mMap;
     double LatitudDialogo = MapsFragment.LatitudDialogo;
     double LongitudDialogo = MapsFragment.LongitudDialogo;
@@ -146,6 +150,12 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                         .setTitleText("Buen Trabajo!")
                         .setContentText("El Marcandor Ha Sido Registrado Correctamente")
                         .show();
+                int height = 80;
+                int width = 80;
+                Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.markers_round);
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
 
                 LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
 
@@ -153,7 +163,8 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(ubicacion1);
                 markerOptions.title(titulo1.getText().toString());
-
+                markerOptions.draggable(true);
+                markerOptions.icon(smallMarkerIcon);
                 //añade el punto
                 Mapa.addMarker(markerOptions);
 

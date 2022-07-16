@@ -11,6 +11,7 @@
     <color name="gris_claro">#B6B6B6</color>
     <color name="gris_muyclaro">#F6F6F6</color>
     <color name="gris_obscuro">#595959</color>
+    <color name="gris_obscuro_translucido">#70595959</color>
 
     <color name="blue">#000D7C</color>
     <color name="gold">#9E9000</color>
@@ -28,6 +29,7 @@
     <color name="Rosa_obscuro">#FF0059</color>
     <color name="Amarillo">#FFD400</color>
     <color name="morado">#5500AA</color>
+    <color name="morado_claro">#7034AC</color>
     <color name="Azul_cian">#00F3A6</color>
     <color name="Verde_Azul">#00F361</color>
     <color name="Rojo">#FF0000</color>
@@ -40,6 +42,7 @@
     <color name="azul">#000DFF</color>
     <color name="azul_claro">#1924F1</color>
     <color name="azul_obscuro">#000673</color>
+    <color name="App_Color">#5b00bc</color>
 
 
 

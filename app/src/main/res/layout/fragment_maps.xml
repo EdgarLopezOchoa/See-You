@@ -8,75 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".MapsFragment" >
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/navegador1"
-        style="@style/BottomNavigation"
-        android:layout_width="0dp"
-        android:background="@drawable/fondodegradado"
-        app:backgroundTint="@null"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@null"
-        android:elevation="8dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ContrainTitutlo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="8dp">
-
-            <TextView
-                android:id="@+id/TVtituloseeyou"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="SEE YOU"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="32sp"
-                android:textStyle="bold|italic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.537"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/IVmensajes"
-                android:layout_width="30dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="15dp"
-                android:src="@drawable/mensaje"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <SearchView
-                android:id="@+id/SVubicacion"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                android:searchIcon="@android:drawable/ic_menu_search"
-                app:layout_constraintBottom_toBottomOf="@+id/TVtituloseeyou"
-                app:layout_constraintEnd_toStartOf="@+id/IVmensajes"
-                app:layout_constraintHorizontal_bias="0.808"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TVtituloseeyou"
-                app:layout_constraintVertical_bias="1.0" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.appcompat.widget.Toolbar>
-
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -87,8 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1"
-        app:layout_constraintVertical_bias="0.0"></fragment>
+        app:layout_constraintTop_toTopOf="parent"></fragment>
 
     <ImageView
         android:id="@+id/IVubicacion"
@@ -96,45 +26,46 @@
         android:layout_height="42dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
+        android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="@+id/IVlocation"
         app:layout_constraintStart_toStartOf="@+id/IVlocation"
         app:layout_constraintTop_toBottomOf="@+id/IVlocation"
-        app:srcCompat="@drawable/ubicacion" />
+        app:srcCompat="@drawable/addmarkers_round" />
 
     <Button
         android:id="@+id/BTNcancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button"
         android:text="Cancelar"
         android:textColor="@color/white"
         android:visibility="invisible"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/navegador1"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SVubicacion" />
 
     <ImageView
         android:id="@+id/IVlocation"
         android:layout_width="45dp"
         android:layout_height="42dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="10dp"
+        android:elevation="8dp"
         android:src="@drawable/marcador_round"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navegador1" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/IVvermarkers"
         android:layout_width="45dp"
         android:layout_height="42dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/bookmarkers"
+        android:layout_marginBottom="10dp"
+        android:src="@mipmap/marcadores_round"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/TValertamarcador"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
@@ -142,35 +73,75 @@
         android:layout_width="45dp"
         android:layout_height="42dp"
         android:layout_marginBottom="5dp"
-        android:src="@drawable/maps"
+        android:src="@mipmap/maps_round"
         app:layout_constraintBottom_toTopOf="@+id/IVvermarkers"
         app:layout_constraintEnd_toEndOf="@+id/IVvermarkers"
         app:layout_constraintStart_toStartOf="@+id/IVvermarkers" />
 
     <ImageView
         android:id="@+id/IVgrupos"
-        android:layout_width="60dp"
-        android:layout_height="48dp"
-        android:src="@drawable/user"
-        app:layout_constraintBottom_toBottomOf="@+id/IVlocation"
-        app:layout_constraintEnd_toStartOf="@+id/IVlocation"
-        app:layout_constraintTop_toTopOf="@+id/IVlocation"
-        app:layout_constraintVertical_bias="0.26"
-        app:srcCompat="@drawable/user" />
+        android:layout_width="45dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/grupos_round"
+        app:layout_constraintEnd_toEndOf="@+id/IVubicacion"
+        app:layout_constraintStart_toStartOf="@+id/IVubicacion"
+        app:layout_constraintTop_toBottomOf="@+id/IVubicacion"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RBgrupos"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/fondo_de_edittext"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/TValertamarcador"
         app:layout_constraintEnd_toStartOf="@+id/IVgrupos"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/BTNcancelar"
-        app:layout_constraintTop_toTopOf="@+id/IVgrupos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BTNcancelar"
         app:layout_constraintVertical_bias="0.0" />
+
+    <SearchView
+        android:id="@+id/SVubicacion"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:addStatesFromChildren="false"
+        android:animateLayoutChanges="true"
+        android:elevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </SearchView>
+
+    <TextView
+        android:id="@+id/TValertamarcador"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:background="@color/gris_obscuro_translucido"
+        android:text="\n AGREGAR MARCADOR ESTA ACTIVO"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/IVclose"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:src="@drawable/close"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/RBgrupos"
+        app:layout_constraintEnd_toEndOf="@+id/RBgrupos" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

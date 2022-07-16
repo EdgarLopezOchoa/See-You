@@ -22,7 +22,7 @@ public class RutasFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    Toolbar navegadorperfil2;
+
     SharedPreferences preferences;
 
     // TODO: Rename and change types of parameters
@@ -65,21 +65,6 @@ public class RutasFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_rutas, container, false);
-        navegadorperfil2 = view.findViewById(R.id.navegador4);
-        preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        if (preferences.getBoolean("fondo2", false) == true){
-            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado2);
-
-        }else if(preferences.getBoolean("fondo", false) == true){
-            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado);
-        }else if(preferences.getBoolean("fondo3", false) == true){
-            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado3);
-        }
-        else if(preferences.getBoolean("fondo4", false) == true){
-            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado4);
-        } else{
-            navegadorperfil2.setBackgroundResource(R.drawable.fondodegradado);
-        }
 
         return view;
     }

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
@@ -32,6 +34,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.seeyou.MapsFragment;
 import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -59,7 +62,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     private Context context;
     private RecyclerView recyclerViewmarker = MapsFragment.recyclerViewmarker;
     private int MY_DEFAULT_TIMEOUT = 15000;
-    private int id_usuario = MapsFragment.id_usuario;
+    private int id_grupo = MapsFragment.id_grupo;
     private GoogleMap mMap = MapsFragment.mMap;
     SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
     LocationManager locationManager;
@@ -238,7 +241,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 Eliminar_Marcador_recycler.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
-                        Eliminar(id_usuario, holder.id);
+                        Eliminar(id_grupo, holder.id);
                         Eliminar_Marcador_recycler.dismiss();
                     }
                 });
@@ -412,7 +415,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
         pDialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=" + id_usuario, new Response.Listener<String>() {
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -485,7 +488,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     }
 
 
-    public void Eliminar(int id_usuario, int id_punto) {
+    public void Eliminar(int id_grupo, int id_punto) {
         SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Loading ...");
         pDialog.setCancelable(true);
@@ -542,7 +545,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
 
                 params.put("idpunto", id_punto + "");
-                params.put("idusuario", id_usuario + "");
+                params.put("idusuario", id_grupo + "");
 
 
                 return params;
@@ -563,7 +566,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     private void PuntosMapa() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_usuario, new Response.Listener<String>() {
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -574,6 +577,12 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                         JSONObject cajas = array.getJSONObject(i);
 
 
+                        int height = 85;
+                        int width = 85;
+                        BitmapDrawable bitmapdraw = (BitmapDrawable) context.getResources().getDrawable(R.mipmap.markers_round);
+                        Bitmap b = bitmapdraw.getBitmap();
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
                         MarkerOptions markerOptions = new MarkerOptions();
 
 
@@ -581,7 +590,8 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                 new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
                         markerOptions.title(cajas.getString("Nombre"));
-                        // markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
                     }
 

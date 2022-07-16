@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.197" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/addmarkers_foreground.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/button.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/button2.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/buttonfondo2.xml" value="0.197" />
@@ -17,6 +18,8 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/fondodegradado2.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/fondodegradado3.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/fondodegradado4.xml" value="0.197" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.197" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/location_foreground.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/mapa_foreground.xml" value="0.1" />
@@ -25,6 +28,7 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/marker_foreground.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/markersbottomsheet.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/perfil_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/remove_foreground.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/routs_foreground.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/searchbar.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/statusbar.xml" value="0.1" />
@@ -35,12 +39,16 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/activity_maps.xml" value="0.19655797101449277" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/activity_pantalla_carga.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/activity_registro.xml" value="0.25" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/bottom_sheet.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/bottom_sheet_persistent.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/bottom_view.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/design_top_sheet_dialog.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_bottomsheet.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_dialogo__mensaje.xml" value="0.33" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_grupos.xml" value="0.5" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_maps.xml" value="0.25" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_markers.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_perfil.xml" value="0.25" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_perfil.xml" value="0.2" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_rutas.xml" value="0.22" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_tarjeta.xml" value="0.33" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/marker_layout.xml" value="0.33" />
@@ -48,12 +56,15 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/menu/bottom_navigartion_empty.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/menu/bottom_navigation.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/menu/bottom_navigation_empty.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/addmarkers_round.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/bookmarkers_round.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/location_round.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/maps.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/maps_round.xml" value="0.195" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/markers_round.xml" value="0.197" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/remove.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1945" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/app/src/main/res/drawable/School_icon_foreground.xml" value="0.1945" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1945" />
