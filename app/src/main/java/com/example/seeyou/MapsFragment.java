@@ -132,20 +132,23 @@ public class MapsFragment extends Fragment {
                 pDialog.setCancelable(true);
 
 
-                id_usuario = preferences.getInt("id", 0);
+
 
                 locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
                 locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
                 networkInfo = locationManagerinternet.getActiveNetworkInfo();
 
-                if (mensaje == 0) {
+                /*if (mensaje == 0) {
                     new SweetAlertDialog(getContext())
                             .setTitleText("Bienvenido!!!!")
                             .setContentText("Bienvenido De Vuelta " + preferences.getString("Nombre", "") +
                                     ", \n Siempre Es Un Gusto Tenerte Aqui :D")
                             .show();
                     mensaje = 1;
-                }
+                }*/
+
+
+
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
                 SVubicacion.setQuery("", false);
@@ -784,8 +787,11 @@ public class MapsFragment extends Fragment {
 
                     JSONArray array = new JSONArray(response);
 
+
                     int ciclo = 0, primero = 1, id = 0;
-                    String Nombre = "", codigo = "", grupo = "";
+
+                    String Nombre =preferences.getString("Nombre", ""), codigo = "", grupo = "",verificar =preferences.getString("Nombre", "");
+
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
 
@@ -798,11 +804,13 @@ public class MapsFragment extends Fragment {
 
                         if (ciclo == cajas.getInt("idgrupo")) {
 
-                            Nombre += " "+cajas.getString("nombreusuario") + ",";
-                            codigo = cajas.getString("codigo");
-                            id = cajas.getInt("idgrupo");
-                            grupo = cajas.getString("nombregrupo");
+                            if(!Objects.equals(cajas.getString("nombreusuario"),verificar)) {
+                                Nombre += ", " + cajas.getString("nombreusuario");
+                            }
 
+                            codigo = cajas.getString("codigo");
+                                id = cajas.getInt("idgrupo");
+                                grupo = cajas.getString("nombregrupo");
 
                         } else {
                             if(ciclo != cajas.getInt("idgrupo")){
@@ -817,7 +825,10 @@ public class MapsFragment extends Fragment {
 
                             ciclo = cajas.getInt("idgrupo");
                             Nombre = "";
-                            Nombre += cajas.getString("nombreusuario") + ",";
+                            Nombre =preferences.getString("Nombre", "");
+                            if(!Objects.equals(cajas.getString("nombreusuario"),verificar)) {
+                                Nombre += ", " + cajas.getString("nombreusuario");
+                            }
                             codigo = cajas.getString("codigo");
                             id = cajas.getInt("idgrupo");
                             grupo = cajas.getString("nombregrupo");
@@ -1117,6 +1128,7 @@ public class MapsFragment extends Fragment {
         SVubicacion.setQueryHint("Buscar Ubicacion");
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        id_usuario = preferences.getInt("id", 0);
 
         closerecycler.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -35,7 +35,7 @@ public class Pantalla_carga extends AppCompatActivity {
                     finish();
                 }
             }
-        },3500);
+        },2500);
 
     }
 }
