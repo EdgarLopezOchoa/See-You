@@ -188,6 +188,62 @@ public class MapsFragment extends Fragment {
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
 
+                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                    @Override
+                    public void onMarkerDrag(@NonNull Marker marker) {
+
+                    }
+
+                    @Override
+                    public void onMarkerDragEnd(@NonNull Marker marker) {
+
+                        try {
+
+                        String id = marker.getTitle();
+                        double Latitud, logitud;
+                        Latitud = marker.getPosition().latitude;
+                        logitud = marker.getPosition().longitude;
+
+
+
+                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+
+                        List<Address> addresses = null;
+
+                            addresses = geocoder.getFromLocation(Latitud, logitud, 1);
+
+
+                        Address address = (Address) addresses.get(0);
+                            addressStr = "";
+                            addressStr += address.getAddressLine(0);
+
+                            Eliminar_Marcador = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
+                            Eliminar_Marcador.setTitleText("¿Estas Seguro?");
+                            Eliminar_Marcador.setContentText("Estas Apunto De Cambiar La Ubicacion De Este Marcador..");
+                            Eliminar_Marcador.setConfirmText("Cambiar");
+                            Eliminar_Marcador.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    UbicacionPunto(Latitud,logitud,id,addressStr);
+                                    Eliminar_Marcador.dismiss();
+                                }
+                            });
+                            Eliminar_Marcador.show();
+
+
+
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onMarkerDragStart(@NonNull Marker marker) {
+
+                    }
+                });
 
 
 
@@ -679,7 +735,8 @@ public class MapsFragment extends Fragment {
                         LatLng puntoubicacion =
                                 new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
-                        markerOptions.title(cajas.getString("Nombre"));
+                        markerOptions.title(cajas.getString("IDpunto"));
+                        markerOptions.draggable(true);
 
                         if (preferences.getBoolean("fondo2", false) == true){
 
@@ -734,7 +791,7 @@ public class MapsFragment extends Fragment {
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("si")
                             .show();
                 }
             }
@@ -992,6 +1049,102 @@ public class MapsFragment extends Fragment {
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
     }
+
+
+    public void UbicacionPunto(double latitud1, double longitud1, String idpunto, String direccion) {
+
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/cambiar_ubicacion.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    pDialog.dismiss();
+
+
+                    if(Objects.equals(response, "Cambios Realizados")){
+
+
+
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Correcto!!")
+                                .setContentText("La Ubicacion Ha Sido Actualizada Correctamente!!")
+                                .show();
+
+
+                    } else{
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Actualizar La Ubicacion De Su Punto....")
+                                .show();
+                    }
+
+                    PuntosMapa();
+
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    pDialog.dismiss();
+
+
+                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
+                                .show();
+                    } else {
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
+                    }
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("idpunto", idpunto);
+                params.put("direccion", direccion);
+                params.put("latitud", latitud1+"");
+                params.put("longitud", longitud1+"");
+
+                return params;
+            }
+
+        };
+
+
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+
+    }
+
+
 
 
 
