@@ -377,10 +377,7 @@ public class MapsFragment extends Fragment {
                         coordenadamarcador.setText("" + Latitud + " : " + logitud);
                         nombremarcador.setText(marker.getTitle());
 
-                        Ubicacion(marker.getPosition().latitude + ""
-                                , marker.getPosition().longitude + ""
-                                , nombremarcador.getText().toString()
-                                , ubicacionmarcador.getText().toString());
+                        Ubicacion(marker.getTitle());
 
 
                         iniciarviaje.setOnClickListener(new View.OnClickListener() {
@@ -1149,7 +1146,7 @@ public class MapsFragment extends Fragment {
 
 
 
-    public void Ubicacion(String latitud1, String longitud1, String nombre, String ubicacion1) {
+    public void Ubicacion(String id) {
 
         pDialog.show();
 
@@ -1166,6 +1163,7 @@ public class MapsFragment extends Fragment {
 
                     descripcionmarcador.setText(cajas.getString("descripcion"));
                     TVidmarker.setText(cajas.getString("IDpunto"));
+                    nombremarcador.setText(cajas.getString("Nombre"));
                     bottomSheetDialogmarker.show();
 
 
@@ -1215,10 +1213,8 @@ public class MapsFragment extends Fragment {
                 Map<String, String> params = new HashMap<String, String>();
 
 
-                params.put("nombrePunto", nombre);
-                params.put("direccion", ubicacion1);
-                params.put("latitud", latitud1);
-                params.put("longitud", longitud1);
+                params.put("id", id);
+
 
                 return params;
             }
