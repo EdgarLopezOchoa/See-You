@@ -35,6 +35,8 @@ import com.example.seeyou.MapsFragment;
 import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -579,9 +581,52 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
                         int height = 85;
                         int width = 85;
-                        BitmapDrawable bitmapdraw = (BitmapDrawable) context.getResources().getDrawable(R.mipmap.markers_round);
+                       /* BitmapDrawable bitmapdraw = (BitmapDrawable) context.getResources().getDrawable(R.mipmap.markers_round);
                         Bitmap b = bitmapdraw.getBitmap();
-                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);*/
+
+
+                        if (preferences.getBoolean("fondo2", false) == true){
+
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(R.color.Amarillo)
+                                    .fillColor(0x30DD4819));
+
+                        }else if(preferences.getBoolean("fondo", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(R.color.morado_obscuro)
+                                    .fillColor(0x30391B6F));
+                        }
+                        else if(preferences.getBoolean("fondo3", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(R.color.Rosa_obscuro)
+                                    .fillColor(0x30FF0000));
+                        }
+                        else if(preferences.getBoolean("fondo4", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(R.color.morado_obscuro)
+                                    .fillColor(0x30391B6F));
+                        } else{
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(R.color.verde_fuerte)
+                                    .fillColor(0x3000F361));
+                        }
+
 
                         MarkerOptions markerOptions = new MarkerOptions();
 
@@ -590,8 +635,8 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                 new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
                         markerOptions.title(cajas.getString("Nombre"));
-                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                        //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
                         mMap.addMarker(markerOptions);
                     }
 

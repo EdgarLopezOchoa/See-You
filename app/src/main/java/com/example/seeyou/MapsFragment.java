@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -61,6 +62,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -664,6 +667,10 @@ public class MapsFragment extends Fragment {
                         JSONObject cajas = array.getJSONObject(i);
                         int height = 85;
                         int width = 85;
+                        /*BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.mipmap.markers_round);
+                        Bitmap b = bitmapdraw.getBitmap();
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);*/
+
 
 
                         MarkerOptions markerOptions = new MarkerOptions();
@@ -674,7 +681,51 @@ public class MapsFragment extends Fragment {
                         markerOptions.position(puntoubicacion);
                         markerOptions.title(cajas.getString("Nombre"));
 
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.markers_round));
+                        if (preferences.getBoolean("fondo2", false) == true){
+
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30DD4819));
+
+                        }else if(preferences.getBoolean("fondo", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30391B6F));
+                        }
+                        else if(preferences.getBoolean("fondo3", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30FF0000));
+                        }
+                        else if(preferences.getBoolean("fondo4", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x3000F361));
+                        } else{
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30391B6F));
+                        }
+
+
+                       // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
                     }
 
