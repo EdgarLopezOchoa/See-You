@@ -150,11 +150,11 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                         .setTitleText("Buen Trabajo!")
                         .setContentText("El Marcandor Ha Sido Registrado Correctamente")
                         .show();
-                int height = 80;
+                /*int height = 80;
                 int width = 80;
                 Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.markers_round);
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+                BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);*/
 
 
                 LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
@@ -164,7 +164,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 markerOptions.position(ubicacion1);
                 markerOptions.title(titulo1.getText().toString());
                 markerOptions.draggable(true);
-                markerOptions.icon(smallMarkerIcon);
+                //markerOptions.icon(smallMarkerIcon);
                 //añade el punto
                 Mapa.addMarker(markerOptions);
 

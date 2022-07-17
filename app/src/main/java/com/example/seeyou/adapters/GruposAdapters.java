@@ -134,6 +134,8 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
 
                     editor.putInt("idgrupo",id_grupo);
                     editor.commit();
+
+
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
                         int height = 85;

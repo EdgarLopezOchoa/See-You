@@ -418,10 +418,10 @@ public class MapsFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 if (habilitado.getText().toString() == "habilitado") {
-                                    Habilitar("deshabilitado", TVidmarker.getText().toString());
+                                    Habilitar("deshabilitado", marker.getTitle());
 
                                 } else {
-                                    Habilitar("habilitado", TVidmarker.getText().toString());
+                                    Habilitar("habilitado", marker.getTitle());
 
                                 }
                             }
@@ -624,6 +624,8 @@ public class MapsFragment extends Fragment {
 
         pDialog.show();
 
+        id_grupo = preferences.getInt("idgrupo",0);
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
@@ -710,6 +712,8 @@ public class MapsFragment extends Fragment {
 
 
     private void PuntosMapa() {
+
+        id_grupo = preferences.getInt("idgrupo",0);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
