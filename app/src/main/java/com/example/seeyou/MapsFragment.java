@@ -1207,6 +1207,7 @@ public class MapsFragment extends Fragment {
         SVubicacion.setIconifiedByDefault(false);
         SVubicacion.setBackgroundResource(R.drawable.fondo_de_edittext);
         SVubicacion.setQueryHint("Buscar Ubicacion");
+        SVubicacion.setFocusable(false);
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
         id_usuario = preferences.getInt("id", 0);
