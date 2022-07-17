@@ -93,7 +93,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/fondo_de_edittext"
         android:visibility="invisible"
@@ -101,7 +100,7 @@
         app:layout_constraintEnd_toStartOf="@+id/IVgrupos"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BTNcancelar"
+        app:layout_constraintTop_toBottomOf="@+id/TBgrupos"
         app:layout_constraintVertical_bias="0.0" />
 
     <SearchView
@@ -134,14 +133,47 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/TBgrupos"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fondodegradado"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/RBgrupos"
+        app:layout_constraintStart_toStartOf="@+id/RBgrupos"
+        app:layout_constraintTop_toBottomOf="@+id/BTNcancelar">
+
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ImageView
         android:id="@+id/IVclose"
-        android:layout_width="40dp"
-        android:layout_height="38dp"
+        android:layout_width="45dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:src="@drawable/close"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/RBgrupos"
-        app:layout_constraintEnd_toEndOf="@+id/RBgrupos" />
+        app:layout_constraintEnd_toEndOf="@+id/RBgrupos"
+        app:layout_constraintTop_toTopOf="@+id/TBgrupos" />
+
+    <ImageView
+        android:id="@+id/IVagregargrupo"
+        android:layout_width="45dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:src="@mipmap/addgroup_foreground"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/RBgrupos"
+        app:layout_constraintStart_toStartOf="@+id/RBgrupos"
+        app:layout_constraintTop_toTopOf="@+id/TBgrupos" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
