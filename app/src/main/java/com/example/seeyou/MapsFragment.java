@@ -99,7 +99,7 @@ public class MapsFragment extends Fragment {
     public static ArrayList<Markers> markerslist = new ArrayList<>();
     public static ArrayList<Grupos> gruposlist = new ArrayList<>();
     public static String direccion = "",NombreUsuarios = "",Codigogrupo="",NombreGrupo="";
-    public static int id_usuario = 0, id_grupo = 1, IDUsuarios;
+    public static int id_usuario = 0, id_grupo = 0, IDUsuarios;
     String addressStr;
     int tiempo = 5000;
     private ObjectAnimator animacionDesvanecido, animacionX,animacionRotation;
@@ -173,7 +173,10 @@ public class MapsFragment extends Fragment {
 
                 mMap = googleMap;
 
-                PuntosMapa();
+                if (id_grupo !=0) {
+
+                    PuntosMapa();
+                }
 
                 //startLocationUpdates();
 
@@ -355,7 +358,7 @@ public class MapsFragment extends Fragment {
                         Latitud = latLng.latitude;
                         logitud = latLng.longitude;
 
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
                         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                         try {
@@ -789,7 +792,7 @@ public class MapsFragment extends Fragment {
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("si")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -1383,6 +1386,14 @@ public class MapsFragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
         id_usuario = preferences.getInt("id", 0);
+
+        if(preferences.getInt("idgrupo", 0) == 0){
+            new SweetAlertDialog(ubicacion.getContext())
+                    .setTitleText("Aviso!")
+                    .setContentText("Seleccione Un Grupo Para Ver Sus Marcadores y A Otros Usuarios Del Mismo.")
+                    .show();
+        }
+        id_grupo =preferences.getInt("idgrupo", 0);
 
 
         if (preferences.getBoolean("fondo2", false) == true){

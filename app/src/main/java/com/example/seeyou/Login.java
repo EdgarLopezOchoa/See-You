@@ -447,6 +447,7 @@ public class Login extends AppCompatActivity {
                         editor.putInt("id", id);
                         editor.putString("Nombre", Nombre1);
                         editor.putString("Apellido", Apellido1);
+                        editor.putInt("idgrupo", 0);
                         editor.commit();
 
 

@@ -72,7 +72,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
     //Toma las variables de otro fragmento
     int a = 1;
-    int b = 2;
+    int id_grupo = 0;
     public GoogleMap Mapa = MapsFragment.mMap;
     double LatitudDialogo = MapsFragment.LatitudDialogo;
     double LongitudDialogo = MapsFragment.LongitudDialogo;
@@ -218,7 +218,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 params.put("Longitud", Longitud);
                 params.put("Latitud", latitud);
                 params.put("idusuario", a + "");
-                params.put("idgrupo", b + "");
+                params.put("idgrupo", id_grupo + "");
                 return params;
             }
 
@@ -254,6 +254,8 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        id_grupo = preferences.getInt("idgrupo",0);
+
 
 
         if (preferences.getBoolean("fondo2", false) == true){
