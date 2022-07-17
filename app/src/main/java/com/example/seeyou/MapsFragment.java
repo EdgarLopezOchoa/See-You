@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -968,9 +969,11 @@ public class MapsFragment extends Fragment {
                     recyclerviewgrupos.setHasFixedSize(true);
                     recyclerviewgrupos.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerviewgrupos.setAdapter(adapter);
+
+
                     recyclerviewgrupos.setVisibility(View.VISIBLE);
                     animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(600);
+                    animacionDesvanecido.setDuration(750);
                     animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(animacionDesvanecido,animacionRotation);
@@ -979,7 +982,7 @@ public class MapsFragment extends Fragment {
 
                     agregargrupo.setVisibility(View.VISIBLE);
                     animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(600);
+                    animacionDesvanecido.setDuration(750);
 
                     animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
                     animatorSet = new AnimatorSet();
@@ -989,7 +992,7 @@ public class MapsFragment extends Fragment {
 
                     TBgrupos.setVisibility(View.VISIBLE);
                     animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(600);
+                    animacionDesvanecido.setDuration(750);
                     animatorSet = new AnimatorSet();
                     animatorSet.play(animacionDesvanecido);
                     animatorSet.start();
@@ -997,7 +1000,7 @@ public class MapsFragment extends Fragment {
 
                     closerecycler.setVisibility(View.VISIBLE);
                     animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(600);
+                    animacionDesvanecido.setDuration(750);
 
                     animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
                     animatorSet = new AnimatorSet();
@@ -1171,7 +1174,7 @@ public class MapsFragment extends Fragment {
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("No Hemos Podido Obtener Los Datos De Su Marcador....")
                             .show();
                 }
 
@@ -1411,34 +1414,65 @@ public class MapsFragment extends Fragment {
 
 
                 animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(600);
+                animacionDesvanecido.setDuration(750);
                 animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
                 AnimatorSet animatorSet = new AnimatorSet();
                 animatorSet.playTogether(animacionDesvanecido,animacionRotation);
                 animatorSet.start();
 
+
                 animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(600);
+                animacionDesvanecido.setDuration(750);
                 animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
                 animatorSet = new AnimatorSet();
                 animatorSet.playTogether(animacionDesvanecido,animacionRotation);
                 animatorSet.start();
 
+
                 animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(600);
+                animacionDesvanecido.setDuration(750);
                 animatorSet = new AnimatorSet();
                 animatorSet.play(animacionDesvanecido);
                 animatorSet.start();
 
 
+
                 animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(600);
+                animacionDesvanecido.setDuration(750);
                 animatorSet = new AnimatorSet();
 
                 animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
                 animatorSet = new AnimatorSet();
                 animatorSet.playTogether(animacionDesvanecido,animacionRotation);
                 animatorSet.start();
+
+
+
+                animatorSet.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        recyclerviewgrupos.setVisibility(View.INVISIBLE);
+                        TBgrupos.setVisibility(View.INVISIBLE);
+                        agregargrupo.setVisibility(View.INVISIBLE);
+                        closerecycler.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+
 
             }
         });
