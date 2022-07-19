@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".Registro">
+    >
 
     <TextView
         android:id="@+id/tvTitulo3"
@@ -67,6 +67,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Nombre"
+                        android:maxLength="30"
                         android:inputType="textPersonName"
                         android:textColor="@color/black">
 
@@ -99,6 +100,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Apellido"
+                        android:maxLength="30"
                         android:inputType="textPersonName"
                         android:textColor="@color/black">
 
@@ -130,6 +132,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Celular"
+                        android:maxLength="10"
                         android:inputType="number"
                         android:textColor="@color/black">
 
@@ -161,6 +164,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Email"
+                        android:maxLength="40"
                         android:inputType="textEmailAddress"
                         android:textColor="@color/black">
 
@@ -193,6 +197,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
+                        android:maxLength="15"
                         android:hint="Contraseña"
                         android:inputType="textPassword"
                         android:textColor="@color/black">

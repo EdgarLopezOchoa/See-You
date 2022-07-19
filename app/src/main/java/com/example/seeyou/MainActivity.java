@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     PerfilFragment perfilFragment = new PerfilFragment();
     MarkersFragment markersFragment = new MarkersFragment();
     SharedPreferences preferences;
-    ConstraintLayout constraintLayout;
+    public static ConstraintLayout constraintLayout;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ejecutar();
+
 
         //llama al fragmento de mapa y lo pone en el FrameLayout
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 handler.postDelayed(this,10);//se ejecutara cada 10 segundos
             }
-        },50);
+        },1500);
     }
 
 

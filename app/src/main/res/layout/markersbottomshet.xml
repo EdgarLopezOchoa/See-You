@@ -3,8 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Contenedormarker"
+    style="@style/BottomSheetDialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondonaranaja2"
     android:orientation="vertical">
 
 
@@ -73,11 +75,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVmarkersbottomsheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
-
 
 
 </LinearLayout>

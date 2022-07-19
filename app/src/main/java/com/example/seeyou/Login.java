@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.LocationManager;
@@ -23,7 +24,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
@@ -49,6 +52,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,9 +70,9 @@ public class Login extends AppCompatActivity {
     Button btnNota, btnIngresar;
     //borrar despues
     Button button, enviar, cancelar, btnGaleria, btningresarsesion;
-    EditText Nombre, Contraseña, Apellido, Celular, Email;
+    TextInputEditText Nombre, Contraseña, Apellido, Celular, Email;
     private LinearLayout contenedor;
-    EditText etEmail, etContraseña;
+    TextInputEditText etEmail, etContraseña;
     ImageView imgUsuario;
     CheckBox sesion;
     int PICK_IMAGE_REQUEST = 1, id = 0, registro = 0;
@@ -85,6 +89,7 @@ public class Login extends AppCompatActivity {
     SweetAlertDialog pDialog;
     LocationManager locationManager;
     TextView Asterisco1, Asterisco2, Asterisco3, Asterisco4, Asterisco5;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +109,15 @@ public class Login extends AppCompatActivity {
         contenedor = findViewById(R.id.Contenedormarker);
         sesion = findViewById(R.id.CBsesion);
         btnIngresar = findViewById(R.id.btnIngresar);
+        button = findViewById(R.id.button);
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), registro_grupos.class));
+            }
+        });
 
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
@@ -116,13 +130,21 @@ public class Login extends AppCompatActivity {
         irregistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BottomSheetBehavior<View> bottomSheetBehavior ;
+
+
                 bottomSheetDialog = new BottomSheetDialog
-                        (Login.this, R.style.BottomSheetDialog);
+                        (Login.this);
                 View bottomSheetView = LayoutInflater.from(Login.this).inflate(
-                        R.layout.activity_registro, (LinearLayout) contenedor
+                        R.layout.activity_registro, null
                 );
 
                 bottomSheetDialog.setContentView(bottomSheetView);
+                LinearLayout contenedor1 = bottomSheetDialog.findViewById(R.id.BottomSheetRegister);
+                bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                assert contenedor1 !=null;
+                contenedor1.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
                 bottomSheetDialog.show();
 
 
@@ -140,6 +162,8 @@ public class Login extends AppCompatActivity {
                 Asterisco3 = bottomSheetDialog.findViewById(R.id.TVasterisco3);
                 Asterisco4 = bottomSheetDialog.findViewById(R.id.TVasterisco4);
                 Asterisco5 = bottomSheetDialog.findViewById(R.id.TVasterisco5);
+
+
 
 
                 btnGaleria.setOnClickListener(new View.OnClickListener() {

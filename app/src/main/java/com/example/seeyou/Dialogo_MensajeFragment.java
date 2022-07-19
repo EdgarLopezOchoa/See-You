@@ -38,10 +38,13 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.androidgamesdk.gametextinput.Listener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,7 +76,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
     //Toma las variables de otro fragmento
     int a = 1;
     int id_grupo = 0;
-    public GoogleMap Mapa = MapsFragment.mMap;
+    public GoogleMap mMap = MapsFragment.mMap;
     double LatitudDialogo = MapsFragment.LatitudDialogo;
     double LongitudDialogo = MapsFragment.LongitudDialogo;
     String direccion = MapsFragment.direccion;
@@ -155,22 +158,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.markers_round);
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
                 BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);*/
-
-
-                LatLng ubicacion1 = new LatLng(LatitudDialogo, LongitudDialogo);
-
-                //Crea todos los valores que lleva el punto
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(ubicacion1);
-                markerOptions.title(titulo1.getText().toString());
-                markerOptions.draggable(true);
-                //markerOptions.icon(smallMarkerIcon);
-                //añade el punto
-                Mapa.addMarker(markerOptions);
-
-                titulo1.getText().clear();
-                descripcion.getText().clear();
-                direccion = "";
+                PuntosMapa();
 
 
                 //cierra el fragmento
@@ -228,6 +216,131 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
+
+
+    public void PuntosMapa() {
+
+        id_grupo = preferences.getInt("idgrupo",0);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+
+                    mMap.clear();
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject cajas = array.getJSONObject(i);
+                        int height = 85;
+                        int width = 85;
+                        /*BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.mipmap.markers_round);
+                        Bitmap b = bitmapdraw.getBitmap();
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);*/
+
+
+
+                        MarkerOptions markerOptions = new MarkerOptions();
+
+
+                        LatLng puntoubicacion =
+                                new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
+                        markerOptions.position(puntoubicacion);
+                        markerOptions.title(cajas.getString("IDpunto"));
+                        markerOptions.draggable(true);
+
+                        if (preferences.getBoolean("fondo2", false) == true){
+
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30DD4819));
+
+                        }else if(preferences.getBoolean("fondo", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30391B6F));
+                        }
+                        else if(preferences.getBoolean("fondo3", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30FF0000));
+                        }
+                        else if(preferences.getBoolean("fondo4", false) == true){
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x3000F361));
+                        } else{
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                    .radius(90)
+                                    .strokeWidth(3)
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30391B6F));
+                        }
+
+
+                        // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                        mMap.addMarker(markerOptions);
+                    }
+
+
+                } catch (JSONException e) {
+
+                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+
+                            if (locationManagerinternet.getActiveNetworkInfo() != null
+                                    && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                    && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                        .show();
+                            }
+                        } catch (Exception e) {
+
+                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .show();
+                        }
+                    }
+                });
+
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+
+    }
+
 
 
     @SuppressLint("MissingPermission")

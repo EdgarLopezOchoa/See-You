@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
     tools:context=".MapsFragment" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/map"
@@ -50,12 +53,11 @@
         android:id="@+id/IVlocation"
         android:layout_width="45dp"
         android:layout_height="42dp"
-        android:layout_marginTop="100dp"
         android:layout_marginEnd="10dp"
         android:elevation="8dp"
         android:src="@drawable/marcador_round"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/SVubicacion" />
 
     <ImageView
         android:id="@+id/IVvermarkers"
@@ -94,7 +96,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/fondo_de_edittext"
+        android:background="@drawable/groupsbackground"
+        android:elevation="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TValertamarcador"
         app:layout_constraintEnd_toStartOf="@+id/IVgrupos"
@@ -107,15 +110,15 @@
         android:id="@+id/SVubicacion"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="15dp"
         android:addStatesFromChildren="false"
         android:animateLayoutChanges="true"
         android:elevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintEnd_toStartOf="@+id/IVlocation"
+        app:layout_constraintStart_toStartOf="@+id/RBgrupos"
+        app:layout_constraintTop_toTopOf="parent">
 
     </SearchView>
 
@@ -175,5 +178,5 @@
         app:layout_constraintStart_toStartOf="@+id/RBgrupos"
         app:layout_constraintTop_toTopOf="@+id/TBgrupos" />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

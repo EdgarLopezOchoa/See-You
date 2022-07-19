@@ -20,12 +20,14 @@
         android:theme="@style/Theme.SeeYou"
         tools:targetApi="31">
         <activity
+            android:name=".registro_grupos"
+            android:exported="false" />
+        <activity
             android:name=".Registro"
             android:exported="false" />
         <activity
             android:name=".Login"
             android:exported="false" />
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -44,7 +46,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-
         <activity
             android:name=".Pantalla_carga"
             android:exported="true">

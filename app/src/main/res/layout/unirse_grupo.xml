@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ContenedorUnirse"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/BottomSheetDialog"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/ETdigito1"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/codigo_background"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+        <EditText
+            android:id="@+id/ETdigito2"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/codigo_background"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:maxLength="1"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ETdigito1"
+            app:layout_constraintStart_toEndOf="@+id/ETdigito1"
+            app:layout_constraintTop_toTopOf="@+id/ETdigito1" />
+
+        <EditText
+            android:id="@+id/ETdigito3"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/codigo_background"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:maxLength="1"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ETdigito2"
+            app:layout_constraintStart_toEndOf="@+id/ETdigito2"
+            app:layout_constraintTop_toTopOf="@+id/ETdigito2" />
+
+        <EditText
+            android:id="@+id/ETdigito4"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/codigo_background"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:maxLength="1"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ETdigito3"
+            app:layout_constraintEnd_toStartOf="@+id/ETdigito5"
+            app:layout_constraintTop_toTopOf="@+id/ETdigito3" />
+
+        <EditText
+            android:id="@+id/ETdigito5"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/codigo_background"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:maxLength="1"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ETdigito2"
+            app:layout_constraintEnd_toStartOf="@+id/ETdigito6"
+            app:layout_constraintTop_toTopOf="@+id/ETdigito2" />
+
+        <EditText
+            android:id="@+id/ETdigito6"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:background="@drawable/codigo_background"
+            android:ems="10"
+            android:maxLength="1"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ETdigito5"
+            app:layout_constraintEnd_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="@+id/ETdigito5" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="40dp"
+            android:text="UNIRSE A UN GRUPO"
+            android:textAlignment="center"
+            android:textColor="@color/Color5"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Ingresa tu codigo de invitación."
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView3"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Pidele el código al creador del grupo"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/ETdigito4" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/ETdigito4"
+            app:layout_constraintEnd_toStartOf="@+id/ETdigito4"
+            app:layout_constraintStart_toEndOf="@+id/ETdigito3"
+            app:layout_constraintTop_toTopOf="@+id/ETdigito4"
+            app:srcCompat="@drawable/ic_baseline_remove_24" />
+
+        <Button
+            android:id="@+id/BTNunirse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button2"
+            android:text="Button"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="@+id/ETdigito6"
+            app:layout_constraintStart_toStartOf="@+id/ETdigito1"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

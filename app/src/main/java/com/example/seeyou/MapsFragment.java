@@ -5,6 +5,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,12 +34,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,6 +75,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONArray;
@@ -103,7 +109,7 @@ public class MapsFragment extends Fragment {
     String addressStr;
     int tiempo = 5000;
     private ObjectAnimator animacionDesvanecido, animacionX,animacionRotation;
-    public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker;
+    public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse;
     FrameLayout mapa;
     Toolbar TBgrupos;
     int bucleubicacion = 0, mensaje = 0;
@@ -120,6 +126,7 @@ public class MapsFragment extends Fragment {
     Toolbar toolbar;
     String version = Build.VERSION.RELEASE;
     SharedPreferences preferences;
+
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -655,7 +662,7 @@ public class MapsFragment extends Fragment {
                     }
                     pDialog.dismiss();
                     if (Objects.equals(response, "[]")) {
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("No Cuentas Con Marcadores..")
                                 .setContentText("Registra Marcadores Para Que Puedas Observarlos Aqui :D!!")
                                 .show();
@@ -711,7 +718,7 @@ public class MapsFragment extends Fragment {
     }
 
 
-    private void PuntosMapa() {
+    public void PuntosMapa() {
 
         id_grupo = preferences.getInt("idgrupo",0);
 
@@ -835,26 +842,49 @@ public class MapsFragment extends Fragment {
     }
 
 
-    private void CambiarGrupos() {
+    private void UnirseGrupo() {
+        pDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/buscar_grupos.php?id=" + id_grupo, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/unirse_grupo.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONArray array = new JSONArray(response);
+                    pDialog.dismiss();
 
 
 
-                    for (int i = 0; i < array.length(); i++) {
+                    if (Objects.equals(response, "Error Grupo")) {
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("EL Grupo No Existe... Introduzca Un Codigo Valido....")
+                                .show();
+                    } else if (Objects.equals(response, "Error Usuario")) {
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ya Formas Parte De Este Grupo....")
+                                .show();
+                    } else {
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Correcto!!!!")
+                                .setContentText("Ahora Formas Parte De Este Grupo!!!")
+                                .show();
+                        SharedPreferences.Editor editor = preferences.edit();
 
+                        editor.putInt("idgrupo",Integer.parseInt(response));
+                        editor.commit();
+
+                        id_grupo = preferences.getInt("idgrupo",0);
+                        PuntosMapa();
+                        BuscarGrupos();
+                        bottomSheetDialogunirse.dismiss();
 
 
 
                     }
 
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
@@ -868,7 +898,7 @@ public class MapsFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         try {
-
+                            pDialog.dismiss();
                             if (locationManagerinternet.getActiveNetworkInfo() != null
                                     && locationManagerinternet.getActiveNetworkInfo().isAvailable()
                                     && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
@@ -890,7 +920,19 @@ public class MapsFragment extends Fragment {
                                     .show();
                         }
                     }
-                });
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("codigo", Codigogrupo);
+                params.put("idusuario", id_usuario+"");
+
+
+                return params;
+            }
+        };
 
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
@@ -1382,9 +1424,17 @@ public class MapsFragment extends Fragment {
         TBgrupos = view.findViewById(R.id.TBgrupos);
         agregargrupo = view.findViewById(R.id.IVagregargrupo);
 
+        /*CoordinatorLayout linearLayout = view.findViewById(R.id.LYgrupos);
+
+        BottomSheetBehavior bottomSheetBehavior;
+
+        bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);*/
+
+
+
 
         SVubicacion.setIconifiedByDefault(false);
-        SVubicacion.setBackgroundResource(R.drawable.fondo_de_edittext);
+        SVubicacion.setBackgroundResource(R.drawable.searchbar);
         SVubicacion.setQueryHint("Buscar Ubicacion");
         SVubicacion.setFocusable(false);
 
@@ -1421,6 +1471,192 @@ public class MapsFragment extends Fragment {
         }
 
 
+
+
+        agregargrupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+
+
+                BottomSheetBehavior<View> bottomSheetBehavior ;
+                bottomSheetDialogunirse = new BottomSheetDialog
+                        (getContext());
+                View bottomSheetView = LayoutInflater.from(getContext()).inflate(
+                        R.layout.unirse_grupo, null
+                );
+                    bottomSheetDialogunirse.setContentView(bottomSheetView);
+                LinearLayout contenedor1 = bottomSheetDialogunirse.findViewById(R.id.ContenedorUnirse);
+                bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                assert contenedor1 !=null;
+                contenedor1.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
+                    bottomSheetDialogunirse.show();
+
+                    EditText numero1,numero2,numero3,numero4,numero5,numero6;
+                    Button unirse;
+
+                    numero1 = bottomSheetDialogunirse.findViewById(R.id.ETdigito1);
+                    numero2 = bottomSheetDialogunirse.findViewById(R.id.ETdigito2);
+                    numero3 = bottomSheetDialogunirse.findViewById(R.id.ETdigito3);
+                    numero4 = bottomSheetDialogunirse.findViewById(R.id.ETdigito4);
+                    numero5 = bottomSheetDialogunirse.findViewById(R.id.ETdigito5);
+                    numero6 = bottomSheetDialogunirse.findViewById(R.id.ETdigito6);
+                    unirse = bottomSheetDialogunirse.findViewById(R.id.BTNunirse);
+
+                    numero1.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            String codigo = s.toString();
+
+                            if (codigo.length()==1){
+                                numero2.requestFocus();
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+                    numero2.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            String codigo = s.toString();
+
+                            if (codigo.length()==1){
+                                numero3.requestFocus();
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+                    numero3.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            String codigo = s.toString();
+
+                            if (codigo.length()==1){
+                                numero4.requestFocus();
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+
+                    numero4.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            String codigo = s.toString();
+
+                            if (codigo.length()==1){
+                                numero5.requestFocus();
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+
+                    numero5.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            String codigo = s.toString();
+
+                            if (codigo.length()==1){
+                                numero6.requestFocus();
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+
+                    numero6.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            String codigo = s.toString();
+
+                            if (codigo.length()==1){
+                                numero1.requestFocus();
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+
+
+                    unirse.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Codigogrupo = numero1.getText().toString() + numero2.getText().toString() +
+                                    numero3.getText().toString() + numero4.getText().toString() +
+                                    numero5.getText().toString() + numero6.getText().toString();
+                            UnirseGrupo();
+                        }
+                    });
+
+
+                }catch (Exception e){
+
+                }
+            }
+        });
 
 
         closerecycler.setOnClickListener(new View.OnClickListener() {
@@ -1604,22 +1840,26 @@ public class MapsFragment extends Fragment {
             public void onClick(View v) {
 
                 try {
-
+                    BottomSheetBehavior<View> bottomSheetBehavior ;
                     bottomSheetDialog = new BottomSheetDialog
-                            (getContext(), R.style.BottomSheetDialog);
+                            (getContext());
                     View bottomSheetView = LayoutInflater.from(getContext()).inflate(
-                            R.layout.markersbottomshet, (LinearLayout) view.findViewById(R.id.ContenedorTarjeta)
+                            R.layout.markersbottomshet, null
                     );
                     bottomSheetDialog.setContentView(bottomSheetView);
+                    LinearLayout contenedor1 = bottomSheetDialog.findViewById(R.id.Contenedormarker);
+                    bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    assert contenedor1 !=null;
+                    contenedor1.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
 
 
-                    PuntosRecycler();
-                    bottomSheetDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
                     recyclerViewmarker = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
                     TextView titulopuntos = bottomSheetDialog.findViewById(R.id.TVtitulomarcadorrecicler);
                     SVpunto = bottomSheetDialog.findViewById(R.id.SVpunto);
 
-
+                    PuntosRecycler();
 
                     Toolbar marker = bottomSheetDialog.findViewById(R.id.navegadormarker);
 

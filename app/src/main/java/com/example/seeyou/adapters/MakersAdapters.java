@@ -84,6 +84,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(true);
+        preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -97,7 +98,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+
 
 
 
@@ -585,6 +586,14 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                         Bitmap b = bitmapdraw.getBitmap();
                         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);*/
 
+                        MarkerOptions markerOptions = new MarkerOptions();
+
+
+                        LatLng puntoubicacion =
+                                new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
+                        markerOptions.position(puntoubicacion);
+                        markerOptions.title(cajas.getString("IDpunto"));
+
 
                         if (preferences.getBoolean("fondo2", false) == true){
 
@@ -592,7 +601,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
-                                    .strokeColor(R.color.Amarillo)
+                                    .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30DD4819));
 
                         }else if(preferences.getBoolean("fondo", false) == true){
@@ -600,7 +609,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
-                                    .strokeColor(R.color.morado_obscuro)
+                                    .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30391B6F));
                         }
                         else if(preferences.getBoolean("fondo3", false) == true){
@@ -608,7 +617,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
-                                    .strokeColor(R.color.Rosa_obscuro)
+                                    .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30FF0000));
                         }
                         else if(preferences.getBoolean("fondo4", false) == true){
@@ -616,25 +625,19 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
-                                    .strokeColor(R.color.morado_obscuro)
-                                    .fillColor(0x30391B6F));
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x3000F361));
                         } else{
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
-                                    .strokeColor(R.color.verde_fuerte)
-                                    .fillColor(0x3000F361));
+                                    .strokeColor(Color.TRANSPARENT)
+                                    .fillColor(0x30391B6F));
                         }
 
 
-                        MarkerOptions markerOptions = new MarkerOptions();
 
-
-                        LatLng puntoubicacion =
-                                new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
-                        markerOptions.position(puntoubicacion);
-                        markerOptions.title(cajas.getString("Nombre"));
                         //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
                         mMap.addMarker(markerOptions);
