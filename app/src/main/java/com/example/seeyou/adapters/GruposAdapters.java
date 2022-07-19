@@ -28,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.seeyou.MapsFragment;
 import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.internal.MapLifecycleDelegate;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -134,6 +135,7 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
 
                     editor.putInt("idgrupo",id_grupo);
                     editor.commit();
+                    MapsFragment.cerrargrupo();
 
 
                     for (int i = 0; i < array.length(); i++) {

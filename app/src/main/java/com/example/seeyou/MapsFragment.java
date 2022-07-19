@@ -94,8 +94,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MapsFragment extends Fragment {
     public static GoogleMap mMap;
+    private static ObjectAnimator animacionDesvanecido;
+    private static ObjectAnimator animacionRotation;
     LocationManager locManager;
-    private ImageView ubicacion, location, vermarkers, cambiarmapa,grupos,closerecycler,agregargrupo;
+    public static ImageView agregargrupo,closerecycler;
+    private ImageView ubicacion, location, vermarkers, cambiarmapa,grupos;
     private Button cancelar, enviar;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
@@ -108,10 +111,9 @@ public class MapsFragment extends Fragment {
     public static int id_usuario = 0, id_grupo = 0, IDUsuarios;
     String addressStr;
     int tiempo = 5000;
-    private ObjectAnimator animacionDesvanecido, animacionX,animacionRotation;
     public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse;
     FrameLayout mapa;
-    Toolbar TBgrupos;
+    public static Toolbar TBgrupos;
     int bucleubicacion = 0, mensaje = 0;
     SweetAlertDialog Eliminar_Marcador;
     View view;
@@ -878,6 +880,7 @@ public class MapsFragment extends Fragment {
                         PuntosMapa();
                         BuscarGrupos();
                         bottomSheetDialogunirse.dismiss();
+                        cerrargrupo();
 
 
 
@@ -1395,6 +1398,71 @@ public class MapsFragment extends Fragment {
 
 
 
+    public static void cerrargrupo(){
+
+        animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido.setDuration(750);
+        animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.start();
+
+
+        animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido.setDuration(750);
+        animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.start();
+
+
+        animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido.setDuration(750);
+        animatorSet = new AnimatorSet();
+        animatorSet.play(animacionDesvanecido);
+        animatorSet.start();
+
+
+
+        animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido.setDuration(750);
+        animatorSet = new AnimatorSet();
+
+        animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.start();
+
+
+
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                recyclerviewgrupos.setVisibility(View.INVISIBLE);
+                TBgrupos.setVisibility(View.INVISIBLE);
+                agregargrupo.setVisibility(View.INVISIBLE);
+                closerecycler.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -1663,66 +1731,8 @@ public class MapsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                cerrargrupo();
 
-                animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(750);
-                animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(animacionDesvanecido,animacionRotation);
-                animatorSet.start();
-
-
-                animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(750);
-                animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
-                animatorSet = new AnimatorSet();
-                animatorSet.playTogether(animacionDesvanecido,animacionRotation);
-                animatorSet.start();
-
-
-                animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(750);
-                animatorSet = new AnimatorSet();
-                animatorSet.play(animacionDesvanecido);
-                animatorSet.start();
-
-
-
-                animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,1.0f,0.0f);
-                animacionDesvanecido.setDuration(750);
-                animatorSet = new AnimatorSet();
-
-                animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
-                animatorSet = new AnimatorSet();
-                animatorSet.playTogether(animacionDesvanecido,animacionRotation);
-                animatorSet.start();
-
-
-
-                animatorSet.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        recyclerviewgrupos.setVisibility(View.INVISIBLE);
-                        TBgrupos.setVisibility(View.INVISIBLE);
-                        agregargrupo.setVisibility(View.INVISIBLE);
-                        closerecycler.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
 
 
             }
