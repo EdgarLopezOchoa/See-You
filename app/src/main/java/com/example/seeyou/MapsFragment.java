@@ -1109,12 +1109,6 @@ public class MapsFragment extends Fragment {
 
                     }
 
-                    gruposlist.add(new Grupos(
-                            grupo,
-                            id,
-                            Nombre,
-                            codigo
-                    ));
 
 
 

@@ -153,11 +153,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                         .setTitleText("Buen Trabajo!")
                         .setContentText("El Marcandor Ha Sido Registrado Correctamente")
                         .show();
-                /*int height = 80;
-                int width = 80;
-                Bitmap b = BitmapFactory.decodeResource(getResources(), R.mipmap.markers_round);
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);*/
+
                 PuntosMapa();
 
 
@@ -233,11 +229,6 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
-                        int height = 85;
-                        int width = 85;
-                        /*BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.mipmap.markers_round);
-                        Bitmap b = bitmapdraw.getBitmap();
-                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);*/
 
 
 
@@ -292,9 +283,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                         }
 
 
-                        // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
-                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
                     }
 
