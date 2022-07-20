@@ -137,6 +137,6 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_blue_eye1_edit" />
+        app:srcCompat="@drawable/logo_final_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

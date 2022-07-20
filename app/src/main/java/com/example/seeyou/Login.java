@@ -29,6 +29,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -153,10 +154,16 @@ public class Login extends AppCompatActivity {
                 Asterisco3 = bottomSheetDialog.findViewById(R.id.TVasterisco3);
                 Asterisco4 = bottomSheetDialog.findViewById(R.id.TVasterisco4);
                 Asterisco5 = bottomSheetDialog.findViewById(R.id.TVasterisco5);
+                bottomSheetBehavior.setDraggable(false);
 
+               ImageView cerrar = bottomSheetDialog.findViewById(R.id.IVcloseregistro);
 
-
-
+               cerrar.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       bottomSheetBehavior.setState(bottomSheetBehavior.STATE_HIDDEN);
+                   }
+               });
 
                 cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override

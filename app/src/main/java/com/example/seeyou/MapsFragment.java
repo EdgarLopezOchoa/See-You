@@ -98,22 +98,22 @@ public class MapsFragment extends Fragment {
     private static ObjectAnimator animacionDesvanecido;
     private static ObjectAnimator animacionRotation;
     LocationManager locManager;
-    public static ImageView closerecycler,cerrarunir,IVcerrarcreargrupo;
-    private ImageView ubicacion, location, vermarkers, cambiarmapa,grupos;
+    public static ImageView closerecycler, cerrarunir, IVcerrarcreargrupo;
+    private ImageView ubicacion, location, vermarkers, cambiarmapa, grupos;
     private Button cancelar, enviar;
-    public static  Button agregargrupo,creargrupo;
+    public static Button agregargrupo, creargrupo;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     private SearchView SVubicacion, SVpunto;
-    private TextView titulo, nombremarcador, TVidmarker,TValertamarcador;
+    private TextView titulo, nombremarcador, TVidmarker, TValertamarcador;
     public static RecyclerView recyclerViewmarker, recyclerviewgrupos;
     public static ArrayList<Markers> markerslist = new ArrayList<>();
     public static ArrayList<Grupos> gruposlist = new ArrayList<>();
-    public static String direccion = "",NombreUsuarios = "",Codigogrupo="",NombreGrupo="";
+    public static String direccion = "", NombreUsuarios = "", Codigogrupo = "", NombreGrupo = "";
     public static int id_usuario = 0, id_grupo = 0, IDUsuarios;
     String addressStr, NombreGrupo1;
     int tiempo = 5000;
-    public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse,bottomSheetDialogcreargrupo;
+    public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse, bottomSheetDialogcreargrupo;
     FrameLayout mapa;
     public static Toolbar TBgrupos;
     int bucleubicacion = 0, mensaje = 0;
@@ -131,7 +131,6 @@ public class MapsFragment extends Fragment {
     String version = Build.VERSION.RELEASE;
     SharedPreferences preferences;
     EditText Nombregrupo;
-
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -160,8 +159,6 @@ public class MapsFragment extends Fragment {
                 });
 
 
-
-
                 locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
                 locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
                 networkInfo = locationManagerinternet.getActiveNetworkInfo();
@@ -176,7 +173,6 @@ public class MapsFragment extends Fragment {
                 }*/
 
 
-
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
                 SVubicacion.setQuery("", false);
@@ -186,7 +182,7 @@ public class MapsFragment extends Fragment {
 
                 mMap = googleMap;
 
-                if (id_grupo !=0) {
+                if (id_grupo != 0) {
 
                     PuntosMapa();
                 }
@@ -216,21 +212,20 @@ public class MapsFragment extends Fragment {
 
                         try {
 
-                        String id = marker.getTitle();
-                        double Latitud, logitud;
-                        Latitud = marker.getPosition().latitude;
-                        logitud = marker.getPosition().longitude;
+                            String id = marker.getTitle();
+                            double Latitud, logitud;
+                            Latitud = marker.getPosition().latitude;
+                            logitud = marker.getPosition().longitude;
 
 
+                            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
 
-                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-
-                        List<Address> addresses = null;
+                            List<Address> addresses = null;
 
                             addresses = geocoder.getFromLocation(Latitud, logitud, 1);
 
 
-                        Address address = (Address) addresses.get(0);
+                            Address address = (Address) addresses.get(0);
                             addressStr = "";
                             addressStr += address.getAddressLine(0);
 
@@ -241,14 +236,11 @@ public class MapsFragment extends Fragment {
                             Eliminar_Marcador.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
-                                    UbicacionPunto(Latitud,logitud,id,addressStr);
+                                    UbicacionPunto(Latitud, logitud, id, addressStr);
                                     Eliminar_Marcador.dismiss();
                                 }
                             });
                             Eliminar_Marcador.show();
-
-
-
 
 
                         } catch (IOException e) {
@@ -261,7 +253,6 @@ public class MapsFragment extends Fragment {
 
                     }
                 });
-
 
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -637,7 +628,7 @@ public class MapsFragment extends Fragment {
 
         pDialog.show();
 
-        id_grupo = preferences.getInt("idgrupo",0);
+        id_grupo = preferences.getInt("idgrupo", 0);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=" + id_grupo, new Response.Listener<String>() {
@@ -726,7 +717,7 @@ public class MapsFragment extends Fragment {
 
     public void PuntosMapa() {
 
-        id_grupo = preferences.getInt("idgrupo",0);
+        id_grupo = preferences.getInt("idgrupo", 0);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
@@ -746,7 +737,6 @@ public class MapsFragment extends Fragment {
                         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);*/
 
 
-
                         MarkerOptions markerOptions = new MarkerOptions();
 
 
@@ -756,7 +746,7 @@ public class MapsFragment extends Fragment {
                         markerOptions.title(cajas.getString("IDpunto"));
                         markerOptions.draggable(true);
 
-                        if (preferences.getBoolean("fondo2", false) == true){
+                        if (preferences.getBoolean("fondo2", false) == true) {
 
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
@@ -765,30 +755,28 @@ public class MapsFragment extends Fragment {
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30DD4819));
 
-                        }else if(preferences.getBoolean("fondo", false) == true){
+                        } else if (preferences.getBoolean("fondo", false) == true) {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30391B6F));
-                        }
-                        else if(preferences.getBoolean("fondo3", false) == true){
+                        } else if (preferences.getBoolean("fondo3", false) == true) {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30FF0000));
-                        }
-                        else if(preferences.getBoolean("fondo4", false) == true){
+                        } else if (preferences.getBoolean("fondo4", false) == true) {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x3000F361));
-                        } else{
+                        } else {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                     .radius(90)
@@ -798,7 +786,7 @@ public class MapsFragment extends Fragment {
                         }
 
 
-                       // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                        // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
                         //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
@@ -859,7 +847,6 @@ public class MapsFragment extends Fragment {
                     pDialog.dismiss();
 
 
-
                     if (Objects.equals(response, "Error Grupo")) {
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
@@ -877,14 +864,13 @@ public class MapsFragment extends Fragment {
                                 .show();
                         SharedPreferences.Editor editor = preferences.edit();
 
-                        editor.putInt("idgrupo",Integer.parseInt(response));
+                        editor.putInt("idgrupo", Integer.parseInt(response));
                         editor.commit();
 
-                        id_grupo = preferences.getInt("idgrupo",0);
+                        id_grupo = preferences.getInt("idgrupo", 0);
                         PuntosMapa();
                         BuscarGrupos();
                         bottomSheetDialogunirse.dismiss();
-
 
 
                     }
@@ -926,14 +912,14 @@ public class MapsFragment extends Fragment {
                                     .show();
                         }
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
 
 
                 params.put("codigo", Codigogrupo);
-                params.put("idusuario", id_usuario+"");
+                params.put("idusuario", id_usuario + "");
 
 
                 return params;
@@ -955,7 +941,6 @@ public class MapsFragment extends Fragment {
                     pDialog.dismiss();
 
 
-
                     if (Objects.equals(response, "Error Grupo")) {
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
@@ -969,17 +954,17 @@ public class MapsFragment extends Fragment {
                                 .setContentText("No Hemos Podido Crear Tu Grupo....")
                                 .show();
 
-                    }else{
+                    } else {
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("Correcto!!!!")
                                 .setContentText("Tu Grupo Se Ha Creado Exitosamente!!!")
                                 .show();
                         SharedPreferences.Editor editor = preferences.edit();
 
-                        editor.putInt("idgrupo",Integer.parseInt(response));
+                        editor.putInt("idgrupo", Integer.parseInt(response));
                         editor.commit();
 
-                        id_grupo = preferences.getInt("idgrupo",0);
+                        id_grupo = preferences.getInt("idgrupo", 0);
                         PuntosMapa();
                         BuscarGrupos();
                         bottomSheetDialogcreargrupo.dismiss();
@@ -1023,14 +1008,14 @@ public class MapsFragment extends Fragment {
                                     .show();
                         }
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
 
 
                 params.put("Nombre", NombreGrupo1);
-                params.put("idusuario", id_usuario+"");
+                params.put("idusuario", id_usuario + "");
 
 
                 return params;
@@ -1040,8 +1025,6 @@ public class MapsFragment extends Fragment {
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
     }
-
-
 
 
     private void BuscarGrupos() {
@@ -1059,33 +1042,33 @@ public class MapsFragment extends Fragment {
 
 
                     int ciclo = 0, primero = 1, id = 0;
-                    String codigo2 = "";
 
-                    String Nombre =preferences.getString("Nombre", ""), codigo = "", grupo = "",verificar =preferences.getString("Nombre", "");
+
+                    String Nombre = preferences.getString("Nombre", ""), codigo = "", grupo = "", verificar = preferences.getString("Nombre", "");
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
 
 
-                        if (primero == 1){
+                        if (primero == 1) {
                             ciclo = cajas.getInt("idgrupo");
-                            primero =0;
+                            primero = 0;
                         }
 
 
-                        if (ciclo == cajas.getInt("idgrupo")) {
+                        if (cajas.getInt("idgrupo") == ciclo) {
 
-                            if(!Objects.equals(cajas.getString("nombreusuario"),verificar)) {
+                            if (!Objects.equals(cajas.getString("nombreusuario"), verificar)) {
                                 Nombre += ", " + cajas.getString("nombreusuario");
                             }
 
                             codigo = cajas.getString("codigo");
-                            codigo2 = cajas.getString("codigo");
-                                id = cajas.getInt("idgrupo");
-                                grupo = cajas.getString("nombregrupo");
+
+                            id = cajas.getInt("idgrupo");
+                            grupo = cajas.getString("nombregrupo");
 
                         } else {
-                            if(ciclo != cajas.getInt("idgrupo")){
+                            if (cajas.getInt("idgrupo") != ciclo) {
                                 gruposlist.add(new Grupos(
                                         grupo,
                                         id,
@@ -1097,28 +1080,29 @@ public class MapsFragment extends Fragment {
 
                             ciclo = cajas.getInt("idgrupo");
                             Nombre = "";
-                            Nombre =preferences.getString("Nombre", "");
-                            if(!Objects.equals(cajas.getString("nombreusuario"),verificar)) {
+                            Nombre = preferences.getString("Nombre", "");
+                            if (!Objects.equals(cajas.getString("nombreusuario"), verificar)) {
                                 Nombre += ", " + cajas.getString("nombreusuario");
                             }
                             codigo = cajas.getString("codigo");
+
                             id = cajas.getInt("idgrupo");
                             grupo = cajas.getString("nombregrupo");
-                            codigo2 = "";
+
 
 
                         }
 
                     }
 
-                    if (codigo2 != "") {
+
                         gruposlist.add(new Grupos(
                                 grupo,
                                 id,
                                 Nombre,
                                 codigo
                         ));
-                    }
+
 
 
                     pDialog.dismiss();
@@ -1173,38 +1157,38 @@ public class MapsFragment extends Fragment {
     }
 
 
-    private void Animaciongrupos(){
+    private void Animaciongrupos() {
         recyclerviewgrupos.setVisibility(View.VISIBLE);
-        animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos, View.ALPHA, 0.0f, 1.0f);
         animacionDesvanecido.setDuration(750);
-        animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos, "rotation", 0f, 360f);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
         animatorSet.start();
 
 
         agregargrupo.setVisibility(View.VISIBLE);
-        animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo, View.ALPHA, 0.0f, 1.0f);
         animacionDesvanecido.setDuration(750);
 
-        animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(agregargrupo, "rotation", 0f, 360f);
         animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
         animatorSet.start();
 
 
         creargrupo.setVisibility(View.VISIBLE);
-        animacionDesvanecido = ObjectAnimator.ofFloat(creargrupo,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(creargrupo, View.ALPHA, 0.0f, 1.0f);
         animacionDesvanecido.setDuration(750);
 
-        animacionRotation = ObjectAnimator.ofFloat(creargrupo,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(creargrupo, "rotation", 0f, 360f);
         animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
         animatorSet.start();
 
 
         TBgrupos.setVisibility(View.VISIBLE);
-        animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos, View.ALPHA, 0.0f, 1.0f);
         animacionDesvanecido.setDuration(750);
         animatorSet = new AnimatorSet();
         animatorSet.play(animacionDesvanecido);
@@ -1212,12 +1196,12 @@ public class MapsFragment extends Fragment {
 
 
         closerecycler.setVisibility(View.VISIBLE);
-        animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler, View.ALPHA, 0.0f, 1.0f);
         animacionDesvanecido.setDuration(750);
 
-        animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(closerecycler, "rotation", 0f, 360f);
         animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
         animatorSet.start();
     }
 
@@ -1234,8 +1218,7 @@ public class MapsFragment extends Fragment {
                     pDialog.dismiss();
 
 
-                    if(Objects.equals(response, "Cambios Realizados")){
-
+                    if (Objects.equals(response, "Cambios Realizados")) {
 
 
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.SUCCESS_TYPE)
@@ -1244,7 +1227,7 @@ public class MapsFragment extends Fragment {
                                 .show();
 
 
-                    } else{
+                    } else {
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("No Hemos Podido Actualizar La Ubicacion De Su Punto....")
@@ -1301,8 +1284,8 @@ public class MapsFragment extends Fragment {
 
                 params.put("idpunto", idpunto);
                 params.put("direccion", direccion);
-                params.put("latitud", latitud1+"");
-                params.put("longitud", longitud1+"");
+                params.put("latitud", latitud1 + "");
+                params.put("longitud", longitud1 + "");
 
                 return params;
             }
@@ -1314,10 +1297,6 @@ public class MapsFragment extends Fragment {
         requestQueue.add(stringRequest);
 
     }
-
-
-
-
 
 
     public void Ubicacion(String id) {
@@ -1516,50 +1495,47 @@ public class MapsFragment extends Fragment {
     }
 
 
+    public static void cerrargrupo() {
 
-    public static void cerrargrupo(){
-
-        animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler, View.ALPHA, 1.0f, 0.0f);
         animacionDesvanecido.setDuration(750);
-        animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(closerecycler, "rotation", 0f, 360f);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
         animatorSet.start();
 
 
-        animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo, View.ALPHA, 1.0f, 0.0f);
         animacionDesvanecido.setDuration(750);
-        animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(agregargrupo, "rotation", 0f, 360f);
         animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
 
 
         animatorSet.start();
-        animacionDesvanecido = ObjectAnimator.ofFloat(creargrupo,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(creargrupo, View.ALPHA, 1.0f, 0.0f);
         animacionDesvanecido.setDuration(750);
-        animacionRotation = ObjectAnimator.ofFloat(creargrupo,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(creargrupo, "rotation", 0f, 360f);
         animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
         animatorSet.start();
 
 
-        animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos, View.ALPHA, 1.0f, 0.0f);
         animacionDesvanecido.setDuration(750);
         animatorSet = new AnimatorSet();
         animatorSet.play(animacionDesvanecido);
         animatorSet.start();
 
 
-
-        animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos, View.ALPHA, 1.0f, 0.0f);
         animacionDesvanecido.setDuration(750);
         animatorSet = new AnimatorSet();
 
-        animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
+        animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos, "rotation", 0f, 360f);
         animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.playTogether(animacionDesvanecido, animacionRotation);
         animatorSet.start();
-
 
 
         animatorSet.addListener(new Animator.AnimatorListener() {
@@ -1590,7 +1566,6 @@ public class MapsFragment extends Fragment {
     }
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -1617,7 +1592,6 @@ public class MapsFragment extends Fragment {
         TValertamarcador = view.findViewById(R.id.TValertamarcador);
 
 
-
         //Grupos Dialog
         closerecycler = view.findViewById(R.id.IVclose);
 
@@ -1634,42 +1608,40 @@ public class MapsFragment extends Fragment {
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
         id_usuario = preferences.getInt("id", 0);
 
-        if(preferences.getInt("idgrupo", 0) == 0){
+        if (preferences.getInt("idgrupo", 0) == 0) {
             new SweetAlertDialog(ubicacion.getContext())
                     .setTitleText("Aviso!")
                     .setContentText("Seleccione Un Grupo Para Ver Sus Marcadores y A Otros Usuarios Del Mismo.")
                     .show();
         }
-        id_grupo =preferences.getInt("idgrupo", 0);
+        id_grupo = preferences.getInt("idgrupo", 0);
 
 
-        if (preferences.getBoolean("fondo2", false) == true){
+        if (preferences.getBoolean("fondo2", false) == true) {
 
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado2);
             creargrupo.setBackgroundResource(R.drawable.buttonfondo2);
             agregargrupo.setBackgroundResource(R.drawable.buttonfondo2);
 
-        }else if(preferences.getBoolean("fondo", false) == true){
+        } else if (preferences.getBoolean("fondo", false) == true) {
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado);
             creargrupo.setBackgroundResource(R.drawable.button2);
             agregargrupo.setBackgroundResource(R.drawable.button2);
-        }
-        else if(preferences.getBoolean("fondo3", false) == true){
+        } else if (preferences.getBoolean("fondo3", false) == true) {
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado3);
             creargrupo.setBackgroundResource(R.drawable.buttonfondo3);
             agregargrupo.setBackgroundResource(R.drawable.buttonfondo3);
 
-        }
-        else if(preferences.getBoolean("fondo4", false) == true){
+        } else if (preferences.getBoolean("fondo4", false) == true) {
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado4);
             creargrupo.setBackgroundResource(R.drawable.buttonfondo4);
             agregargrupo.setBackgroundResource(R.drawable.buttonfondo4);
 
-        }else {
+        } else {
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado);
             creargrupo.setBackgroundResource(R.drawable.button2);
             agregargrupo.setBackgroundResource(R.drawable.button2);
@@ -1680,9 +1652,9 @@ public class MapsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                BottomSheetBehavior<View> bottomSheetBehavior ;
+                BottomSheetBehavior<View> bottomSheetBehavior;
                 bottomSheetDialogcreargrupo = new BottomSheetDialog
-                        (getContext(),R.style.BottomSheetDialog);
+                        (getContext(), R.style.BottomSheetDialog);
                 View bottomSheetView = LayoutInflater.from(getContext()).inflate(
                         R.layout.activity_registro_grupos, null
                 );
@@ -1690,8 +1662,8 @@ public class MapsFragment extends Fragment {
                 LinearLayout contenedor1 = bottomSheetDialogcreargrupo.findViewById(R.id.Contenedorgrupos);
                 bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
-                assert contenedor1 !=null;
+                int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.92);
+                assert contenedor1 != null;
                 contenedor1.setMinimumHeight(height);
                 bottomSheetDialogcreargrupo.show();
 
@@ -1724,33 +1696,30 @@ public class MapsFragment extends Fragment {
         });
 
 
-
         agregargrupo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
 
 
-                BottomSheetBehavior<View> bottomSheetBehavior ;
-                bottomSheetDialogunirse = new BottomSheetDialog
-                        (getContext(),R.style.BottomSheetDialog);
-                View bottomSheetView = LayoutInflater.from(getContext()).inflate(
-                        R.layout.unirse_grupo, null
-                );
+                    BottomSheetBehavior<View> bottomSheetBehavior;
+                    bottomSheetDialogunirse = new BottomSheetDialog
+                            (getContext(), R.style.BottomSheetDialog);
+                    View bottomSheetView = LayoutInflater.from(getContext()).inflate(
+                            R.layout.unirse_grupo, null
+                    );
                     bottomSheetDialogunirse.setContentView(bottomSheetView);
-                LinearLayout contenedor1 = bottomSheetDialogunirse.findViewById(R.id.ContenedorUnirse);
-                bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    LinearLayout contenedor1 = bottomSheetDialogunirse.findViewById(R.id.ContenedorUnirse);
+                    bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
-                assert contenedor1 !=null;
-                contenedor1.setMinimumHeight(height);
-                bottomSheetDialogunirse.show();
-
-
+                    int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.92);
+                    assert contenedor1 != null;
+                    contenedor1.setMinimumHeight(height);
+                    bottomSheetDialogunirse.show();
 
 
-                    EditText numero1,numero2,numero3,numero4,numero5,numero6;
+                    EditText numero1, numero2, numero3, numero4, numero5, numero6;
                     Button unirse;
 
                     numero1 = bottomSheetDialogunirse.findViewById(R.id.ETdigito1);
@@ -1854,7 +1823,7 @@ public class MapsFragment extends Fragment {
 
                             String codigo = s.toString();
 
-                            if (codigo.length()==1){
+                            if (codigo.length() == 1) {
 
                                 numero2.requestFocus();
                             }
@@ -1878,7 +1847,7 @@ public class MapsFragment extends Fragment {
 
                             String codigo = s.toString();
 
-                            if (codigo.length()==1){
+                            if (codigo.length() == 1) {
                                 numero3.requestFocus();
                             }
                         }
@@ -1900,7 +1869,7 @@ public class MapsFragment extends Fragment {
 
                             String codigo = s.toString();
 
-                            if (codigo.length()==1){
+                            if (codigo.length() == 1) {
                                 numero4.requestFocus();
                             }
                         }
@@ -1923,7 +1892,7 @@ public class MapsFragment extends Fragment {
 
                             String codigo = s.toString();
 
-                            if (codigo.length()==1){
+                            if (codigo.length() == 1) {
                                 numero5.requestFocus();
                             }
                         }
@@ -1946,7 +1915,7 @@ public class MapsFragment extends Fragment {
 
                             String codigo = s.toString();
 
-                            if (codigo.length()==1){
+                            if (codigo.length() == 1) {
                                 numero6.requestFocus();
                             }
                         }
@@ -1969,7 +1938,7 @@ public class MapsFragment extends Fragment {
 
                             String codigo = s.toString();
 
-                            if (codigo.length()==1){
+                            if (codigo.length() == 1) {
                                 numero1.requestFocus();
                             }
                         }
@@ -1979,7 +1948,6 @@ public class MapsFragment extends Fragment {
 
                         }
                     });
-
 
 
                     unirse.setOnClickListener(new View.OnClickListener() {
@@ -1993,7 +1961,7 @@ public class MapsFragment extends Fragment {
                     });
 
 
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -2007,7 +1975,6 @@ public class MapsFragment extends Fragment {
                 cerrargrupo();
 
 
-
             }
         });
 
@@ -2016,7 +1983,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-             BuscarGrupos();
+                BuscarGrupos();
             }
         });
 
@@ -2123,7 +2090,7 @@ public class MapsFragment extends Fragment {
             public void onClick(View v) {
 
                 try {
-                    BottomSheetBehavior<View> bottomSheetBehavior ;
+                    BottomSheetBehavior<View> bottomSheetBehavior;
                     bottomSheetDialog = new BottomSheetDialog
                             (getContext());
                     View bottomSheetView = LayoutInflater.from(getContext()).inflate(
@@ -2133,9 +2100,8 @@ public class MapsFragment extends Fragment {
                     LinearLayout contenedor1 = bottomSheetDialog.findViewById(R.id.Contenedormarker);
                     bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    assert contenedor1 !=null;
+                    assert contenedor1 != null;
                     contenedor1.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
-
 
 
                     recyclerViewmarker = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
