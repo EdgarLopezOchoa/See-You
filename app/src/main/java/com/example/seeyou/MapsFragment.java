@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -97,9 +98,10 @@ public class MapsFragment extends Fragment {
     private static ObjectAnimator animacionDesvanecido;
     private static ObjectAnimator animacionRotation;
     LocationManager locManager;
-    public static ImageView agregargrupo,closerecycler;
+    public static ImageView closerecycler,cerrarunir,IVcerrarcreargrupo;
     private ImageView ubicacion, location, vermarkers, cambiarmapa,grupos;
     private Button cancelar, enviar;
+    public static  Button agregargrupo,creargrupo;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     private SearchView SVubicacion, SVpunto;
@@ -109,9 +111,9 @@ public class MapsFragment extends Fragment {
     public static ArrayList<Grupos> gruposlist = new ArrayList<>();
     public static String direccion = "",NombreUsuarios = "",Codigogrupo="",NombreGrupo="";
     public static int id_usuario = 0, id_grupo = 0, IDUsuarios;
-    String addressStr;
+    String addressStr, NombreGrupo1;
     int tiempo = 5000;
-    public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse;
+    public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse,bottomSheetDialogcreargrupo;
     FrameLayout mapa;
     public static Toolbar TBgrupos;
     int bucleubicacion = 0, mensaje = 0;
@@ -128,6 +130,8 @@ public class MapsFragment extends Fragment {
     Toolbar toolbar;
     String version = Build.VERSION.RELEASE;
     SharedPreferences preferences;
+    EditText Nombregrupo;
+
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -941,6 +945,106 @@ public class MapsFragment extends Fragment {
 
     }
 
+    private void CrearGrupo() {
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_grupo.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    pDialog.dismiss();
+
+
+
+                    if (Objects.equals(response, "Error Grupo")) {
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Crear Tu Grupo....")
+                                .show();
+                    } else if (Objects.equals(response, "")) {
+
+
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Crear Tu Grupo....")
+                                .show();
+
+                    }else{
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Correcto!!!!")
+                                .setContentText("Tu Grupo Se Ha Creado Exitosamente!!!")
+                                .show();
+                        SharedPreferences.Editor editor = preferences.edit();
+
+                        editor.putInt("idgrupo",Integer.parseInt(response));
+                        editor.commit();
+
+                        id_grupo = preferences.getInt("idgrupo",0);
+                        PuntosMapa();
+                        BuscarGrupos();
+                        bottomSheetDialogcreargrupo.dismiss();
+
+                    }
+
+
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+                            pDialog.dismiss();
+                            if (locationManagerinternet.getActiveNetworkInfo() != null
+                                    && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                    && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                        .show();
+                            }
+                        } catch (Exception e) {
+                            pDialog.dismiss();
+                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .show();
+                        }
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("Nombre", NombreGrupo1);
+                params.put("idusuario", id_usuario+"");
+
+
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+
+    }
+
+
+
+
     private void BuscarGrupos() {
         pDialog.show();
 
@@ -1022,42 +1126,7 @@ public class MapsFragment extends Fragment {
                     recyclerviewgrupos.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerviewgrupos.setAdapter(adapter);
 
-
-                    recyclerviewgrupos.setVisibility(View.VISIBLE);
-                    animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(750);
-                    animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    animatorSet.playTogether(animacionDesvanecido,animacionRotation);
-                    animatorSet.start();
-
-
-                    agregargrupo.setVisibility(View.VISIBLE);
-                    animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(750);
-
-                    animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
-                    animatorSet = new AnimatorSet();
-                    animatorSet.playTogether(animacionDesvanecido,animacionRotation);
-                    animatorSet.start();
-
-
-                    TBgrupos.setVisibility(View.VISIBLE);
-                    animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(750);
-                    animatorSet = new AnimatorSet();
-                    animatorSet.play(animacionDesvanecido);
-                    animatorSet.start();
-
-
-                    closerecycler.setVisibility(View.VISIBLE);
-                    animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,0.0f,1.0f);
-                    animacionDesvanecido.setDuration(750);
-
-                    animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
-                    animatorSet = new AnimatorSet();
-                    animatorSet.playTogether(animacionDesvanecido,animacionRotation);
-                    animatorSet.start();
+                    Animaciongrupos();
 
 
                 } catch (JSONException e) {
@@ -1100,6 +1169,55 @@ public class MapsFragment extends Fragment {
 
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
+    }
+
+
+    private void Animaciongrupos(){
+        recyclerviewgrupos.setVisibility(View.VISIBLE);
+        animacionDesvanecido = ObjectAnimator.ofFloat(recyclerviewgrupos,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido.setDuration(750);
+        animacionRotation = ObjectAnimator.ofFloat(recyclerviewgrupos,"rotation",0f,360f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.start();
+
+
+        agregargrupo.setVisibility(View.VISIBLE);
+        animacionDesvanecido = ObjectAnimator.ofFloat(agregargrupo,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido.setDuration(750);
+
+        animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.start();
+
+
+        creargrupo.setVisibility(View.VISIBLE);
+        animacionDesvanecido = ObjectAnimator.ofFloat(creargrupo,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido.setDuration(750);
+
+        animacionRotation = ObjectAnimator.ofFloat(creargrupo,"rotation",0f,360f);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.start();
+
+
+        TBgrupos.setVisibility(View.VISIBLE);
+        animacionDesvanecido = ObjectAnimator.ofFloat(TBgrupos,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido.setDuration(750);
+        animatorSet = new AnimatorSet();
+        animatorSet.play(animacionDesvanecido);
+        animatorSet.start();
+
+
+        closerecycler.setVisibility(View.VISIBLE);
+        animacionDesvanecido = ObjectAnimator.ofFloat(closerecycler,View.ALPHA,0.0f,1.0f);
+        animacionDesvanecido.setDuration(750);
+
+        animacionRotation = ObjectAnimator.ofFloat(closerecycler,"rotation",0f,360f);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+        animatorSet.start();
     }
 
 
@@ -1413,6 +1531,14 @@ public class MapsFragment extends Fragment {
         animacionRotation = ObjectAnimator.ofFloat(agregargrupo,"rotation",0f,360f);
         animatorSet = new AnimatorSet();
         animatorSet.playTogether(animacionDesvanecido,animacionRotation);
+
+
+        animatorSet.start();
+        animacionDesvanecido = ObjectAnimator.ofFloat(creargrupo,View.ALPHA,1.0f,0.0f);
+        animacionDesvanecido.setDuration(750);
+        animacionRotation = ObjectAnimator.ofFloat(creargrupo,"rotation",0f,360f);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionDesvanecido,animacionRotation);
         animatorSet.start();
 
 
@@ -1447,6 +1573,7 @@ public class MapsFragment extends Fragment {
                 TBgrupos.setVisibility(View.INVISIBLE);
                 agregargrupo.setVisibility(View.INVISIBLE);
                 closerecycler.setVisibility(View.INVISIBLE);
+                creargrupo.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -1487,18 +1614,15 @@ public class MapsFragment extends Fragment {
         grupos = view.findViewById(R.id.IVgrupos);
         recyclerviewgrupos = view.findViewById(R.id.RBgrupos);
         TValertamarcador = view.findViewById(R.id.TValertamarcador);
+
+
+
+        //Grupos Dialog
         closerecycler = view.findViewById(R.id.IVclose);
 
         TBgrupos = view.findViewById(R.id.TBgrupos);
-        agregargrupo = view.findViewById(R.id.IVagregargrupo);
-
-        /*CoordinatorLayout linearLayout = view.findViewById(R.id.LYgrupos);
-
-        BottomSheetBehavior bottomSheetBehavior;
-
-        bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);*/
-
-
+        agregargrupo = view.findViewById(R.id.BTNunirsegrupo);
+        creargrupo = view.findViewById(R.id.BTNcreargrupo);
 
 
         SVubicacion.setIconifiedByDefault(false);
@@ -1539,6 +1663,53 @@ public class MapsFragment extends Fragment {
         }
 
 
+        creargrupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                BottomSheetBehavior<View> bottomSheetBehavior ;
+                bottomSheetDialogcreargrupo = new BottomSheetDialog
+                        (getContext(),R.style.BottomSheetDialog);
+                View bottomSheetView = LayoutInflater.from(getContext()).inflate(
+                        R.layout.activity_registro_grupos, null
+                );
+                bottomSheetDialogcreargrupo.setContentView(bottomSheetView);
+                LinearLayout contenedor1 = bottomSheetDialogcreargrupo.findViewById(R.id.Contenedorgrupos);
+                bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
+                assert contenedor1 !=null;
+                contenedor1.setMinimumHeight(height);
+                bottomSheetDialogcreargrupo.show();
+
+                TextView unirsegrupo, tienesgrupo;
+                unirsegrupo = bottomSheetDialogcreargrupo.findViewById(R.id.TVcuentacogrupo);
+                unirsegrupo.setVisibility(View.INVISIBLE);
+                tienesgrupo = bottomSheetDialogcreargrupo.findViewById(R.id.TVunirse);
+                tienesgrupo.setVisibility(View.INVISIBLE);
+                IVcerrarcreargrupo = bottomSheetDialogcreargrupo.findViewById(R.id.IVcerrarcreargrupo);
+                Button crear = bottomSheetDialogcreargrupo.findViewById(R.id.BTNregistrargrupo);
+                Nombregrupo = bottomSheetDialogcreargrupo.findViewById(R.id.ETnombregrupo);
+
+                crear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        NombreGrupo1 = Nombregrupo.getText().toString();
+                        CrearGrupo();
+                    }
+                });
+
+
+                IVcerrarcreargrupo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    }
+                });
+
+            }
+        });
+
 
 
         agregargrupo.setOnClickListener(new View.OnClickListener() {
@@ -1549,7 +1720,7 @@ public class MapsFragment extends Fragment {
 
                 BottomSheetBehavior<View> bottomSheetBehavior ;
                 bottomSheetDialogunirse = new BottomSheetDialog
-                        (getContext());
+                        (getContext(),R.style.BottomSheetDialog);
                 View bottomSheetView = LayoutInflater.from(getContext()).inflate(
                         R.layout.unirse_grupo, null
                 );
@@ -1557,9 +1728,14 @@ public class MapsFragment extends Fragment {
                 LinearLayout contenedor1 = bottomSheetDialogunirse.findViewById(R.id.ContenedorUnirse);
                 bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
                 assert contenedor1 !=null;
-                contenedor1.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
-                    bottomSheetDialogunirse.show();
+                contenedor1.setMinimumHeight(height);
+                bottomSheetDialogunirse.show();
+
+
+
 
                     EditText numero1,numero2,numero3,numero4,numero5,numero6;
                     Button unirse;
@@ -1571,10 +1747,92 @@ public class MapsFragment extends Fragment {
                     numero5 = bottomSheetDialogunirse.findViewById(R.id.ETdigito5);
                     numero6 = bottomSheetDialogunirse.findViewById(R.id.ETdigito6);
                     unirse = bottomSheetDialogunirse.findViewById(R.id.BTNunirse);
+                    cerrarunir = bottomSheetDialogunirse.findViewById(R.id.IVcerrarunir);
+
+
+                    cerrarunir.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                        }
+                    });
+
+
+                    numero1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            numero1.setBackgroundResource(R.drawable.codigo_background2);
+                            numero2.setBackgroundResource(R.drawable.codigo_background);
+                            numero3.setBackgroundResource(R.drawable.codigo_background);
+                            numero4.setBackgroundResource(R.drawable.codigo_background);
+                            numero5.setBackgroundResource(R.drawable.codigo_background);
+                            numero6.setBackgroundResource(R.drawable.codigo_background);
+
+                        }
+                    });
+
+                    numero2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            numero1.setBackgroundResource(R.drawable.codigo_background);
+                            numero2.setBackgroundResource(R.drawable.codigo_background2);
+                            numero3.setBackgroundResource(R.drawable.codigo_background);
+                            numero4.setBackgroundResource(R.drawable.codigo_background);
+                            numero5.setBackgroundResource(R.drawable.codigo_background);
+                            numero6.setBackgroundResource(R.drawable.codigo_background);
+                        }
+                    });
+
+                    numero3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            numero1.setBackgroundResource(R.drawable.codigo_background);
+                            numero2.setBackgroundResource(R.drawable.codigo_background);
+                            numero3.setBackgroundResource(R.drawable.codigo_background2);
+                            numero4.setBackgroundResource(R.drawable.codigo_background);
+                            numero5.setBackgroundResource(R.drawable.codigo_background);
+                            numero6.setBackgroundResource(R.drawable.codigo_background);
+                        }
+                    });
+                    numero4.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            numero1.setBackgroundResource(R.drawable.codigo_background);
+                            numero2.setBackgroundResource(R.drawable.codigo_background);
+                            numero3.setBackgroundResource(R.drawable.codigo_background);
+                            numero4.setBackgroundResource(R.drawable.codigo_background2);
+                            numero5.setBackgroundResource(R.drawable.codigo_background);
+                            numero6.setBackgroundResource(R.drawable.codigo_background);
+                        }
+                    });
+                    numero5.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            numero1.setBackgroundResource(R.drawable.codigo_background);
+                            numero2.setBackgroundResource(R.drawable.codigo_background);
+                            numero3.setBackgroundResource(R.drawable.codigo_background);
+                            numero4.setBackgroundResource(R.drawable.codigo_background);
+                            numero5.setBackgroundResource(R.drawable.codigo_background2);
+                            numero6.setBackgroundResource(R.drawable.codigo_background);
+                        }
+                    });
+                    numero6.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            numero1.setBackgroundResource(R.drawable.codigo_background);
+                            numero2.setBackgroundResource(R.drawable.codigo_background);
+                            numero3.setBackgroundResource(R.drawable.codigo_background);
+                            numero4.setBackgroundResource(R.drawable.codigo_background);
+                            numero5.setBackgroundResource(R.drawable.codigo_background);
+                            numero6.setBackgroundResource(R.drawable.codigo_background2);
+                        }
+                    });
+
 
                     numero1.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
 
                         }
 
@@ -1584,12 +1842,14 @@ public class MapsFragment extends Fragment {
                             String codigo = s.toString();
 
                             if (codigo.length()==1){
+
                                 numero2.requestFocus();
                             }
                         }
 
                         @Override
                         public void afterTextChanged(Editable s) {
+
 
                         }
                     });
