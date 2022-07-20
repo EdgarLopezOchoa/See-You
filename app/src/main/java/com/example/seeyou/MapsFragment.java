@@ -884,7 +884,6 @@ public class MapsFragment extends Fragment {
                         PuntosMapa();
                         BuscarGrupos();
                         bottomSheetDialogunirse.dismiss();
-                        cerrargrupo();
 
 
 
@@ -1060,6 +1059,7 @@ public class MapsFragment extends Fragment {
 
 
                     int ciclo = 0, primero = 1, id = 0;
+                    String codigo2 = "";
 
                     String Nombre =preferences.getString("Nombre", ""), codigo = "", grupo = "",verificar =preferences.getString("Nombre", "");
 
@@ -1080,6 +1080,7 @@ public class MapsFragment extends Fragment {
                             }
 
                             codigo = cajas.getString("codigo");
+                            codigo2 = cajas.getString("codigo");
                                 id = cajas.getInt("idgrupo");
                                 grupo = cajas.getString("nombregrupo");
 
@@ -1103,14 +1104,14 @@ public class MapsFragment extends Fragment {
                             codigo = cajas.getString("codigo");
                             id = cajas.getInt("idgrupo");
                             grupo = cajas.getString("nombregrupo");
-                            codigo = "";
+                            codigo2 = "";
 
 
                         }
 
                     }
 
-                    if (codigo != "") {
+                    if (codigo2 != "") {
                         gruposlist.add(new Grupos(
                                 grupo,
                                 id,
