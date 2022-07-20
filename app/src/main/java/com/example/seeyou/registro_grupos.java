@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -61,7 +62,7 @@ public class registro_grupos extends AppCompatActivity {
         NombreGrupo = findViewById(R.id.ETnombregrupo);
         registrar = findViewById(R.id.BTNregistrargrupo);
 
-
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(true);
@@ -381,18 +382,25 @@ public class registro_grupos extends AppCompatActivity {
                                 .setContentText("No Hemos Podido Crear Tu Grupo....")
                                 .show();
 
-                    }else{
+                    }else {
                         new SweetAlertDialog(registro_grupos.this, SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("Correcto!!!!")
                                 .setContentText("Tu Grupo Se Ha Creado Exitosamente!!!")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
+                                    }
+                                })
+
                                 .show();
                         SharedPreferences.Editor editor = preferences.edit();
 
                         editor.putInt("idgrupo",Integer.parseInt(response));
                         editor.commit();
 
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
+
 
 
 

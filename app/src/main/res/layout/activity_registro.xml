@@ -65,6 +65,8 @@
                     app:endIconMode="clear_text"
                     app:helperText="Requerido"
                     app:helperTextEnabled="true"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/Color5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -98,7 +100,7 @@
                     app:endIconMode="clear_text"
                     app:helperText="Requerido"
                     app:helperTextEnabled="true"
-                    app:hintEnabled="false"
+                    app:hintTextColor="@color/Color5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textInputLayout2">
@@ -132,6 +134,8 @@
                     app:counterMaxLength="10"
                     app:endIconMode="clear_text"
                     app:helperText="Requerido"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/Color5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textInputLayout4">
@@ -165,6 +169,8 @@
                     app:counterMaxLength="40"
                     app:endIconMode="clear_text"
                     app:helperText="Requerido"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/Color5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textInputLayout5">
