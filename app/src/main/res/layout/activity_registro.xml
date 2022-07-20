@@ -5,9 +5,9 @@
     android:id="@+id/BottomSheetRegister"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    >
+    android:background="@drawable/fondo_de_tarjeta"
+    android:orientation="vertical">
+
 
     <TextView
         android:id="@+id/tvTitulo3"
@@ -67,8 +67,8 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Nombre"
-                        android:maxLength="30"
                         android:inputType="textPersonName"
+                        android:maxLength="30"
                         android:textColor="@color/black">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -100,8 +100,8 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Apellido"
-                        android:maxLength="30"
                         android:inputType="textPersonName"
+                        android:maxLength="30"
                         android:textColor="@color/black">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -132,8 +132,8 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Celular"
-                        android:maxLength="10"
                         android:inputType="number"
+                        android:maxLength="10"
                         android:textColor="@color/black">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -164,8 +164,8 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Email"
-                        android:maxLength="40"
                         android:inputType="textEmailAddress"
+                        android:maxLength="40"
                         android:textColor="@color/black">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -197,9 +197,9 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
-                        android:maxLength="15"
                         android:hint="Contraseña"
                         android:inputType="textPassword"
+                        android:maxLength="15"
                         android:textColor="@color/black">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -283,89 +283,6 @@
                     app:layout_constraintTop_toTopOf="@+id/textInputLayout3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/imgUsuario"
-                            android:layout_width="150dp"
-                            android:layout_height="100dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.498"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/user" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/btnGaleria"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:background="@drawable/button2"
-                        android:text="Galeria"
-                        app:backgroundTint="@null" />
-
-                    <Button
-                        android:id="@+id/btnFoto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="@drawable/button2"
-                        android:text="Foto"
-                        app:backgroundTint="@null" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
 
 
             <Button

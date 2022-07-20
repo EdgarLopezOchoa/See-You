@@ -1103,15 +1103,21 @@ public class MapsFragment extends Fragment {
                             codigo = cajas.getString("codigo");
                             id = cajas.getInt("idgrupo");
                             grupo = cajas.getString("nombregrupo");
+                            codigo = "";
 
 
                         }
 
                     }
 
-
-
-
+                    if (codigo != "") {
+                        gruposlist.add(new Grupos(
+                                grupo,
+                                id,
+                                Nombre,
+                                codigo
+                        ));
+                    }
 
 
                     pDialog.dismiss();
@@ -1640,20 +1646,32 @@ public class MapsFragment extends Fragment {
 
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado2);
+            creargrupo.setBackgroundResource(R.drawable.buttonfondo2);
+            agregargrupo.setBackgroundResource(R.drawable.buttonfondo2);
 
         }else if(preferences.getBoolean("fondo", false) == true){
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado);
+            creargrupo.setBackgroundResource(R.drawable.button2);
+            agregargrupo.setBackgroundResource(R.drawable.button2);
         }
         else if(preferences.getBoolean("fondo3", false) == true){
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado3);
+            creargrupo.setBackgroundResource(R.drawable.buttonfondo3);
+            agregargrupo.setBackgroundResource(R.drawable.buttonfondo3);
+
         }
         else if(preferences.getBoolean("fondo4", false) == true){
 
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado4);
+            creargrupo.setBackgroundResource(R.drawable.buttonfondo4);
+            agregargrupo.setBackgroundResource(R.drawable.buttonfondo4);
+
         }else {
             TBgrupos.setBackgroundResource(R.drawable.fondodegradado);
+            creargrupo.setBackgroundResource(R.drawable.button2);
+            agregargrupo.setBackgroundResource(R.drawable.button2);
         }
 
 

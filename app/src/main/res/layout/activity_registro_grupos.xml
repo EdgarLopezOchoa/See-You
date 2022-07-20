@@ -82,10 +82,9 @@
             android:id="@+id/TVcuentacogrupo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="29dp"
             android:text="¿TUS AMIGOS/FAMILIA CUENTAN CON UN GRUPO?"
             android:textColor="@color/black"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
             app:layout_constraintTop_toBottomOf="@+id/BTNregistrargrupo" />

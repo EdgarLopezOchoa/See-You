@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity {
 
     Button btnNota, btnIngresar;
     //borrar despues
-    Button button, enviar, cancelar, btnGaleria, btningresarsesion;
+    Button enviar, cancelar, btnGaleria, btningresarsesion;
     TextInputEditText Nombre, Contraseña, Apellido, Celular, Email;
     private LinearLayout contenedor;
     TextInputEditText etEmail, etContraseña;
@@ -109,15 +109,7 @@ public class Login extends AppCompatActivity {
         contenedor = findViewById(R.id.Contenedormarker);
         sesion = findViewById(R.id.CBsesion);
         btnIngresar = findViewById(R.id.btnIngresar);
-        button = findViewById(R.id.button);
 
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), registro_grupos.class));
-            }
-        });
 
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +126,7 @@ public class Login extends AppCompatActivity {
 
 
                 bottomSheetDialog = new BottomSheetDialog
-                        (Login.this);
+                        (Login.this,R.style.BottomSheetDialog);
                 View bottomSheetView = LayoutInflater.from(Login.this).inflate(
                         R.layout.activity_registro, null
                 );
@@ -143,8 +135,9 @@ public class Login extends AppCompatActivity {
                 LinearLayout contenedor1 = bottomSheetDialog.findViewById(R.id.BottomSheetRegister);
                 bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
                 assert contenedor1 !=null;
-                contenedor1.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
+                contenedor1.setMinimumHeight(height);
                 bottomSheetDialog.show();
 
 
@@ -155,8 +148,6 @@ public class Login extends AppCompatActivity {
                 Celular = bottomSheetDialog.findViewById(R.id.etCelular);
                 Email = bottomSheetDialog.findViewById(R.id.etEmail);
                 cancelar = bottomSheetDialog.findViewById(R.id.btncancelarregistro);
-                btnGaleria = bottomSheetDialog.findViewById(R.id.btnGaleria);
-                imgUsuario = bottomSheetDialog.findViewById(R.id.imgUsuario);
                 Asterisco1 = bottomSheetDialog.findViewById(R.id.TVasterisco1);
                 Asterisco2 = bottomSheetDialog.findViewById(R.id.TVasterisco2);
                 Asterisco3 = bottomSheetDialog.findViewById(R.id.TVasterisco3);
@@ -166,12 +157,6 @@ public class Login extends AppCompatActivity {
 
 
 
-                btnGaleria.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showFileChooser();
-                    }
-                });
 
                 cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -496,7 +481,7 @@ public class Login extends AppCompatActivity {
                                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
                                         public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                            startActivity(new Intent(getApplicationContext(), registro_grupos.class));
                                             registro = 0;
                                             finish();
                                         }
