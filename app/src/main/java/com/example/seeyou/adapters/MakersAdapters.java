@@ -9,18 +9,23 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,11 +40,14 @@ import com.android.volley.toolbox.Volley;
 import com.example.seeyou.MapsFragment;
 import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONArray;
@@ -70,7 +78,8 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
     LocationManager locationManager;
     ConnectivityManager locationManagerinternet;
-    BottomSheetDialog bottomSheetDialog = MapsFragment.bottomSheetDialog;
+    public static GoogleMap mapa;
+    BottomSheetDialog bottomSheetDialog = MapsFragment.bottomSheetDialog, bottomSheetDialogeditmarker;
 
 
     public MakersAdapters(ArrayList<Markers> markerList, Context context) {
@@ -99,16 +108,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-
-
-
-
-
         holder.titulo.setText(MarkerList.get(position).getNombre());
-        holder.descripcion.setText(MarkerList.get(position).getDescripcion());
-        holder.coordenadas.setText(MarkerList.get(position).getLatitud() + " , " + MarkerList.get(position).getLongitud());
-        holder.ubicacion.setText(MarkerList.get(position).getDireccion());
-        holder.habilitarmarcador.setText(MarkerList.get(position).getHabilitado());
 
         holder.id = MarkerList.get(position).getId();
 
@@ -122,7 +122,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
 
         if (preferences.getBoolean("fondo2", false) == true){
-            holder.iniciar_viaje.setBackgroundResource(R.drawable.buttonfondo2);
+
             ColorStateList buttonStates = new ColorStateList(
                     new int[][]{
                             new int[]{-android.R.attr.state_enabled},
@@ -140,7 +140,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
 
         }else if(preferences.getBoolean("fondo", false) == true){
-            holder.iniciar_viaje.setBackgroundResource(R.drawable.button2);
+
             ColorStateList buttonStates = new ColorStateList(
                     new int[][]{
                             new int[]{-android.R.attr.state_enabled},
@@ -157,7 +157,6 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
 
         }else if(preferences.getBoolean("fondo3", false) == true){
-            holder.iniciar_viaje.setBackgroundResource(R.drawable.buttonfondo3);
             ColorStateList buttonStates = new ColorStateList(
                     new int[][]{
                             new int[]{-android.R.attr.state_enabled},
@@ -175,7 +174,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
         }
         else if(preferences.getBoolean("fondo4", false) == true){
-            holder.iniciar_viaje.setBackgroundResource(R.drawable.buttonfondo4);
+
             ColorStateList buttonStates = new ColorStateList(
                     new int[][]{
                             new int[]{-android.R.attr.state_enabled},
@@ -192,18 +191,83 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             holder.habilitarmarcador.getTrackDrawable().setTintList(buttonStates);
         }
 
+        holder.contenedor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetBehavior<View> bottomSheetBehavior;
+                bottomSheetDialogeditmarker = new BottomSheetDialog
+                        (context,R.style.BottomSheetDialog);
+                View bottomSheetView = LayoutInflater.from(context).inflate(
+                        R.layout.detalles_marker, null
+                );
+                bottomSheetDialogeditmarker.setContentView(bottomSheetView);
+                LinearLayout contenedor1 = bottomSheetDialogeditmarker.findViewById(R.id.editarmarker);
+                bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+                int height = (int)(context.getResources().getDisplayMetrics().heightPixels*0.92);
+
+                assert contenedor1 !=null;
+                contenedor1.setMinimumHeight(height);
+                bottomSheetBehavior.setMaxHeight(height);
+
+                holder.Nombregrupo = bottomSheetDialogeditmarker.findViewById(R.id.etNombreMarker);
+                holder.DescripcionGrupo = bottomSheetDialogeditmarker.findViewById(R.id.etDescripcionMarker);
+                holder.idmarker = bottomSheetDialogeditmarker.findViewById(R.id.TVidmarker);
+                holder.eliminarmarkerbutton = bottomSheetDialogeditmarker.findViewById(R.id.BTNeliminarmarker);
+                holder.DirreccionGrupo = bottomSheetDialogeditmarker.findViewById(R.id.etDireccionMarker);
+                holder.guardarcambios = bottomSheetDialogeditmarker.findViewById(R.id.TVguardarcambios);
+                holder.DirreccionGrupo.setEnabled(false);
+                holder.cerrareditarmarker = bottomSheetDialogeditmarker.findViewById(R.id.TVcerrareditarmarcador);
+
+                Ubicacion(holder.id,holder);
+
+                holder.eliminarmarkerbutton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Eliminar_Marcador_recycler = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                        Eliminar_Marcador_recycler.setTitleText("¿Estas Seguro?");
+                        Eliminar_Marcador_recycler.setContentText("Este Marcador Ya no Se Podra Recuperar..");
+                        Eliminar_Marcador_recycler.setConfirmText("Eliminar");
+                        Eliminar_Marcador_recycler.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                Eliminar(id_grupo, holder.id,1);
+                                Eliminar_Marcador_recycler.dismiss();
+                            }
+                        });
+                        Eliminar_Marcador_recycler.setCancelText("Cancelar");
+                        Eliminar_Marcador_recycler.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                Eliminar_Marcador_recycler.dismiss();
+                            }
+                        });
+                        Eliminar_Marcador_recycler.show();
+                    }
+                });
+
+                holder.guardarcambios.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "MUY PRONTO GUARDARA LOS CAMBIOS :D", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                holder.cerrareditarmarker.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialogeditmarker.dismiss();
+                    }
+                });
 
 
-       /* if (preferences.getBoolean("fondo2", false) == true){
-            holder.contenedor.setBackgroundResource(R.drawable.blue_background_edit);
 
-        }else if(preferences.getBoolean("fondo", false) == true){
-            holder.contenedor.setBackgroundResource(R.drawable.fondonaranaja2);
-        }else if(preferences.getBoolean("fondo3", false) == true){
-            holder.contenedor.setBackgroundResource(R.drawable.blue_background_edit);
-        }else if(preferences.getBoolean("fondo4", false) == true){
-            holder.contenedor.setBackgroundResource(R.drawable.fondonaranaja2);
-        }*/
+            }
+        });
+
+
+
 
         holder.habilitarmarcador.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,14 +290,6 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             }
         });
 
-        holder.iniciar_viaje.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, holder.id + "",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
         holder.eliminarmarker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,7 +301,14 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 Eliminar_Marcador_recycler.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
-                        Eliminar(id_grupo, holder.id);
+                        Eliminar(id_grupo, holder.id,0);
+                        Eliminar_Marcador_recycler.dismiss();
+                    }
+                });
+                Eliminar_Marcador_recycler.setCancelText("Cancelar");
+                Eliminar_Marcador_recycler.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
                         Eliminar_Marcador_recycler.dismiss();
                     }
                 });
@@ -264,25 +327,23 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView titulo, ubicacion, coordenadas, descripcion, header;
-        private Button iniciar_viaje, eliminarmarker;
+        private TextView titulo, idmarker,guardarcambios,cerrareditarmarker;
+        private Button iniciar_viaje,eliminarmarkerbutton;
         private Switch habilitarmarcador;
+        private ImageView eliminarmarker;
         private int id;
-        ConstraintLayout fondo;
-        LinearLayout contenedor;
+        ConstraintLayout contenedor;
+
+        EditText Nombregrupo,DescripcionGrupo,DirreccionGrupo;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             titulo = itemView.findViewById(R.id.TVnombreubicacionmarker);
-            ubicacion = itemView.findViewById(R.id.TVubicacionmarker);
-            coordenadas = itemView.findViewById(R.id.TVmasinformacionmarker);
-            descripcion = itemView.findViewById(R.id.TVdescripcionmarker);
-            iniciar_viaje = itemView.findViewById(R.id.BTNviajarmarker);
-            eliminarmarker = itemView.findViewById(R.id.BTNeliminarmarker);
+            eliminarmarker = itemView.findViewById(R.id.IVeliminarmaker);
             habilitarmarcador = itemView.findViewById(R.id.SWhabilitarmarker);
-             fondo = itemView.findViewById(R.id.ContenedorTarjeta);
-             contenedor = itemView.findViewById(R.id.Contenedormarker);
+            contenedor = itemView.findViewById(R.id.ContenedorTarjeta);
+
 
         }
     }
@@ -302,7 +363,6 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
                 if (Habilitado1 == "habilitado") {
 
-                    holder.habilitarmarcador.setText("habilitado");
                     new SweetAlertDialog(context)
                             .setTitleText("Habilitado")
                             .setContentText("Este Marcador Ahora Aparecera En Su Mapa :D")
@@ -311,7 +371,6 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
                 } else {
 
-                    holder.habilitarmarcador.setText("deshabilitado");
                     new SweetAlertDialog(context)
                             .setTitleText("Deshabilitado")
                             .setContentText("Este Marcador Ya No Aparecera En Su Mapa... D:")
@@ -494,7 +553,93 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     }
 
 
-    public void Eliminar(int id_grupo, int id_punto) {
+    public void Ubicacion(int id, ViewHolder holder) {
+
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/buscar_datos_de_marcador.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    pDialog.dismiss();
+                    JSONArray array = new JSONArray(response);
+
+                    JSONObject cajas = array.getJSONObject(0);
+
+
+                    holder.DescripcionGrupo.setText(cajas.getString("descripcion"));
+                    holder.idmarker.setText(cajas.getString("IDpunto"));
+                    holder.Nombregrupo.setText(cajas.getString("Nombre"));
+                    holder.DirreccionGrupo.setText(cajas.getString("direccion"));
+                    bottomSheetDialogeditmarker.show();
+
+
+                } catch (JSONException e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Obtener Los Datos De Su Marcador....")
+                            .show();
+                }
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    pDialog.dismiss();
+
+
+                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
+                                .show();
+                    } else {
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
+                    }
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("id", id+"");
+
+
+                return params;
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
+    }
+
+
+
+
+
+    public void Eliminar(int id_grupo, int id_punto, int accion) {
         SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Loading ...");
         pDialog.setCancelable(true);
@@ -515,6 +660,9 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 PuntosRecycler(2);
                 PuntosMapa();
 
+                if(accion == 1) {
+                    bottomSheetDialogeditmarker.dismiss();
+                }
             }
 
         }, new com.android.volley.Response.ErrorListener() {
@@ -689,4 +837,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         Volley.newRequestQueue(context).add(stringRequest);
 
     }
+
+
+
 }

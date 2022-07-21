@@ -11,8 +11,8 @@
         </gradient>
 
         <corners
-            android:topLeftRadius="25dp"
-            android:topRightRadius="25dp"
+            android:topLeftRadius="15dp"
+            android:topRightRadius="15dp"
             ></corners>
     </shape>
     </item>

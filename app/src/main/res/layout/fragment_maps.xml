@@ -94,7 +94,7 @@
             android:id="@+id/RBgrupos"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="40dp"
             android:layout_marginEnd="10dp"
             android:background="@color/blanco_gris"
             android:elevation="8dp"

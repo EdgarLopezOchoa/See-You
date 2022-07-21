@@ -241,6 +241,20 @@ public class MapsFragment extends Fragment {
                                     Eliminar_Marcador.dismiss();
                                 }
                             });
+                            Eliminar_Marcador.setCancelText("Cancelar");
+                            Eliminar_Marcador.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    Eliminar_Marcador.dismiss();
+                                    PuntosMapa();
+                                }
+                            });
+                            Eliminar_Marcador.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    PuntosMapa();
+                                }
+                            });
                             Eliminar_Marcador.show();
 
 
@@ -410,6 +424,14 @@ public class MapsFragment extends Fragment {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         Eliminar(id_usuario, TVidmarker.getText().toString());
+                                        Eliminar_Marcador.dismiss();
+
+                                    }
+                                });
+                                Eliminar_Marcador.setCancelText("Cancelar");
+                                Eliminar_Marcador.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
                                         Eliminar_Marcador.dismiss();
                                     }
                                 });

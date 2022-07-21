@@ -151,7 +151,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                 new SweetAlertDialog(Registrar.getContext(),
                         SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Buen Trabajo!")
-                        .setContentText("El Marcandor Ha Sido Registrado Correctamente")
+                        .setContentText("El Marcador Ha Sido Registrado Correctamente")
                         .show();
 
                 PuntosMapa();
