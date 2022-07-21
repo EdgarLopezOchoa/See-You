@@ -23,17 +23,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></fragment>
 
-    <ImageView
-        android:id="@+id/IVubicacion"
-        android:layout_width="45dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:elevation="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/IVlocation"
-        app:layout_constraintStart_toStartOf="@+id/IVlocation"
-        app:layout_constraintTop_toBottomOf="@+id/IVlocation"
-        app:srcCompat="@drawable/addmarkers_round" />
+        <ImageView
+            android:id="@+id/IVubicacion"
+            android:layout_width="50dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:elevation="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/IVlocation"
+            app:layout_constraintStart_toStartOf="@+id/IVlocation"
+            app:layout_constraintTop_toBottomOf="@+id/IVlocation"
+            app:srcCompat="@drawable/addmarkers_round" />
 
     <Button
         android:id="@+id/BTNcancelar"
@@ -49,46 +49,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SVubicacion" />
 
-    <ImageView
-        android:id="@+id/IVlocation"
-        android:layout_width="45dp"
-        android:layout_height="42dp"
-        android:layout_marginEnd="10dp"
-        android:elevation="8dp"
-        android:src="@drawable/marcador_round"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/SVubicacion" />
+        <ImageView
+            android:id="@+id/IVlocation"
+            android:layout_width="50dp"
+            android:layout_height="47dp"
+            android:layout_marginEnd="10dp"
+            android:elevation="8dp"
+            android:src="@drawable/marcador_round"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/SVubicacion" />
 
-    <ImageView
-        android:id="@+id/IVvermarkers"
-        android:layout_width="45dp"
-        android:layout_height="42dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:src="@mipmap/marcadores_round"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/TValertamarcador"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView
+            android:id="@+id/IVvermarkers"
+            android:layout_width="50dp"
+            android:layout_height="47dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@mipmap/marcadores_round"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/TValertamarcador"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/IVcambiarmapa"
-        android:layout_width="45dp"
-        android:layout_height="42dp"
-        android:layout_marginBottom="5dp"
-        android:src="@mipmap/maps_round"
-        app:layout_constraintBottom_toTopOf="@+id/IVvermarkers"
-        app:layout_constraintEnd_toEndOf="@+id/IVvermarkers"
-        app:layout_constraintStart_toStartOf="@+id/IVvermarkers" />
+        <ImageView
+            android:id="@+id/IVcambiarmapa"
+            android:layout_width="50dp"
+            android:layout_height="47dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/maps_round"
+            app:layout_constraintBottom_toTopOf="@+id/IVvermarkers"
+            app:layout_constraintEnd_toEndOf="@+id/IVvermarkers"
+            app:layout_constraintStart_toStartOf="@+id/IVvermarkers" />
 
-    <ImageView
-        android:id="@+id/IVgrupos"
-        android:layout_width="45dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="10dp"
-        android:src="@mipmap/grupos_round"
-        app:layout_constraintEnd_toEndOf="@+id/IVubicacion"
-        app:layout_constraintStart_toStartOf="@+id/IVubicacion"
-        app:layout_constraintTop_toBottomOf="@+id/IVubicacion"/>
+        <ImageView
+            android:id="@+id/IVgrupos"
+            android:layout_width="50dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/grupos_round"
+            app:layout_constraintEnd_toEndOf="@+id/IVubicacion"
+            app:layout_constraintStart_toStartOf="@+id/IVubicacion"
+            app:layout_constraintTop_toBottomOf="@+id/IVubicacion" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RBgrupos"
@@ -99,7 +99,7 @@
             android:background="@color/blanco_gris"
             android:elevation="8dp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/IVcambiarmapa"
+            app:layout_constraintBottom_toTopOf="@+id/IVvermarkers"
             app:layout_constraintEnd_toStartOf="@+id/IVgrupos"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"

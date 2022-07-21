@@ -139,6 +139,7 @@ public class Login extends AppCompatActivity {
                 int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
                 assert contenedor1 !=null;
                 contenedor1.setMinimumHeight(height);
+                bottomSheetBehavior.setMaxHeight(height);
                 bottomSheetDialog.show();
 
 

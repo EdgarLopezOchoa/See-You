@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -193,16 +194,16 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
 
 
-        if (preferences.getBoolean("fondo2", false) == true){
-            holder.fondo.setBackgroundResource(R.drawable.fondodegradado);
+       /* if (preferences.getBoolean("fondo2", false) == true){
+            holder.contenedor.setBackgroundResource(R.drawable.blue_background_edit);
 
         }else if(preferences.getBoolean("fondo", false) == true){
-            holder.fondo.setBackgroundResource(R.drawable.fondonaranaja2);
+            holder.contenedor.setBackgroundResource(R.drawable.fondonaranaja2);
         }else if(preferences.getBoolean("fondo3", false) == true){
-            holder.fondo.setBackgroundResource(R.drawable.fondodegradado);
-        }else if(preferences.getBoolean("fondo3", false) == true){
-            holder.fondo.setBackgroundResource(R.drawable.fondonaranaja2);
-        }
+            holder.contenedor.setBackgroundResource(R.drawable.blue_background_edit);
+        }else if(preferences.getBoolean("fondo4", false) == true){
+            holder.contenedor.setBackgroundResource(R.drawable.fondonaranaja2);
+        }*/
 
         holder.habilitarmarcador.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,6 +269,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         private Switch habilitarmarcador;
         private int id;
         ConstraintLayout fondo;
+        LinearLayout contenedor;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -280,6 +282,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
             eliminarmarker = itemView.findViewById(R.id.BTNeliminarmarker);
             habilitarmarcador = itemView.findViewById(R.id.SWhabilitarmarker);
              fondo = itemView.findViewById(R.id.ContenedorTarjeta);
+             contenedor = itemView.findViewById(R.id.Contenedormarker);
 
         }
     }

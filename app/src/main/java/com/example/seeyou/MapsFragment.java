@@ -5,6 +5,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -1665,6 +1666,7 @@ public class MapsFragment extends Fragment {
                 int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.92);
                 assert contenedor1 != null;
                 contenedor1.setMinimumHeight(height);
+                bottomSheetBehavior.setMaxHeight(height);
                 bottomSheetDialogcreargrupo.show();
 
                 TextView unirsegrupo, tienesgrupo;
@@ -1716,6 +1718,7 @@ public class MapsFragment extends Fragment {
                     int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.92);
                     assert contenedor1 != null;
                     contenedor1.setMinimumHeight(height);
+                    bottomSheetBehavior.setMaxHeight(height);
                     bottomSheetDialogunirse.show();
 
 
@@ -2092,7 +2095,7 @@ public class MapsFragment extends Fragment {
                 try {
                     BottomSheetBehavior<View> bottomSheetBehavior;
                     bottomSheetDialog = new BottomSheetDialog
-                            (getContext());
+                            (getContext(),R.style.BottomSheetDialog);
                     View bottomSheetView = LayoutInflater.from(getContext()).inflate(
                             R.layout.markersbottomshet, null
                     );
@@ -2100,9 +2103,11 @@ public class MapsFragment extends Fragment {
                     LinearLayout contenedor1 = bottomSheetDialog.findViewById(R.id.Contenedormarker);
                     bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    assert contenedor1 != null;
-                    contenedor1.setMinimumHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
+                    int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
 
+                    assert contenedor1 !=null;
+                    contenedor1.setMinimumHeight(height);
+                    bottomSheetBehavior.setMaxHeight(height);
 
                     recyclerViewmarker = bottomSheetDialog.findViewById(R.id.RVmarkersbottomsheet);
                     TextView titulopuntos = bottomSheetDialog.findViewById(R.id.TVtitulomarcadorrecicler);
@@ -2110,27 +2115,18 @@ public class MapsFragment extends Fragment {
 
                     PuntosRecycler();
 
-                    Toolbar marker = bottomSheetDialog.findViewById(R.id.navegadormarker);
+
+                    LinearLayout contenedormarkers = bottomSheetDialog.findViewById(R.id.contenedorrecyclermarkers);
 
 
-                    if (preferences.getBoolean("fondo2", false) == true) {
-                        marker.setBackgroundResource(R.drawable.fondodegradado2);
 
-                    } else if (preferences.getBoolean("fondo", false) == true) {
-                        marker.setBackgroundResource(R.drawable.fondodegradado);
-
-                    } else if (preferences.getBoolean("fondo3", false) == true) {
-                        marker.setBackgroundResource(R.drawable.fondodegradado3);
-                    } else if (preferences.getBoolean("fondo4", false) == true) {
-                        marker.setBackgroundResource(R.drawable.fondodegradado4);
-                    }
 
 
                     SVpunto.setOnSearchClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             titulopuntos.setVisibility(View.INVISIBLE);
-                            SVpunto.setBackgroundResource(R.drawable.fondo_de_edittext);
+
 
                         }
                     });
