@@ -2,6 +2,8 @@ package com.example.seeyou;
 
 import static android.view.View.VISIBLE;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -17,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,8 +52,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
@@ -90,6 +97,7 @@ public class Login extends AppCompatActivity {
     SweetAlertDialog pDialog;
     LocationManager locationManager;
     TextView Asterisco1, Asterisco2, Asterisco3, Asterisco4, Asterisco5;
+    Double Latitud, Longitud;
 
 
     @Override
@@ -177,7 +185,7 @@ public class Login extends AppCompatActivity {
                 enviar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ValidarRegistro();
+                        getLastLocation();
                     }
                 });
             }
@@ -404,6 +412,55 @@ public class Login extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+
+    @SuppressLint("MissingPermission")
+    public void getLastLocation() {
+        // Get last known recent location using new Google Play Services SDK (v11+)
+        try {
+
+            FusedLocationProviderClient locationClient = getFusedLocationProviderClient(Login.this);
+
+            locationClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // GPS location can be null if GPS is switched off
+                            if (location != null) {
+                                ValidarRegistro();
+                                Longitud = location.getLongitude();
+                                Latitud = location.getLatitude();
+
+
+
+                            } else {
+                                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
+                                    new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("Por Favor Habilite Su Ubicacion...")
+                                            .show();
+                                }
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Por Favor Active Su Ubicacion O Permita Que La App Accesada A Ella...")
+                                    .show();
+                        }
+                    });
+        } catch (Exception e) {
+            pDialog.dismiss();
+            new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Algo Salio Mal..")
+                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                    .show();
+        }
+    }
+
+
     public void Validar(String Email_usuario, String Contraseña_usuario) {
 
 
@@ -531,6 +588,8 @@ public class Login extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("email", Email_usuario);
                 params.put("password", Contraseña_usuario);
+                params.put("latitud", Latitud + "");
+                params.put("longitud", Longitud + "");
                 return params;
 
             }

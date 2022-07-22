@@ -26,6 +26,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -34,6 +41,10 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -45,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     MarkersFragment markersFragment = new MarkersFragment();
     SharedPreferences preferences;
     public static ConstraintLayout constraintLayout;
+    int id_usuario = 0;
+    double longitud,latitud;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -63,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.Fondobottomnavigation);
 
         preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        id_usuario = preferences.getInt("id", 0);
 
         if (preferences.getBoolean("fondo2", false) == true){
             Window window = getWindow();
@@ -274,12 +288,77 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onLocationChanged(Location location) {
-        // New location has now been determined
-        /*String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        // You can now create a LatLng Object for use with maps
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());*/
+        latitud = location.getLatitude();
+        longitud = location.getLongitude();
+
+        ActualizarUbicacion();
     }
+
+    public void ActualizarUbicacion() {
+
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/ubicacion_usuario.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+
+
+
+                   // PuntosMapa();
+
+                } catch (Exception e) {
+
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+
+                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
+                                .show();
+
+                } catch (Exception e) {
+
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("id", id_usuario+"");
+                params.put("latitud", latitud + "");
+                params.put("longitud", longitud + "");
+
+                return params;
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(stringRequest);
+
+    }
+
+
 }

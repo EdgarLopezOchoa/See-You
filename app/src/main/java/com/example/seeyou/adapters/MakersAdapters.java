@@ -250,7 +250,8 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                 holder.guardarcambios.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "MUY PRONTO GUARDARA LOS CAMBIOS :D", Toast.LENGTH_SHORT).show();
+                        CambiarPunto(holder.DescripcionGrupo.getText().toString(),
+                                holder.idmarker.getText().toString(),holder.Nombregrupo.getText().toString());
                     }
                 });
 
@@ -434,6 +435,102 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+
+
+    public void CambiarPunto(String descripcion1, String idpunto, String nombre1) {
+
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/cambiar_datos_punto.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    pDialog.dismiss();
+
+
+                    if (Objects.equals(response, "Cambios Realizados")) {
+
+
+                        new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Correcto!!")
+                                .setContentText("Los Datos Han Sido Actualizados Correctamente!!")
+                                .show();
+
+                        bottomSheetDialogeditmarker.dismiss();
+
+
+                    } else {
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Actualizar Los Datos De Su Punto....")
+                                .show();
+                    }
+
+                    PuntosMapa();
+
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    pDialog.dismiss();
+
+
+                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
+                                .show();
+                    } else {
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
+                    }
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("idpunto", idpunto);
+                params.put("nombre", nombre1);
+                params.put("descripcion", descripcion1 + "");
+
+                return params;
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
+    }
+
+
 
     public ArrayList<Markers> filtrado(String Buscar) {
 

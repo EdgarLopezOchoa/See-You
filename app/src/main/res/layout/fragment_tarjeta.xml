@@ -41,6 +41,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="5dp"
             android:elevation="10dp"
+            android:fontFamily="sans-serif-condensed-light"
             android:text="Titulo"
             android:textAlignment="textStart"
             android:textAllCaps="false"
