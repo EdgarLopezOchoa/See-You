@@ -494,9 +494,9 @@ public class MapsFragment extends Fragment {
                 PuntosMapa();
                 usuariosMapa();
 
-                handler.postDelayed(this,2500);//se ejecutara cada 10 segundos
+                handler.postDelayed(this,3000);//se ejecutara cada 10 segundos
             }
-        },3500);
+        },3000);
     }
 
 
