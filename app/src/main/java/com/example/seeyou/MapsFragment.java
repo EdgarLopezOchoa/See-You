@@ -488,15 +488,25 @@ public class MapsFragment extends Fragment {
 
     private void ejecutar(){
         final Handler handler= new Handler();
+        final Handler handler2= new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 PuntosMapa();
                 usuariosMapa();
 
-                handler.postDelayed(this,3000);//se ejecutara cada 10 segundos
+                handler.postDelayed(this,3000);
             }
         },3000);
+
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                PuntosMapa();
+
+                handler2.postDelayed(this,8000);//se ejecutara cada 8 segundos
+            }
+        },8000);
     }
 
 
