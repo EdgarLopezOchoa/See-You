@@ -767,6 +767,9 @@ public class MapsFragment extends Fragment {
 
 
     public void PuntosMapa() {
+        try{
+
+
 
         id_grupo = preferences.getInt("idgrupo", 0);
 
@@ -884,6 +887,10 @@ public class MapsFragment extends Fragment {
                 });
 
         Volley.newRequestQueue(getContext()).add(stringRequest);
+
+        }catch(Exception e){
+
+        }
 
     }
 
