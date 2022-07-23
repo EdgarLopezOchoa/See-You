@@ -120,7 +120,7 @@ public class MapsFragment extends Fragment {
     public static String direccion = "", NombreUsuarios = "", Codigogrupo = "", NombreGrupo = "";
     public static int id_usuario = 0, id_grupo = 0, IDUsuarios;
     String addressStr, NombreGrupo1;
-    int tiempo = 5000;
+    int tiempo = 5000, alertapuntos = 0,alertaubicacion = 0;
     public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse, bottomSheetDialogcreargrupo;
     FrameLayout mapa;
     public static Toolbar TBgrupos;
@@ -492,7 +492,6 @@ public class MapsFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                PuntosMapa();
                 usuariosMapa();
 
                 handler.postDelayed(this,3000);
@@ -504,7 +503,8 @@ public class MapsFragment extends Fragment {
             public void run() {
                 PuntosMapa();
 
-                handler2.postDelayed(this,8000);//se ejecutara cada 8 segundos
+
+                handler.postDelayed(this,8000);
             }
         },8000);
     }
@@ -814,7 +814,7 @@ public class MapsFragment extends Fragment {
 
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30DD4819));
@@ -822,28 +822,28 @@ public class MapsFragment extends Fragment {
                         } else if (preferences.getBoolean("fondo", false) == true) {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30391B6F));
                         } else if (preferences.getBoolean("fondo3", false) == true) {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30FF0000));
                         } else if (preferences.getBoolean("fondo4", false) == true) {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x3000F361));
                         } else {
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30391B6F));
@@ -876,10 +876,14 @@ public class MapsFragment extends Fragment {
                             if (locationManagerinternet.getActiveNetworkInfo() != null
                                     && locationManagerinternet.getActiveNetworkInfo().isAvailable()
                                     && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                if(alertapuntos == 0){
+
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
                                         .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
                                         .show();
+                                alertapuntos = 1;
+                                }
                             } else {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
@@ -990,10 +994,14 @@ public class MapsFragment extends Fragment {
                             if (locationManagerinternet.getActiveNetworkInfo() != null
                                     && locationManagerinternet.getActiveNetworkInfo().isAvailable()
                                     && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
-                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Algo Salio Mal..")
-                                        .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
-                                        .show();
+
+                                if(alertaubicacion == 0) {
+                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("No Hemos Podido Obtener La Ubicacion De Los Miembros Del Grupo...")
+                                            .show();
+                                    alertaubicacion = 1;
+                                }
                             } else {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
@@ -1806,7 +1814,6 @@ public class MapsFragment extends Fragment {
         SVubicacion = view.findViewById(R.id.SVubicacion);
 
         cambiarmapa = view.findViewById(R.id.IVcambiarmapa);
-        toolbar = view.findViewById(R.id.navegador1);
         grupos = view.findViewById(R.id.IVgrupos);
         recyclerviewgrupos = view.findViewById(R.id.RBgrupos);
         TValertamarcador = view.findViewById(R.id.TValertamarcador);

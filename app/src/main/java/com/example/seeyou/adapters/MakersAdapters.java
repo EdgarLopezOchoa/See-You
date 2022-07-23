@@ -847,7 +847,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30DD4819));
@@ -855,7 +855,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                         }else if(preferences.getBoolean("fondo", false) == true){
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30391B6F));
@@ -863,7 +863,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                         else if(preferences.getBoolean("fondo3", false) == true){
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30FF0000));
@@ -871,14 +871,14 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                         else if(preferences.getBoolean("fondo4", false) == true){
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x3000F361));
                         } else{
                             Circle circle = mMap.addCircle(new CircleOptions()
                                     .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(90)
+                                    .radius(50)
                                     .strokeWidth(3)
                                     .strokeColor(Color.TRANSPARENT)
                                     .fillColor(0x30391B6F));

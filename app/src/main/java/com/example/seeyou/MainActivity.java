@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
     RutasFragment RutasFragment = new RutasFragment();
     MapsFragment mapsFragment = new MapsFragment();
     PerfilFragment perfilFragment = new PerfilFragment();
-    MarkersFragment markersFragment = new MarkersFragment();
+
     SharedPreferences preferences;
     public static ConstraintLayout constraintLayout;
-    int id_usuario = 0;
+    int id_usuario = 0,alertaubicacionactual = 0;
     double longitud,latitud;
     GoogleMap mapa = MapsFragment.mapubicacion;
     public static int bucle = 0;
@@ -83,44 +83,22 @@ public class MainActivity extends AppCompatActivity {
         id_usuario = preferences.getInt("id", 0);
 
         if (preferences.getBoolean("fondo2", false) == true){
-            Window window = getWindow();
 
-            window.setBackgroundDrawableResource(R.drawable.fondodegradado2);
-
-            Toolbar toolbar = findViewById(R.id.navegador1);
-
-            setSupportActionBar(toolbar);
 
             constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
 
         }else if(preferences.getBoolean("fondo", false) == true){
-            Window window = getWindow();
 
-            window.setBackgroundDrawableResource(R.drawable.fondodegradado);
 
-            Toolbar toolbar = findViewById(R.id.navegador1);
 
-            setSupportActionBar(toolbar);
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
         }
         else if(preferences.getBoolean("fondo3", false) == true){
-            Window window = getWindow();
 
-            window.setBackgroundDrawableResource(R.drawable.fondodegradado3);
-
-            Toolbar toolbar = findViewById(R.id.navegador1);
-
-            setSupportActionBar(toolbar);
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
         }
         else if(preferences.getBoolean("fondo4", false) == true){
-            Window window = getWindow();
 
-            window.setBackgroundDrawableResource(R.drawable.fondodegradado4);
-
-            Toolbar toolbar = findViewById(R.id.navegador1);
-
-            setSupportActionBar(toolbar);
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
         }
 
@@ -214,44 +192,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (preferences.getBoolean("fondo2", false) == true){
-                    Window window = getWindow();
 
-                    window.setBackgroundDrawableResource(R.drawable.fondodegradado2);
-
-                    Toolbar toolbar = findViewById(R.id.navegador1);
-
-                    setSupportActionBar(toolbar);
                     constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
 
                 }else if(preferences.getBoolean("fondo", false) == true){
-                    Window window = getWindow();
 
-                    window.setBackgroundDrawableResource(R.drawable.fondodegradado);
-
-                    Toolbar toolbar = findViewById(R.id.navegador1);
-
-                    setSupportActionBar(toolbar);
 
                     constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
                 }
                 else if(preferences.getBoolean("fondo3", false) == true){
-                    Window window = getWindow();
 
-                    window.setBackgroundDrawableResource(R.drawable.fondodegradado3);
-
-                    Toolbar toolbar = findViewById(R.id.navegador1);
-
-                    setSupportActionBar(toolbar);
                     constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
                 }
                 else if(preferences.getBoolean("fondo4", false) == true){
-                    Window window = getWindow();
 
-                    window.setBackgroundDrawableResource(R.drawable.fondodegradado4);
-
-                    Toolbar toolbar = findViewById(R.id.navegador1);
-
-                    setSupportActionBar(toolbar);
 
                     constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
                 }
@@ -335,11 +289,14 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 try {
 
+                    if(alertaubicacionactual == 0){
                         new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
+                                .setContentText("No Hemos Podido Actualizar Tu Ubicacion Actual...")
                                 .show();
+                        alertaubicacionactual = 1;
 
+                    }
                 } catch (Exception e) {
 
                     new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
@@ -404,10 +361,13 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 try {
 
-                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
-                            .show();
+                    if(alertaubicacionactual == 0) {
+                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Almacenar La Ruta...")
+                                .show();
+                        alertaubicacionactual = 1;
+                    }
 
                 } catch (Exception e) {
 
