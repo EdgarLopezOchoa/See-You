@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private long RUTA_INTERVAL = 2000; /* 2 sec */
     SweetAlertDialog Eliminar_Marcador;
 
     @Override
@@ -300,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ActualizarUbicacion();
+        guardarruta();
     }
 
     public void ActualizarUbicacion() {
@@ -368,5 +370,73 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
+    public void guardarruta() {
+
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_recorridos.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+
+
+
+                    // PuntosMapa();
+
+                } catch (Exception e) {
+
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("No Hemos Podido Obtener La Informacion Del Marcador...")
+                            .show();
+
+                } catch (Exception e) {
+
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("id", id_usuario+"");
+                params.put("latitud", latitud + "");
+                params.put("longitud", longitud + "");
+
+                return params;
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(stringRequest);
+
+    }
 
 }
