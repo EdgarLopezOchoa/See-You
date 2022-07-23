@@ -491,12 +491,12 @@ public class MapsFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                PuntosMapa();
                 usuariosMapa();
 
                 handler.postDelayed(this,2500);//se ejecutara cada 10 segundos
             }
-        },2500);
+        },3500);
     }
 
 
@@ -901,6 +901,7 @@ public class MapsFragment extends Fragment {
             public void onResponse(String response) {
                 try {
                     JSONArray array = new JSONArray(response);
+
 
                     if (marker != null) {
 

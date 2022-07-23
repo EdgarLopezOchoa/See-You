@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private long FASTEST_INTERVAL = 3000; /* 3 sec */
     private long RUTA_INTERVAL = 2000; /* 2 sec */
     SweetAlertDialog Eliminar_Marcador;
 
