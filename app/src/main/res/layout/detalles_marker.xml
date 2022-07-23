@@ -235,7 +235,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/blanco_gris">
+            android:background="@color/gris_muyclaro">
 
             <Button
                 android:id="@+id/BTNeliminarmarker"

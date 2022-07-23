@@ -35,6 +35,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -65,6 +67,11 @@ import com.example.seeyou.adapters.GruposAdapters;
 import com.example.seeyou.adapters.MakersAdapters;
 import com.example.seeyou.adapters.Markers;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -95,7 +102,7 @@ import java.util.Objects;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MapsFragment extends Fragment {
-    public static GoogleMap mMap;
+    public static GoogleMap mMap, mapubicacion;
     private static ObjectAnimator animacionDesvanecido;
     private static ObjectAnimator animacionRotation;
     LocationManager locManager;
@@ -132,6 +139,8 @@ public class MapsFragment extends Fragment {
     String version = Build.VERSION.RELEASE;
     SharedPreferences preferences;
     EditText Nombregrupo;
+
+    Marker marker[] = new Marker[20];
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -183,9 +192,12 @@ public class MapsFragment extends Fragment {
 
                 mMap = googleMap;
 
+
                 if (id_grupo != 0) {
 
+                    ejecutar();
                     PuntosMapa();
+
                 }
 
                 //startLocationUpdates();
@@ -400,8 +412,11 @@ public class MapsFragment extends Fragment {
                         coordenadamarcador.setText("" + Latitud + " : " + logitud);
                         nombremarcador.setText(marker.getTitle());
 
-                        Ubicacion(marker.getTitle());
-
+                        if (!Objects.equals(marker.getTitle(), "no")){
+                            Ubicacion(marker.getTitle());
+                        }else{
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+                        }
 
                         iniciarviaje.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -470,6 +485,19 @@ public class MapsFragment extends Fragment {
 
 
     };
+
+    private void ejecutar(){
+        final Handler handler= new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                usuariosMapa();
+
+                handler.postDelayed(this,2500);//se ejecutara cada 10 segundos
+            }
+        },2500);
+    }
 
 
     public void Eliminar(int id_usuario, String id_punto) {
@@ -813,6 +841,7 @@ public class MapsFragment extends Fragment {
 
                         //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                         mMap.addMarker(markerOptions);
+                        usuariosMapa();
                     }
 
 
@@ -856,6 +885,118 @@ public class MapsFragment extends Fragment {
 
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
+    }
+
+
+    public void usuariosMapa() {
+        try {
+
+
+
+        id_grupo = preferences.getInt("idgrupo", 0);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/usuarios_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+
+                    if (marker != null) {
+
+                        for (int i = 0; i < marker.length; i++) {
+                            try {
+                                if (Objects.equals(marker[i].getTitle(), "no")) {
+                                    marker[i].remove();
+                                }
+                            }
+
+                            catch (Exception e){
+
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject cajas = array.getJSONObject(i);
+
+
+
+
+                        MarkerOptions markerOptions = new MarkerOptions();
+
+                        String name = cajas.getString("nombre");
+
+                        if (Objects.equals(preferences.getString("Nombre", ""), name)) {
+                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                            LatLng puntoubicacion =
+                                    new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
+                            markerOptions.position(puntoubicacion);
+
+                            markerOptions.title("no");
+                            markerOptions.draggable(false);
+
+
+                        } else {
+                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+                            LatLng puntoubicacion =
+                                    new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
+                            markerOptions.position(puntoubicacion);
+
+                            markerOptions.title("no");
+                            markerOptions.draggable(false);
+
+
+
+                        }
+
+                        marker[i] = mMap.addMarker(markerOptions);
+                    }
+
+
+                } catch (JSONException e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+
+                            if (locationManagerinternet.getActiveNetworkInfo() != null
+                                    && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                    && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                        .show();
+                            }
+                        } catch (Exception e) {
+                            pDialog.dismiss();
+                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .show();
+                        }
+                    }
+                });
+
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+
+        }catch (Exception e){
+
+        }
     }
 
 
@@ -1113,19 +1254,17 @@ public class MapsFragment extends Fragment {
                             grupo = cajas.getString("nombregrupo");
 
 
-
                         }
 
                     }
 
 
-                        gruposlist.add(new Grupos(
-                                grupo,
-                                id,
-                                Nombre,
-                                codigo
-                        ));
-
+                    gruposlist.add(new Grupos(
+                            grupo,
+                            id,
+                            Nombre,
+                            codigo
+                    ));
 
 
                     pDialog.dismiss();
@@ -1402,6 +1541,46 @@ public class MapsFragment extends Fragment {
         requestQueue.add(stringRequest);
 
     }
+
+    @SuppressLint("MissingPermission")
+    protected void startLocationUpdates() {
+
+        // Create the location request to start receiving updates
+        mLocationRequest = new com.google.android.gms.location.LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(getContext());
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        getFusedLocationProviderClient(getContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        // do work here
+                        onLocationChanged(locationResult.getLastLocation());
+
+
+                    }
+                },
+                Looper.myLooper());
+    }
+
+
+    public void onLocationChanged(Location location) {
+        PuntosMapa();
+
+
+    }
+
 
     @SuppressLint("MissingPermission")
     public void getLastLocation() {
@@ -2115,9 +2294,10 @@ public class MapsFragment extends Fragment {
             public void onClick(View v) {
 
                 try {
+
                     BottomSheetBehavior<View> bottomSheetBehavior;
                     bottomSheetDialog = new BottomSheetDialog
-                            (getContext(),R.style.BottomSheetDialog);
+                            (getContext(), R.style.BottomSheetDialog);
                     View bottomSheetView = LayoutInflater.from(getContext()).inflate(
                             R.layout.markersbottomshet, null
                     );
@@ -2125,9 +2305,9 @@ public class MapsFragment extends Fragment {
                     LinearLayout contenedor1 = bottomSheetDialog.findViewById(R.id.Contenedormarker);
                     bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
+                    int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.92);
 
-                    assert contenedor1 !=null;
+                    assert contenedor1 != null;
                     contenedor1.setMinimumHeight(height);
                     bottomSheetBehavior.setMaxHeight(height);
 
@@ -2139,9 +2319,6 @@ public class MapsFragment extends Fragment {
 
 
                     LinearLayout contenedormarkers = bottomSheetDialog.findViewById(R.id.contenedorrecyclermarkers);
-
-
-
 
 
                     SVpunto.setOnSearchClickListener(new View.OnClickListener() {

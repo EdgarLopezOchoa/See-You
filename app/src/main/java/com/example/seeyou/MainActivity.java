@@ -38,6 +38,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public static ConstraintLayout constraintLayout;
     int id_usuario = 0;
     double longitud,latitud;
+    GoogleMap mapa = MapsFragment.mapubicacion;
+    public static int bucle = 0;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -141,13 +144,17 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.RutasFragment:
                     loadFragment(RutasFragment);
+                    bucle = 1;
                     return true;
                 case R.id.MapsFragment:
                     loadFragment(mapsFragment);
+                    bucle = 0;
                     return true;
                 case R.id.PerfilFragment:
                     loadFragment(perfilFragment);
+                    bucle = 1;
                     return true;
+
             }
             return false;
         }
@@ -290,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
     public void onLocationChanged(Location location) {
         latitud = location.getLatitude();
         longitud = location.getLongitude();
+
 
         ActualizarUbicacion();
     }
