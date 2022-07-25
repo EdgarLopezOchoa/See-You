@@ -25,8 +25,10 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -76,6 +78,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -140,7 +143,7 @@ public class MapsFragment extends Fragment {
     SharedPreferences preferences;
     EditText Nombregrupo;
 
-    Marker marker[] = new Marker[20];
+
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -794,11 +797,7 @@ public class MapsFragment extends Fragment {
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
-                        int height = 85;
-                        int width = 85;
-                        /*BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.mipmap.markers_round);
-                        Bitmap b = bitmapdraw.getBitmap();
-                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);*/
+
 
 
                         MarkerOptions markerOptions = new MarkerOptions();
@@ -807,6 +806,8 @@ public class MapsFragment extends Fragment {
                         LatLng puntoubicacion =
                                 new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
+                        markerOptions.icon(bitmapDescriptorFromVector(getContext(),R.drawable.markers_round_edit));
+
                         markerOptions.title(cajas.getString("IDpunto"));
                         markerOptions.draggable(true);
 
@@ -923,6 +924,7 @@ public class MapsFragment extends Fragment {
                 try {
                     JSONArray array = new JSONArray(response);
 
+                    Marker marker[] = new Marker[array.length()];
 
                     if (marker != null) {
 
@@ -939,8 +941,10 @@ public class MapsFragment extends Fragment {
                         }
                     }
 
+
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
+
 
 
 
@@ -951,27 +955,17 @@ public class MapsFragment extends Fragment {
 
                         if (Objects.equals(preferences.getString("Nombre", ""), name)) {
                             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                            LatLng puntoubicacion =
-                                    new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
-                            markerOptions.position(puntoubicacion);
-
-                            markerOptions.title("no");
-                            markerOptions.draggable(false);
-
 
                         } else {
                             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-                            LatLng puntoubicacion =
-                                    new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
-                            markerOptions.position(puntoubicacion);
-
-                            markerOptions.title("no");
-                            markerOptions.draggable(false);
-
-
-
                         }
 
+                        LatLng puntoubicacion =
+                                new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
+                        markerOptions.position(puntoubicacion);
+                        markerOptions.icon(bitmapDescriptorFromVector(getContext(),R.drawable.user_location_icon_icons_edit));
+                        markerOptions.title("no");
+                        markerOptions.draggable(false);
                         marker[i] = mMap.addMarker(markerOptions);
                     }
 
@@ -1023,6 +1017,16 @@ public class MapsFragment extends Fragment {
         }catch (Exception e){
 
         }
+    }
+
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
 
