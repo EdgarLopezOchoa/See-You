@@ -133,7 +133,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
                     .show();
 
         } else {
-            Ubicacion("https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_marcador.php");
+            Ubicacion("https://mifolderdeproyectos.online/SEEYOU/agregar_marcador.php");
         }
     }
 
@@ -223,7 +223,7 @@ public class Dialogo_MensajeFragment<listener> extends DialogFragment {
         id_grupo = preferences.getInt("idgrupo",0);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {

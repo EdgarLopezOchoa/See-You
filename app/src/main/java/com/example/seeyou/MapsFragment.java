@@ -515,7 +515,7 @@ public class MapsFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -594,7 +594,7 @@ public class MapsFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -692,7 +692,7 @@ public class MapsFragment extends Fragment {
         id_grupo = preferences.getInt("idgrupo", 0);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=" + id_grupo, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/Buscar_marcadores.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -784,7 +784,7 @@ public class MapsFragment extends Fragment {
         id_grupo = preferences.getInt("idgrupo", 0);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -917,7 +917,7 @@ public class MapsFragment extends Fragment {
         id_grupo = preferences.getInt("idgrupo", 0);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/usuarios_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/usuarios_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -1030,7 +1030,7 @@ public class MapsFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/unirse_grupo.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/unirse_grupo.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -1124,7 +1124,7 @@ public class MapsFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_grupo.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/agregar_grupo.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -1221,7 +1221,7 @@ public class MapsFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/buscar_grupos.php?id=" + id_usuario, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/buscar_grupos.php?id=" + id_usuario, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -1399,7 +1399,7 @@ public class MapsFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/cambiar_ubicacion.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/cambiar_ubicacion.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -1492,7 +1492,7 @@ public class MapsFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/buscar_datos_de_marcador.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/buscar_datos_de_marcador.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {

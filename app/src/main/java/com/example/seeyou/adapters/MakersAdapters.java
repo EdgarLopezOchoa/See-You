@@ -357,7 +357,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/habilitar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pDialog.dismiss();
@@ -442,7 +442,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/cambiar_datos_punto.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/cambiar_datos_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -577,7 +577,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
         pDialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/Buscar_marcadores.php?id=" + id_grupo, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/Buscar_marcadores.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -655,7 +655,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/buscar_datos_de_marcador.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/buscar_datos_de_marcador.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -743,7 +743,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/eliminar_punto.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pDialog.dismiss();
@@ -817,7 +817,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
     private void PuntosMapa() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {

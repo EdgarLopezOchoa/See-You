@@ -263,15 +263,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/ubicacion_usuario.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/ubicacion_usuario.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
 
-
-
-
-                   // PuntosMapa();
 
                 } catch (Exception e) {
 
@@ -335,15 +331,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_recorridos.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/puntos_recorridos.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
 
 
-
-
-                    // PuntosMapa();
 
                 } catch (Exception e) {
 

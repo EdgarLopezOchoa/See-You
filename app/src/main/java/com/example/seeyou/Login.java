@@ -88,7 +88,7 @@ public class Login extends AppCompatActivity {
     TextView irregistro;
     RequestQueue requestQueue;
     Bitmap bitmap;
-    String url = "https://wwwutntrabajos.000webhostapp.com/SEEYOU/login.php";
+    String url = "https://mifolderdeproyectos.online/SEEYOU/login.php";
     private boolean esVisible = true;
     String Apellido1, Nombre1;
     SweetAlertDialog Eliminar_Marcador, CambiarSesion;
@@ -361,7 +361,7 @@ public class Login extends AppCompatActivity {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_usuarios.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/agregar_usuarios.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 

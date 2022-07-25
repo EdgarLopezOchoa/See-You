@@ -123,7 +123,7 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {

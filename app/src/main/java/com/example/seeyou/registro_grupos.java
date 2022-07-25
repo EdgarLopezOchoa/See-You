@@ -362,7 +362,7 @@ public class registro_grupos extends AppCompatActivity {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/agregar_grupo.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/agregar_grupo.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -467,7 +467,7 @@ public class registro_grupos extends AppCompatActivity {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/unirse_grupo.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/unirse_grupo.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {

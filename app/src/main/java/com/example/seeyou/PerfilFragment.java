@@ -254,7 +254,7 @@ public class PerfilFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/datos_usuario.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/datos_usuario.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -378,7 +378,7 @@ public class PerfilFragment extends Fragment {
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://wwwutntrabajos.000webhostapp.com/SEEYOU/cambiar_usuario.php", new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/cambiar_usuario.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
