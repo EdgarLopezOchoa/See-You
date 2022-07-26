@@ -7,7 +7,7 @@
     tools:context=".Pantalla_carga">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/IVlogocarga"
         android:layout_width="300dp"
         android:layout_height="248dp"
         app:layout_constraintBottom_toBottomOf="parent"

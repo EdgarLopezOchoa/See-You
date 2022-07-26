@@ -85,10 +85,12 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.maps.android.ui.IconGenerator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -142,14 +144,14 @@ public class MapsFragment extends Fragment {
     String version = Build.VERSION.RELEASE;
     SharedPreferences preferences;
     EditText Nombregrupo;
-
+    Marker marker[] = new Marker[20];
 
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private long FASTEST_INTERVAL = 5000; /* 2 sec */
 
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -415,7 +417,7 @@ public class MapsFragment extends Fragment {
                         coordenadamarcador.setText("" + Latitud + " : " + logitud);
                         nombremarcador.setText(marker.getTitle());
 
-                        if (!Objects.equals(marker.getTitle(), "no")){
+                        if (!Objects.equals(marker.getTitle(), "Nombre:")){
                             Ubicacion(marker.getTitle());
                         }else{
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
@@ -886,10 +888,13 @@ public class MapsFragment extends Fragment {
                                 alertapuntos = 1;
                                 }
                             } else {
-                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
-                                        .show();
+                                if(alertapuntos == 0) {
+                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                            .show();
+                                    alertapuntos = 1;
+                                }
                             }
                         } catch (Exception e) {
                             pDialog.dismiss();
@@ -924,15 +929,15 @@ public class MapsFragment extends Fragment {
                 try {
                     JSONArray array = new JSONArray(response);
 
-                    Marker marker[] = new Marker[array.length()];
+
 
                     if (marker != null) {
 
-                        for (int i = 0; i < marker.length; i++) {
+                        for (int p = 0; p < array.length(); p++) {
                             try {
-                                if (Objects.equals(marker[i].getTitle(), "no")) {
-                                    marker[i].remove();
-                                }
+
+                                    marker[p].remove();
+
                             }
 
                             catch (Exception e){
@@ -948,25 +953,24 @@ public class MapsFragment extends Fragment {
 
 
 
-
                         MarkerOptions markerOptions = new MarkerOptions();
 
                         String name = cajas.getString("nombre");
 
-                        if (Objects.equals(preferences.getString("Nombre", ""), name)) {
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-
-                        } else {
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-                        }
 
                         LatLng puntoubicacion =
                                 new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
                         markerOptions.position(puntoubicacion);
                         markerOptions.icon(bitmapDescriptorFromVector(getContext(),R.drawable.user_location_icon_icons_edit));
-                        markerOptions.title("no");
+                        markerOptions.title("Nombre:").visible(false);
+                        markerOptions.snippet(cajas.getString("nombre"));
                         markerOptions.draggable(false);
+                        markerOptions.visible(true);
+
                         marker[i] = mMap.addMarker(markerOptions);
+
+
+
                     }
 
 
@@ -997,10 +1001,13 @@ public class MapsFragment extends Fragment {
                                     alertaubicacion = 1;
                                 }
                             } else {
+                                if(alertaubicacion == 0) {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
                                         .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
                                         .show();
+                                    alertaubicacion = 1;
+                                }
                             }
                         } catch (Exception e) {
                             pDialog.dismiss();
@@ -1018,6 +1025,9 @@ public class MapsFragment extends Fragment {
 
         }
     }
+
+
+
 
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {

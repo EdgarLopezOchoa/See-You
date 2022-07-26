@@ -7,7 +7,6 @@
     android:layout_height="wrap_content"
     android:background="@drawable/fondo_de_edittext"
     app:backgroundTint="@null"
-    app:cardBackgroundColor="@color/Trasparente"
     tools:context=".Dialogo_MensajeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
