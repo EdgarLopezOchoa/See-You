@@ -121,6 +121,7 @@ public class Login extends AppCompatActivity {
 
 
 
+
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +164,17 @@ public class Login extends AppCompatActivity {
                 Asterisco3 = bottomSheetDialog.findViewById(R.id.TVasterisco3);
                 Asterisco4 = bottomSheetDialog.findViewById(R.id.TVasterisco4);
                 Asterisco5 = bottomSheetDialog.findViewById(R.id.TVasterisco5);
+                imgUsuario = bottomSheetDialog.findViewById(R.id.IVuser);
                 bottomSheetBehavior.setDraggable(false);
+
+                btnGaleria = bottomSheetDialog.findViewById(R.id.btngaleria);
+
+                btnGaleria.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showFileChooser();
+                    }
+                });
 
                ImageView cerrar = bottomSheetDialog.findViewById(R.id.IVcloseregistro);
 

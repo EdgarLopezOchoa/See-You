@@ -2,6 +2,7 @@ package com.example.seeyou;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -27,6 +28,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -91,6 +93,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.ui.IconGenerator;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -966,7 +969,8 @@ public class MapsFragment extends Fragment {
                         markerOptions.snippet(cajas.getString("nombre"));
                         markerOptions.draggable(false);
                         markerOptions.visible(true);
-
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                getMarkerBitmapFromView("https://www.lanacion.com.ar/resizer/H7kqpChFXJnaKaVkYhzXHg6FmC4=/309x206/smart/filters:format(webp):quality(80)/cloudfront-us-east-1.images.arcpublishing.com/lanacionar/6KZSHEEQVRHITJJJ56NVINV3DM.jpg")));
                         marker[i] = mMap.addMarker(markerOptions);
 
 
@@ -1027,7 +1031,24 @@ public class MapsFragment extends Fragment {
     }
 
 
+    private Bitmap getMarkerBitmapFromView(String url) {
 
+        View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
+        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
+        Picasso.get().load(url).into(markerImageView);
+        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+        customMarkerView.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = customMarkerView.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        customMarkerView.draw(canvas);
+        return returnedBitmap;
+    }
 
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
