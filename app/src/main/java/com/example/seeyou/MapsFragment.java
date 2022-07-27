@@ -1836,10 +1836,14 @@ public class MapsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        } else{
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-        //objetos de la pantalla de inicio de maps
+    }
+
+
+       //objetos de la pantalla de inicio de maps
         ubicacion = view.findViewById(R.id.IVubicacion);
         cancelar = view.findViewById(R.id.BTNcancelar);
         enviar = view.findViewById(R.id.BTNenviarmensaje);
