@@ -970,7 +970,7 @@ public class MapsFragment extends Fragment {
                         markerOptions.draggable(false);
                         markerOptions.visible(true);
                         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
-                                getMarkerBitmapFromView("https://www.lanacion.com.ar/resizer/H7kqpChFXJnaKaVkYhzXHg6FmC4=/309x206/smart/filters:format(webp):quality(80)/cloudfront-us-east-1.images.arcpublishing.com/lanacionar/6KZSHEEQVRHITJJJ56NVINV3DM.jpg")));
+                                getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
                         marker[i] = mMap.addMarker(markerOptions);
 
 
