@@ -113,7 +113,6 @@ public class MapsFragment extends Fragment {
     public static GoogleMap mMap, mapubicacion;
     private static ObjectAnimator animacionDesvanecido;
     private static ObjectAnimator animacionRotation;
-    LocationManager locManager;
     public static ImageView closerecycler, cerrarunir, IVcerrarcreargrupo;
     private ImageView ubicacion, location, vermarkers, cambiarmapa, grupos;
     private Button cancelar, enviar;
@@ -121,18 +120,16 @@ public class MapsFragment extends Fragment {
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
     private SearchView SVubicacion, SVpunto;
-    private TextView titulo, nombremarcador, TVidmarker, TValertamarcador;
+    private TextView nombremarcador, TVidmarker, TValertamarcador;
     public static RecyclerView recyclerViewmarker, recyclerviewgrupos;
     public static ArrayList<Markers> markerslist = new ArrayList<>();
     public static ArrayList<Grupos> gruposlist = new ArrayList<>();
-    public static String direccion = "", NombreUsuarios = "", Codigogrupo = "", NombreGrupo = "";
-    public static int id_usuario = 0, id_grupo = 0, IDUsuarios;
+    public static String direccion = "", Codigogrupo = "";
+    public static int id_usuario = 0, id_grupo = 0;
     String addressStr, NombreGrupo1;
-    int tiempo = 5000, alertapuntos = 0,alertaubicacion = 0;
+    int alertapuntos = 0, alertaubicacion = 0;
     public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse, bottomSheetDialogcreargrupo;
-    FrameLayout mapa;
     public static Toolbar TBgrupos;
-    int bucleubicacion = 0, mensaje = 0;
     SweetAlertDialog Eliminar_Marcador;
     View view;
     SweetAlertDialog pDialog;
@@ -143,12 +140,9 @@ public class MapsFragment extends Fragment {
     NetworkInfo networkInfo;
     TextView ubicacionmarcador, coordenadamarcador, descripcionmarcador;
     Switch habilitado;
-    Toolbar toolbar;
-    String version = Build.VERSION.RELEASE;
     SharedPreferences preferences;
     EditText Nombregrupo;
     Marker marker[] = new Marker[20];
-
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -420,10 +414,10 @@ public class MapsFragment extends Fragment {
                         coordenadamarcador.setText("" + Latitud + " : " + logitud);
                         nombremarcador.setText(marker.getTitle());
 
-                        if (!Objects.equals(marker.getTitle(), "Nombre:")){
+                        if (!Objects.equals(marker.getTitle(), "Nombre:")) {
                             Ubicacion(marker.getTitle());
-                        }else{
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+                        } else {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
                         }
 
                         iniciarviaje.setOnClickListener(new View.OnClickListener() {
@@ -494,17 +488,17 @@ public class MapsFragment extends Fragment {
 
     };
 
-    private void ejecutar(){
-        final Handler handler= new Handler();
-        final Handler handler2= new Handler();
+    private void ejecutar() {
+        final Handler handler = new Handler();
+        final Handler handler2 = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 usuariosMapa();
 
-                handler.postDelayed(this,3000);
+                handler.postDelayed(this, 3000);
             }
-        },3000);
+        }, 3000);
 
         handler2.postDelayed(new Runnable() {
             @Override
@@ -512,9 +506,9 @@ public class MapsFragment extends Fragment {
                 PuntosMapa();
 
 
-                handler.postDelayed(this,8000);
+                handler.postDelayed(this, 8000);
             }
-        },8000);
+        }, 8000);
     }
 
 
@@ -785,133 +779,135 @@ public class MapsFragment extends Fragment {
 
 
     public void PuntosMapa() {
-        try{
+        try {
 
 
+            id_grupo = preferences.getInt("idgrupo", 0);
 
-        id_grupo = preferences.getInt("idgrupo", 0);
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONArray array = new JSONArray(response);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONArray(response);
+                        mMap.clear();
 
-                    mMap.clear();
-
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject cajas = array.getJSONObject(i);
-
-
-
-                        MarkerOptions markerOptions = new MarkerOptions();
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+                            try {
 
 
-                        LatLng puntoubicacion =
-                                new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
-                        markerOptions.position(puntoubicacion);
-                        markerOptions.icon(bitmapDescriptorFromVector(getContext(),R.drawable.markers_round_edit));
-
-                        markerOptions.title(cajas.getString("IDpunto"));
-                        markerOptions.draggable(true);
-
-                        if (preferences.getBoolean("fondo2", false) == true) {
-
-                            Circle circle = mMap.addCircle(new CircleOptions()
-                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(50)
-                                    .strokeWidth(3)
-                                    .strokeColor(Color.TRANSPARENT)
-                                    .fillColor(0x30DD4819));
-
-                        } else if (preferences.getBoolean("fondo", false) == true) {
-                            Circle circle = mMap.addCircle(new CircleOptions()
-                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(50)
-                                    .strokeWidth(3)
-                                    .strokeColor(Color.TRANSPARENT)
-                                    .fillColor(0x30391B6F));
-                        } else if (preferences.getBoolean("fondo3", false) == true) {
-                            Circle circle = mMap.addCircle(new CircleOptions()
-                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(50)
-                                    .strokeWidth(3)
-                                    .strokeColor(Color.TRANSPARENT)
-                                    .fillColor(0x30FF0000));
-                        } else if (preferences.getBoolean("fondo4", false) == true) {
-                            Circle circle = mMap.addCircle(new CircleOptions()
-                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(50)
-                                    .strokeWidth(3)
-                                    .strokeColor(Color.TRANSPARENT)
-                                    .fillColor(0x3000F361));
-                        } else {
-                            Circle circle = mMap.addCircle(new CircleOptions()
-                                    .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
-                                    .radius(50)
-                                    .strokeWidth(3)
-                                    .strokeColor(Color.TRANSPARENT)
-                                    .fillColor(0x30391B6F));
-                        }
+                                MarkerOptions markerOptions = new MarkerOptions();
 
 
-                        // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                LatLng puntoubicacion =
+                                        new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
+                                markerOptions.position(puntoubicacion);
+                                markerOptions.icon(bitmapDescriptorFromVector(getContext(), R.drawable.markers_round_edit));
 
-                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
-                        mMap.addMarker(markerOptions);
-                        usuariosMapa();
-                    }
+                                markerOptions.title(cajas.getString("IDpunto"));
+                                markerOptions.draggable(true);
 
+                                if (preferences.getBoolean("fondo2", false) == true) {
 
-                } catch (JSONException e) {
-                    pDialog.dismiss();
-                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                            .show();
-                }
-            }
-        },
-                new Response.ErrorListener() {
-                    @SuppressLint("MissingPermission")
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        try {
+                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                            .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                            .radius(50)
+                                            .strokeWidth(3)
+                                            .strokeColor(Color.TRANSPARENT)
+                                            .fillColor(0x30DD4819));
 
-                            if (locationManagerinternet.getActiveNetworkInfo() != null
-                                    && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                    && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
-                                if(alertapuntos == 0){
-
-                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Algo Salio Mal..")
-                                        .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
-                                        .show();
-                                alertapuntos = 1;
+                                } else if (preferences.getBoolean("fondo", false) == true) {
+                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                            .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                            .radius(50)
+                                            .strokeWidth(3)
+                                            .strokeColor(Color.TRANSPARENT)
+                                            .fillColor(0x30391B6F));
+                                } else if (preferences.getBoolean("fondo3", false) == true) {
+                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                            .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                            .radius(50)
+                                            .strokeWidth(3)
+                                            .strokeColor(Color.TRANSPARENT)
+                                            .fillColor(0x30FF0000));
+                                } else if (preferences.getBoolean("fondo4", false) == true) {
+                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                            .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                            .radius(50)
+                                            .strokeWidth(3)
+                                            .strokeColor(Color.TRANSPARENT)
+                                            .fillColor(0x3000F361));
+                                } else {
+                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                            .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
+                                            .radius(50)
+                                            .strokeWidth(3)
+                                            .strokeColor(Color.TRANSPARENT)
+                                            .fillColor(0x30391B6F));
                                 }
-                            } else {
-                                if(alertapuntos == 0) {
-                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                            .setTitleText("Algo Salio Mal..")
-                                            .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
-                                            .show();
-                                    alertapuntos = 1;
-                                }
+
+
+                                // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                                //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                                mMap.addMarker(markerOptions);
+                                usuariosMapa();
+                            } catch (Exception e) {
+
                             }
-                        } catch (Exception e) {
-                            pDialog.dismiss();
-                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                                    .show();
                         }
+
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .show();
                     }
-                });
+                }
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
 
-        Volley.newRequestQueue(getContext()).add(stringRequest);
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                    if (alertapuntos == 0) {
 
-        }catch(Exception e){
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                } else {
+                                    if (alertapuntos == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .show();
+                            }
+                        }
+                    });
+
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+
+        } catch (Exception e) {
 
         }
 
@@ -922,142 +918,153 @@ public class MapsFragment extends Fragment {
         try {
 
 
+            id_grupo = preferences.getInt("idgrupo", 0);
 
-        id_grupo = preferences.getInt("idgrupo", 0);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://mifolderdeproyectos.online/SEEYOU/usuarios_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONArray(response);
-
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/usuarios_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONArray array = new JSONArray(response);
 
 
-                    if (marker != null) {
+                        if (marker != null) {
 
-                        for (int p = 0; p < array.length(); p++) {
-                            try {
+                            for (int p = 0; p < array.length(); p++) {
+                                try {
 
                                     marker[p].remove();
 
-                            }
+                                } catch (Exception e) {
 
-                            catch (Exception e){
+                                }
+                            }
+                        }
+
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+                            try {
+
+
+                                MarkerOptions markerOptions = new MarkerOptions();
+
+                                String name = cajas.getString("nombre");
+
+
+                                LatLng puntoubicacion =
+                                        new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
+                                markerOptions.position(puntoubicacion);
+                                markerOptions.title("Nombre:").visible(false);
+                                markerOptions.snippet(cajas.getString("nombre"));
+                                markerOptions.draggable(false);
+                                markerOptions.visible(true);
+                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                        getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
+                                marker[i] = mMap.addMarker(markerOptions);
+
+
+                            } catch (Exception e) {
 
                             }
                         }
+
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .show();
                     }
-
-
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject cajas = array.getJSONObject(i);
-
-
-
-
-                        MarkerOptions markerOptions = new MarkerOptions();
-
-                        String name = cajas.getString("nombre");
-
-
-                        LatLng puntoubicacion =
-                                new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
-                        markerOptions.position(puntoubicacion);
-                        markerOptions.icon(bitmapDescriptorFromVector(getContext(),R.drawable.user_location_icon_icons_edit));
-                        markerOptions.title("Nombre:").visible(false);
-                        markerOptions.snippet(cajas.getString("nombre"));
-                        markerOptions.draggable(false);
-                        markerOptions.visible(true);
-                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
-                                getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
-                        marker[i] = mMap.addMarker(markerOptions);
-
-
-
-                    }
-
-
-                } catch (JSONException e) {
-                    pDialog.dismiss();
-                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                            .show();
                 }
-            }
-        },
-                new Response.ErrorListener() {
-                    @SuppressLint("MissingPermission")
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        try {
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
 
-                            if (locationManagerinternet.getActiveNetworkInfo() != null
-                                    && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                    && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
 
-                                if(alertaubicacion == 0) {
-                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                            .setTitleText("Algo Salio Mal..")
-                                            .setContentText("No Hemos Podido Obtener La Ubicacion De Los Miembros Del Grupo...")
-                                            .show();
-                                    alertaubicacion = 1;
+                                    if (alertaubicacion == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("No Hemos Podido Obtener La Ubicacion De Los Miembros Del Grupo...")
+                                                .show();
+                                        alertaubicacion = 1;
+                                    }
+                                } else {
+                                    if (alertaubicacion == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                .show();
+                                        alertaubicacion = 1;
+                                    }
                                 }
-                            } else {
-                                if(alertaubicacion == 0) {
-                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                         .show();
-                                    alertaubicacion = 1;
-                                }
                             }
-                        } catch (Exception e) {
-                            pDialog.dismiss();
-                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                                    .show();
                         }
-                    }
-                });
+                    });
 
-        Volley.newRequestQueue(getContext()).add(stringRequest);
+            Volley.newRequestQueue(getContext()).add(stringRequest);
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
 
     private Bitmap getMarkerBitmapFromView(String url) {
+        int crash = 0;
+        try {
 
-        View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
-        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
-        Picasso.get().load(url).into(markerImageView);
-        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
-        customMarkerView.buildDrawingCache();
-        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(returnedBitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        Drawable drawable = customMarkerView.getBackground();
-        if (drawable != null)
-            drawable.draw(canvas);
-        customMarkerView.draw(canvas);
-        return returnedBitmap;
+
+            View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
+            ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
+            Picasso.get().load(url).placeholder(R.drawable.ic_baseline_arrow_circle_down_24).into(markerImageView);
+            customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+            customMarkerView.buildDrawingCache();
+            Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(returnedBitmap);
+            canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+            Drawable drawable = customMarkerView.getBackground();
+            if (drawable != null)
+                drawable.draw(canvas);
+            customMarkerView.draw(canvas);
+            return returnedBitmap;
+        } catch (Exception e) {
+
+        }
+        return null;
+
     }
 
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
+        try {
+
+
+            Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+            vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+            Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            vectorDrawable.draw(canvas);
+            return BitmapDescriptorFactory.fromBitmap(bitmap);
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
 
@@ -1603,45 +1610,6 @@ public class MapsFragment extends Fragment {
 
     }
 
-    @SuppressLint("MissingPermission")
-    protected void startLocationUpdates() {
-
-        // Create the location request to start receiving updates
-        mLocationRequest = new com.google.android.gms.location.LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-
-        // Create LocationSettingsRequest object using location request
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        LocationSettingsRequest locationSettingsRequest = builder.build();
-
-        // Check whether location settings are satisfied
-        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-        SettingsClient settingsClient = LocationServices.getSettingsClient(getContext());
-        settingsClient.checkLocationSettings(locationSettingsRequest);
-
-
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        getFusedLocationProviderClient(getContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        // do work here
-                        onLocationChanged(locationResult.getLastLocation());
-
-
-                    }
-                },
-                Looper.myLooper());
-    }
-
-
-    public void onLocationChanged(Location location) {
-        PuntosMapa();
-
-
-    }
-
 
     @SuppressLint("MissingPermission")
     public void getLastLocation() {
@@ -1839,13 +1807,12 @@ public class MapsFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        } else{
-            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    }
+        }
 
 
-       //objetos de la pantalla de inicio de maps
+        //objetos de la pantalla de inicio de maps
         ubicacion = view.findViewById(R.id.IVubicacion);
         cancelar = view.findViewById(R.id.BTNcancelar);
         enviar = view.findViewById(R.id.BTNenviarmensaje);

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import com.example.seeyou.adapters.MakersAdapters;
 import com.example.seeyou.adapters.Markers;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +62,7 @@ public class PerfilFragment extends Fragment {
     private String mParam2;
     SweetAlertDialog pDialog;
     int id_usuario, validacion = 0;
-    ImageView fondo1,fondo2,fondo3,fondo4;
+    ImageView fondo1,fondo2,fondo3,fondo4,usuario;
     ;
     LocationManager locationManager;
     String NombreUsuario, CorreoUsuario, ContraseñaUsuario, TelefonoUsuario, ApellidoUsuario;
@@ -125,6 +128,13 @@ public class PerfilFragment extends Fragment {
 
         fondo3 = view.findViewById(R.id.IVfondo3);
         fondo4 = view.findViewById(R.id.IVfondo4);
+        usuario = view.findViewById(R.id.IVusuarioinfo);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        } else {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
@@ -281,6 +291,9 @@ public class PerfilFragment extends Fragment {
                         ContraseñaUsuario = cajas.getString("Contraseña");
                         contraseña.setText(ContraseñaUsuario);
 
+                        if (!Objects.equals(cajas.getString("foto"), "")) {
+                            Picasso.get().load(cajas.getString("foto")).placeholder(R.drawable.ic_baseline_arrow_circle_down_24).into(usuario);
+                        }
 
                     }
 
