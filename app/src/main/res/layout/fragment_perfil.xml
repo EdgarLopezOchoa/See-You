@@ -25,25 +25,24 @@
                 android:id="@+id/btnLogin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/button2"
                 android:text="Cerrar Sesion"
                 app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/BTNcambiardatos"
+                app:layout_constraintEnd_toStartOf="@+id/BTNcambiardatos"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/BTNcambiardatos"
-                app:layout_constraintTop_toBottomOf="@+id/BTNcambiardatos" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/BTNcambiardatos" />
 
             <ImageView
                 android:id="@+id/IVusuarioinfo"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="-10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
                 app:layout_constraintEnd_toStartOf="@+id/textView5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -161,11 +160,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    android:maxLength="15"
                     android:layout_marginBottom="5dp"
                     android:fontFamily="sans-serif-condensed-light"
                     android:hint="Contraseña"
                     android:inputType="textPassword"
+                    android:maxLength="15"
                     android:textColor="@color/black">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -206,13 +205,17 @@
                 android:id="@+id/BTNcambiardatos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/button2"
                 android:text="Cambiar Datos"
                 app:backgroundTint="@null"
-                app:layout_constraintEnd_toEndOf="@+id/IVfondo4"
-                app:layout_constraintStart_toStartOf="@+id/IVfondo3"
-                app:layout_constraintTop_toBottomOf="@+id/IVfondo3" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -230,12 +233,12 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="35dp"
+                android:layout_marginBottom="-30dp"
                 android:src="@drawable/fondodegradado"
-                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout4"
+                app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
                 app:layout_constraintEnd_toStartOf="@+id/textView11"
                 app:layout_constraintStart_toStartOf="@+id/IVusuarioinfo"
-                app:layout_constraintTop_toBottomOf="@+id/IVusuarioinfo" />
+                app:layout_constraintTop_toBottomOf="@+id/btngaleriausuario" />
 
             <ImageView
                 android:id="@+id/IVfondo2"
@@ -253,8 +256,8 @@
                 android:id="@+id/IVfondo3"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="-30dp"
                 android:src="@drawable/fondodegradado3"
                 app:layout_constraintBottom_toBottomOf="@+id/textInputLayout5"
                 app:layout_constraintEnd_toEndOf="@+id/IVfondo1"
@@ -278,6 +281,18 @@
                 app:layout_constraintEnd_toEndOf="@+id/IVusuarioinfo"
                 app:layout_constraintStart_toStartOf="@+id/IVusuarioinfo"
                 tools:layout_editor_absoluteY="217dp" />
+
+            <Button
+                android:id="@+id/btngaleriausuario"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button2"
+                android:text="Galeria"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toEndOf="@+id/IVusuarioinfo"
+                app:layout_constraintStart_toStartOf="@+id/IVusuarioinfo"
+                app:layout_constraintTop_toBottomOf="@+id/IVusuarioinfo" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

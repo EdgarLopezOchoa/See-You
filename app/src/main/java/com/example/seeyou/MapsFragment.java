@@ -959,8 +959,16 @@ public class MapsFragment extends Fragment {
                                 markerOptions.snippet(cajas.getString("nombre"));
                                 markerOptions.draggable(false);
                                 markerOptions.visible(true);
-                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
-                                        getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
+
+                                if(!Objects.equals(cajas.getString("foto"), "")) {
+                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                            getMarkerBitmapFromView(cajas.getString("foto"))));
+                                } else{
+                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                            getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
+
+                                }
+
                                 marker[i] = mMap.addMarker(markerOptions);
 
 
@@ -1024,7 +1032,6 @@ public class MapsFragment extends Fragment {
 
 
     private Bitmap getMarkerBitmapFromView(String url) {
-        int crash = 0;
         try {
 
 

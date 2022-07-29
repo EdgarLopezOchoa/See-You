@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,10 +34,12 @@ import com.example.seeyou.MapsFragment;
 import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.internal.MapLifecycleDelegate;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -199,9 +206,8 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                         }
 
 
-                        // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-
-                        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
                         mMap.addMarker(markerOptions);
                     }
 
@@ -252,6 +258,33 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                 });
 
         Volley.newRequestQueue(context).add(stringRequest);
+
+    }
+
+    private Bitmap getMarkerBitmapFromView(String url) {
+        int crash = 0;
+        try {
+
+
+            View customMarkerView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
+            ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
+            Picasso.get().load(url).placeholder(R.drawable.ic_baseline_arrow_circle_down_24).into(markerImageView);
+            customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+            customMarkerView.buildDrawingCache();
+            Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(returnedBitmap);
+            canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+            Drawable drawable = customMarkerView.getBackground();
+            if (drawable != null)
+                drawable.draw(canvas);
+            customMarkerView.draw(canvas);
+            return returnedBitmap;
+        } catch (Exception e) {
+
+        }
+        return null;
 
     }
 }

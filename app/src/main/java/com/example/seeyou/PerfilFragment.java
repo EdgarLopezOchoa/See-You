@@ -1,18 +1,24 @@
 package com.example.seeyou;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -56,6 +63,7 @@ public class PerfilFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -96,7 +104,8 @@ public class PerfilFragment extends Fragment {
 
 
     //BORRAR DESPUES
-    Button btnCambiar, btnLogin;
+    Button btnCambiar, btnLogin,btngaleria;
+    Bitmap bitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +134,7 @@ public class PerfilFragment extends Fragment {
         btnCambiar = view.findViewById(R.id.BTNcambiardatos);
         fondo1 = view.findViewById(R.id.IVfondo1);
         fondo2 = view.findViewById(R.id.IVfondo2);
-
+        btngaleria = view.findViewById(R.id.btngaleriausuario);
         fondo3 = view.findViewById(R.id.IVfondo3);
         fondo4 = view.findViewById(R.id.IVfondo4);
         usuario = view.findViewById(R.id.IVusuarioinfo);
@@ -142,20 +151,24 @@ public class PerfilFragment extends Fragment {
         if (preferences.getBoolean("fondo2", false) == true){
 
             btnCambiar.setBackgroundResource(R.drawable.buttonfondo2);
+            btngaleria.setBackgroundResource(R.drawable.buttonfondo2);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo2);
 
         }else if(preferences.getBoolean("fondo", false) == true){
 
             btnCambiar.setBackgroundResource(R.drawable.button2);
+            btngaleria.setBackgroundResource(R.drawable.button2);
             btnLogin.setBackgroundResource(R.drawable.button2);
         }else if(preferences.getBoolean("fondo3", false) == true){
 
             btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
+            btngaleria.setBackgroundResource(R.drawable.buttonfondo3);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
         }
         else if(preferences.getBoolean("fondo4", false) == true){
 
             btnCambiar.setBackgroundResource(R.drawable.buttonfondo4);
+            btngaleria.setBackgroundResource(R.drawable.buttonfondo4);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo4);
         }
 
@@ -170,6 +183,7 @@ public class PerfilFragment extends Fragment {
                 editor.putBoolean("fondo4", false);
                 editor.commit();
                 btnCambiar.setBackgroundResource(R.drawable.button2);
+                btngaleria.setBackgroundResource(R.drawable.button2);
                 btnLogin.setBackgroundResource(R.drawable.button2);
             }
         });
@@ -185,6 +199,7 @@ public class PerfilFragment extends Fragment {
                 editor.putBoolean("fondo4", false);
                 editor.commit();
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo2);
+                btngaleria.setBackgroundResource(R.drawable.buttonfondo2);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo2);
             }
         });
@@ -200,6 +215,7 @@ public class PerfilFragment extends Fragment {
                 editor.putBoolean("fondo4", false);
                 editor.commit();
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
+                btngaleria.setBackgroundResource(R.drawable.buttonfondo3);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
             }
         });
@@ -214,6 +230,7 @@ public class PerfilFragment extends Fragment {
                 editor.putBoolean("fondo4", true);
                 editor.commit();
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo4);
+                btngaleria.setBackgroundResource(R.drawable.buttonfondo4);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo4);
             }
         });
@@ -224,6 +241,13 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 validacion();
+            }
+        });
+
+        btngaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
             }
         });
 
@@ -255,6 +279,35 @@ public class PerfilFragment extends Fragment {
         return view;
     }
 
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Seleciona imagen"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri filePath = data.getData();
+            try {
+                //Cómo obtener el mapa de bits de la Galería
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                //Configuración del mapa de bits en ImageView
+                usuario.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Algo Salio Mal..")
+                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                        .show();
+            }
+        }
+    }
+
+
     private void Usuario() {
 
         pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
@@ -276,6 +329,7 @@ public class PerfilFragment extends Fragment {
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
 
+
                         NombreUsuario = cajas.getString("Nombre");
                         nombre.setText(NombreUsuario);
 
@@ -292,7 +346,10 @@ public class PerfilFragment extends Fragment {
                         contraseña.setText(ContraseñaUsuario);
 
                         if (!Objects.equals(cajas.getString("foto"), "")) {
-                            Picasso.get().load(cajas.getString("foto")).placeholder(R.drawable.ic_baseline_arrow_circle_down_24).into(usuario);
+                            Picasso.get()
+                                    .load(cajas.getString("foto"))
+                                    .placeholder(R.drawable.ic_baseline_arrow_circle_down_24)
+                                    .into(usuario);
                         }
 
                     }
