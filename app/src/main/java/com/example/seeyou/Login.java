@@ -87,6 +87,7 @@ public class Login extends AppCompatActivity {
     String str_email, str_password;
     TextView irregistro;
     RequestQueue requestQueue;
+    //String key_foto = "foto";
     Bitmap bitmap;
     String url = "https://mifolderdeproyectos.online/SEEYOU/login.php";
     private boolean esVisible = true;
@@ -368,6 +369,15 @@ public class Login extends AppCompatActivity {
         }
     }
 
+//Despues de optener la foto esta la compbierte para poderla mandar a la base de datos
+    /*public String getStringImagen(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }*/
+
     public void registrarUsuarios(String Nombre, String Apellido, String Celular, String Email, String Contraseña) {
         pDialog.show();
 
@@ -409,12 +419,14 @@ public class Login extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+               // String IMAGEN = getStringImagen(bitmap)
                 Map<String, String> parametros = new HashMap<String, String>();
                 parametros.put("Nombre", Nombre);
                 parametros.put("Apellido", Apellido);
                 parametros.put("Celular", Celular);
                 parametros.put("Email", Email);
                 parametros.put("Contraseña", Contraseña);
+                //parametros.put(key_foto,IMAGEN);
                 return parametros;
             }
         };
