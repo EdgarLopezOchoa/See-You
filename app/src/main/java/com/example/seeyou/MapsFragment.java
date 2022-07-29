@@ -194,15 +194,9 @@ public class MapsFragment extends Fragment {
 
                 mMap = googleMap;
 
+                        ejecutar();
+                        PuntosMapa();
 
-                if (id_grupo != 0) {
-
-                    ejecutar();
-                    PuntosMapa();
-
-                }
-
-                //startLocationUpdates();
 
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {

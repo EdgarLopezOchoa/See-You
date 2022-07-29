@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -34,6 +35,7 @@ import com.example.seeyou.MapsFragment;
 import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.internal.MapLifecycleDelegate;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -59,6 +61,7 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
     ConnectivityManager locationManagerinternet;
     SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
     private GoogleMap mMap = MapsFragment.mMap;
+    SharedPreferences.Editor editor;
 
     public GruposAdapters(ArrayList<Grupos> GroupsList, Context context) {
 
@@ -163,6 +166,7 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                         markerOptions.position(puntoubicacion);
                         markerOptions.title(cajas.getString("IDpunto"));
                         markerOptions.draggable(true);
+                        markerOptions.icon(bitmapDescriptorFromVector(context, R.drawable.markers_round_edit));
 
                         if (preferences.getBoolean("fondo2", false) == true){
 
@@ -206,8 +210,6 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                         }
 
 
-                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
-                                getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
                         mMap.addMarker(markerOptions);
                     }
 
@@ -260,6 +262,24 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
         Volley.newRequestQueue(context).add(stringRequest);
 
     }
+
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        try {
+
+
+            Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+            vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+            Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            vectorDrawable.draw(canvas);
+            return BitmapDescriptorFactory.fromBitmap(bitmap);
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
 
     private Bitmap getMarkerBitmapFromView(String url) {
         int crash = 0;
