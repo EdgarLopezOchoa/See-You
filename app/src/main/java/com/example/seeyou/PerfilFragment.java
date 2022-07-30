@@ -527,7 +527,7 @@ public class PerfilFragment extends Fragment {
                 params.put("Contraseña", contraseña.getText().toString());
                 params.put("IDusuario", id_usuario + "");
                 params.put("foto",IMAGEN);
-                Log.i("hola CARLOS",IMAGEN);
+
                 return params;
             }
 
