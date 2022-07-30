@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Console;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -447,6 +449,7 @@ public class PerfilFragment extends Fragment {
 
     //Despues de optener la foto esta la compbierte para poderla mandar a la base de datos
         public String getStringImagen(Bitmap bmp) {
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
@@ -508,7 +511,12 @@ public class PerfilFragment extends Fragment {
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                String IMAGEN = getStringImagen(bitmap);
+                String IMAGEN;
+                if (bitmap != null) {
+                     IMAGEN = getStringImagen(bitmap);
+                }else {
+                    IMAGEN="";
+                }
                 Map<String, String> params = new HashMap<String, String>();
 
 
@@ -519,7 +527,7 @@ public class PerfilFragment extends Fragment {
                 params.put("Contraseña", contraseña.getText().toString());
                 params.put("IDusuario", id_usuario + "");
                 params.put("foto",IMAGEN);
-
+                Log.i("hola CARLOS",IMAGEN);
                 return params;
             }
 
