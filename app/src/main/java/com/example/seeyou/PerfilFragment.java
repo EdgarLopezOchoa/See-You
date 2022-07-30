@@ -81,7 +81,7 @@ public class PerfilFragment extends Fragment {
     ConnectivityManager locationManagerinternet;
     SharedPreferences.Editor editor;
     TextInputEditText nombre, correo, contraseña, telefono, apellido;
-  //  String key_foto = "foto";
+    String key_foto = "foto";
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -446,14 +446,14 @@ public class PerfilFragment extends Fragment {
 
 
     //Despues de optener la foto esta la compbierte para poderla mandar a la base de datos
- /*   public String getStringImagen(Bitmap bmp) {
+   public String getStringImagen(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-*/
+
     private void CambiosDatos() {
 
         pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
@@ -506,7 +506,7 @@ public class PerfilFragment extends Fragment {
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-              //  String IMAGEN = getStringImagen(bitmap);
+                String IMAGEN = getStringImagen(bitmap);
                 Map<String, String> params = new HashMap<String, String>();
 
 
@@ -516,7 +516,7 @@ public class PerfilFragment extends Fragment {
                 params.put("Celular", telefono.getText().toString());
                 params.put("Contraseña", contraseña.getText().toString());
                 params.put("IDusuario", id_usuario + "");
-               // params.put("foto",IMAGEN);
+                params.put("foto",IMAGEN);
 
                 return params;
             }
