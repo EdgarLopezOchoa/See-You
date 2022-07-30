@@ -81,7 +81,7 @@ public class PerfilFragment extends Fragment {
     ConnectivityManager locationManagerinternet;
     SharedPreferences.Editor editor;
     TextInputEditText nombre, correo, contraseña, telefono, apellido;
-    String key_foto = "foto";
+  //  String key_foto = "foto";
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -446,7 +446,7 @@ public class PerfilFragment extends Fragment {
 
 
     //Despues de optener la foto esta la compbierte para poderla mandar a la base de datos
-   public String getStringImagen(Bitmap bmp) {
+        public String getStringImagen(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
@@ -474,6 +474,8 @@ public class PerfilFragment extends Fragment {
                         new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("Cambios Realizados Con Exito!!!!!")
                                 .show();
+
+
                     }
                 } catch (Exception e) {
                     new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)

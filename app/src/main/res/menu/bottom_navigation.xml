@@ -4,10 +4,10 @@
         android:id="@+id/MapsFragment"
         android:icon="@drawable/marker_foreground"
         android:iconTint="@color/black"
-        android:title="Mapa"></item>
+        android:title="Localizacion"></item>
     <item
         android:id="@+id/RutasFragment"
-        android:title="Rutas"
+        android:title="Seguimiento"
         android:icon="@mipmap/routeicon_foreground"
         android:iconTint="@color/black"
         android:iconTintMode="multiply"></item>

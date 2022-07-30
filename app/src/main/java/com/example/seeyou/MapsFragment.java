@@ -161,7 +161,7 @@ public class MapsFragment extends Fragment {
             try {
                 pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
                 pDialog.setTitleText("Cargando ...");
-                pDialog.setCancelable(true);
+                pDialog.setCancelable(false);
 
                 pDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override

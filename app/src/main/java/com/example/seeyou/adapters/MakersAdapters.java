@@ -93,7 +93,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
         locationManagerinternet = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Cargando ...");
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
         preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
     }
 
