@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -14,24 +16,67 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CustomCap;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class RutasFragment extends Fragment {
+public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClickListener{
     GoogleMap mMap;
     SweetAlertDialog pDialog;
     LocationManager locationManager;
     ConnectivityManager locationManagerinternet;
+    public static int id_usuario = 0, id_grupo = 0;
+    SharedPreferences preferences;
+    private ImageView ubicacion;
+    int alertapuntos = 0, alertaubicacion = 0;
+    View view;
+
+
+
+
+    // VARIABLES DEL MAU
+    // Color y tamaño para las lineas
+    private static final int COLOR_BLACK_ARGB = 0xff000000;
+    private static final int POLYLINE_STROKE_WIDTH_PX = 12;
+    //Cambiar lineas con un clic a otro estilo
+    private static final int PATTERN_GAP_LENGTH_PX = 20;
+    private static final PatternItem DOT = new Dot();
+    private static final PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
+    // Create a stroke pattern of a gap followed by a dot.
+    private static final List<PatternItem> PATTERN_POLYLINE_DOTTED = Arrays.asList(GAP, DOT);
+    // FIN
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -53,6 +98,132 @@ public class RutasFragment extends Fragment {
             mMap.getUiSettings().setCompassEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             getLastLocation();
+
+            // NO SE ENOJE OIGA POFAVO PERO VOLVI A METER EL CODIGO AL ONMAPREADY :D //
+
+            /*// Datos Manuales //
+            Polyline DatosManuales = googleMap.addPolyline(new PolylineOptions()
+                    .clickable(true)
+                    .add(
+                            //Ruta salida de la linea hacia san carlos
+                            new LatLng(31.330355, -110.945011),
+                            new LatLng(31.322998, -110.946117),
+                            new LatLng(31.317467, -110.946884),
+                            new LatLng(31.299756, -110.938258),
+                            new LatLng(31.290274, -110.936714),
+                            new LatLng(31.289967, -110.941091),
+                            new LatLng(31.289967, -110.941091),
+                            new LatLng(31.275013, -110.929017),
+                            new LatLng(31.273242, -110.929281),
+                            new LatLng(31.270566, -110.926998),
+                            new LatLng(31.271447, -110.919941)
+                    ));
+            DatosManuales.setTag("Ruta Manual");
+            stylePolyline(DatosManuales);
+            */
+            ////////////////////////////////////////////////////////////////////////////////////////
+            Toast.makeText(getContext(), "Antes del Try donde esta el Try que tiene el for" , Toast.LENGTH_SHORT).show();
+            try {
+                Toast.makeText(getContext(), "Adentro del Try donde esta el Try que tiene el for" , Toast.LENGTH_SHORT).show();
+                id_grupo = preferences.getInt("idgrupo", 0);
+                Toast.makeText(getContext(), "Antes de entrar al evento donde esta el php" , Toast.LENGTH_SHORT).show();
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + id_grupo+"&user="+ id_usuario, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getContext(), "Antes del Try donde esta el for" , Toast.LENGTH_SHORT).show();
+                        try {
+                            Toast.makeText(getContext(), "Adentro del Try donde esta el for" , Toast.LENGTH_SHORT).show();
+                            JSONArray array = new JSONArray(response);
+
+                            ArrayList<Double> ArrayLongitud = new ArrayList<Double>();
+                            ArrayList<Double> ArrayLatitud = new ArrayList<Double>();
+
+                            Toast.makeText(getContext(), "Antes del for" , Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < array.length(); i++) {
+                                Toast.makeText(getContext(), "Adentro del for" , Toast.LENGTH_SHORT).show();
+                                JSONObject cajas = array.getJSONObject(i);
+
+                                ArrayLatitud.add(cajas.getDouble("Latitud_ruta"));
+                                ArrayLongitud.add(cajas.getDouble("Longitud_ruta"));
+
+
+                                Toast.makeText(getContext(), "Posicion: " + (i+1) + "\n"
+                                                + "Latitud: " + ArrayLatitud.get(i) + "\n"
+                                                + "Longitud: " + ArrayLongitud.get(i) + "\n"
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+
+                            Polyline polyline1 = googleMap.addPolyline(new PolylineOptions().clickable(true)
+                                    .add(
+
+                                            new LatLng(ArrayLatitud.get(0), ArrayLongitud.get(0)),
+                                            new LatLng(ArrayLatitud.get(1), ArrayLongitud.get(1)),
+                                            new LatLng(ArrayLatitud.get(2), ArrayLongitud.get(2)),
+                                            new LatLng(ArrayLatitud.get(3), ArrayLongitud.get(3)),
+                                            new LatLng(ArrayLatitud.get(4), ArrayLongitud.get(4)),
+                                            new LatLng(ArrayLatitud.get(5), ArrayLongitud.get(5)),
+                                            new LatLng(ArrayLatitud.get(6), ArrayLongitud.get(6)),
+                                            new LatLng(ArrayLatitud.get(7), ArrayLongitud.get(7)),
+                                            new LatLng(ArrayLatitud.get(8), ArrayLongitud.get(8)),
+                                            new LatLng(ArrayLatitud.get(9), ArrayLongitud.get(9))
+
+                                    ));
+                            // Indicar un nombre para la linea
+                            polyline1.setTag("A");
+                            // Estilo de la linea
+                            stylePolyline(polyline1);
+
+                        } catch (JSONException e) {
+                            pDialog.dismiss();
+                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
+                                    .show();
+
+                        }
+                    }
+                },
+                        new Response.ErrorListener() {
+                            @SuppressLint("MissingPermission")
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                try {
+
+                                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                        if (alertapuntos == 0) {
+
+                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Algo Salio Mal..")
+                                                    .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                                    .show();
+                                            alertapuntos = 1;
+                                        }
+                                    } else {
+                                        if (alertapuntos == 0) {
+                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Algo Salio Mal..")
+                                                    .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                    .show();
+                                            alertapuntos = 1;
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    pDialog.dismiss();
+                                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
+                                            .show();
+                                }
+                            }
+                        });
+                Volley.newRequestQueue(getContext()).add(stringRequest);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Error de catch: " + e, Toast.LENGTH_SHORT).show();
+            }
+            ////////////////////////////////////////////////////////////////////////////////////////
         }
     };
 
@@ -61,9 +232,24 @@ public class RutasFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_rutas, container, false);
+        view = inflater.inflate(R.layout.fragment_rutas, container, false);
         locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
+
+
+        preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        id_usuario = preferences.getInt("id", 0);
+
+        if (preferences.getInt("idgrupo", 0) == 0) {
+            new SweetAlertDialog(ubicacion.getContext())
+                    .setTitleText("Aviso!")
+                    .setContentText("Seleccione Un Grupo Para Ver Sus Marcadores y A Otros Usuarios Del Mismo.")
+                    .show();
+        }
+        id_grupo = preferences.getInt("idgrupo", 0);
+
+
+
     return view;
     }
 
@@ -123,4 +309,46 @@ public class RutasFragment extends Fragment {
             mapFragment.getMapAsync(callback);
         }
     }
+
+    // EVENTOS DEL MAU
+    @Override
+    public void onPolylineClick(@NonNull Polyline polyline) {
+        // Flip from solid stroke to dotted stroke pattern.
+        if ((polyline.getPattern() == null) || (!polyline.getPattern().contains(DOT))) {
+            polyline.setPattern(PATTERN_POLYLINE_DOTTED);
+        } else {
+            // The default pattern is a solid stroke.
+            polyline.setPattern(null);
+        }
+
+
+    }
+
+    // Estilo para las lineas
+    private void stylePolyline(Polyline polyline) {
+        String type = "";
+        // Get the data object stored with the polyline.
+        if (polyline.getTag() != null) {
+            type = polyline.getTag().toString();
+        }
+
+        switch (type) {
+            // If no type is given, allow the API to use the default.
+            case "A":
+                // Use a custom bitmap as the cap at the start of the line.
+                polyline.setStartCap(
+                        new CustomCap(
+                                BitmapDescriptorFactory.fromResource(android.R.drawable.presence_online), 10));
+                polyline.setEndCap(
+                        new CustomCap(
+                                BitmapDescriptorFactory.fromResource(android.R.drawable.presence_busy), 10));
+                break;
+        }
+
+        //polyline.setEndCap(new RoundCap());
+        polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
+        polyline.setColor(COLOR_BLACK_ARGB);
+        polyline.setJointType(JointType.ROUND);
+    }
+    // FIN
 }

@@ -178,10 +178,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         @SuppressLint({"MissingPermission"})
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            ////////////////////////////////////////////////////////////////////////////////////////
+            /*///////////////////////////////////////////////////////////////////////////////////////
             try {
                 id_grupo = preferences.getInt("idgrupo", 0);
-                id_usuario= preferences.getInt("idusuario",0);
                 StringRequest stringRequest = new StringRequest(Request.Method.GET,
                         "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + id_grupo+"&user="+ id_usuario, new Response.Listener<String>() {
                     @Override
@@ -230,7 +229,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             pDialog.dismiss();
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
                                     .show();
                         }
                     }
@@ -265,7 +264,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                     pDialog.dismiss();
                                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                             .setTitleText("Algo Salio Mal..")
-                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
                                             .show();
                                 }
                             }
@@ -273,8 +272,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                 Volley.newRequestQueue(getContext()).add(stringRequest);
             } catch (Exception e) {
             }
-
-            ////////////////////////////////////////////////////////////////////////////////////////
+            /*///////////////////////////////////////////////////////////////////////////////////////
             adapter = new MakersAdapters(markerslist, getContext());
             try {
                 pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
@@ -522,7 +520,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             pDialog.dismiss();
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(3)")
                                     .show();
                         }
 
@@ -595,7 +593,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                 pDialog.dismiss();
                 new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Algo Salio Mal..")
-                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(4)")
                         .show();
             }
         }
@@ -695,7 +693,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(5)")
                             .show();
                 }
             }
@@ -725,7 +723,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(6)")
                             .show();
                 }
             }
@@ -786,7 +784,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(7)")
                             .show();
                 }
 
@@ -821,7 +819,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(8)")
                             .show();
                 }
             }
@@ -897,7 +895,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(9)")
                             .show();
                 }
             }
@@ -926,7 +924,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             pDialog.dismiss();
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(10)")
                                     .show();
                         }
                     }
@@ -938,6 +936,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
 
     public void PuntosMapaRuta() {
+        /*
         try {
             id_grupo = preferences.getInt("idgrupo", 0);
 
@@ -983,7 +982,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         pDialog.dismiss();
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(11)")
                                 .show();
                     }
                 }
@@ -1018,7 +1017,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                 pDialog.dismiss();
                                 new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(12)")
                                         .show();
                             }
                         }
@@ -1029,7 +1028,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         } catch (Exception e) {
 
         }
-
+        */
     }
 
 
@@ -1119,7 +1118,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         pDialog.dismiss();
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(13)")
                                 .show();
                     }
                 }
@@ -1154,7 +1153,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                 pDialog.dismiss();
                                 new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(14)")
                                         .show();
                             }
                         }
@@ -1237,7 +1236,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         pDialog.dismiss();
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(15)")
                                 .show();
                     }
                 }
@@ -1272,7 +1271,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                 pDialog.dismiss();
                                 new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(16)")
                                         .show();
                             }
                         }
@@ -1375,7 +1374,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(17)")
                             .show();
                 }
             }
@@ -1403,7 +1402,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             pDialog.dismiss();
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(18)")
                                     .show();
                         }
                     }
@@ -1473,7 +1472,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(19)")
                             .show();
                 }
             }
@@ -1501,7 +1500,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             pDialog.dismiss();
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(20)")
                                     .show();
                         }
                     }
@@ -1613,7 +1612,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(21)")
                             .show();
                 }
             }
@@ -1641,7 +1640,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             pDialog.dismiss();
                             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(22)")
                                     .show();
                         }
                     }
@@ -1736,7 +1735,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(23)")
                             .show();
                 }
 
@@ -1767,7 +1766,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(24)")
                             .show();
                 }
 
@@ -1851,7 +1850,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(25)")
                             .show();
                 }
 
@@ -1917,7 +1916,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
             pDialog.dismiss();
             new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Algo Salio Mal..")
-                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(26)")
                     .show();
         }
     }
@@ -1955,7 +1954,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         pDialog.dismiss();
                         new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(27)")
                                 .show();
                     }
 
@@ -1982,7 +1981,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(28)")
                             .show();
                 }
             }
@@ -2665,7 +2664,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(29)")
                             .show();
                 }
 
