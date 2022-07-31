@@ -84,9 +84,16 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.CustomCap;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -100,7 +107,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -109,7 +118,8 @@ import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class MapsFragment extends Fragment {
+//IMPLEMENT PARA GRAFICAR LAS LINEAS
+public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickListener{
     public static GoogleMap mMap, mapubicacion;
     private static ObjectAnimator animacionDesvanecido;
     private static ObjectAnimator animacionRotation;
@@ -148,8 +158,19 @@ public class MapsFragment extends Fragment {
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 5000; /* 2 sec */
+    private long FASTEST_INTERVAL = 5000; /* 5 sec */
 
+    // VARIABLES DEL MAU
+    // Color y tamaño para las lineas
+    private static final int COLOR_BLACK_ARGB = 0xff000000;
+    private static final int POLYLINE_STROKE_WIDTH_PX = 12;
+    //Cambiar lineas con un clic a otro estilo
+    private static final int PATTERN_GAP_LENGTH_PX = 20;
+    private static final PatternItem DOT = new Dot();
+    private static final PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
+    // Create a stroke pattern of a gap followed by a dot.
+    private static final List<PatternItem> PATTERN_POLYLINE_DOTTED = Arrays.asList(GAP, DOT);
+    // FIN
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -157,6 +178,103 @@ public class MapsFragment extends Fragment {
         @SuppressLint({"MissingPermission"})
         @Override
         public void onMapReady(GoogleMap googleMap) {
+            ////////////////////////////////////////////////////////////////////////////////////////
+            try {
+                id_grupo = preferences.getInt("idgrupo", 0);
+                id_usuario= preferences.getInt("idusuario",0);
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + id_grupo+"&user="+ id_usuario, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray array = new JSONArray(response);
+
+                            ArrayList<Double> ArrayLongitud = new ArrayList<Double>();
+                            ArrayList<Double> ArrayLatitud = new ArrayList<Double>();
+
+                            for (int i = 0; i < array.length(); i++) {
+
+                                JSONObject cajas = array.getJSONObject(i);
+
+                                ArrayLatitud.add(cajas.getDouble("Latitud_ruta"));
+                                ArrayLongitud.add(cajas.getDouble("Longitud_ruta"));
+
+
+                                Toast.makeText(getContext(), "Posicion: " + (i+1) + "\n"
+                                        + "Latitud: " + ArrayLatitud.get(i) + "\n"
+                                        + "Longitud: " + ArrayLongitud.get(i) + "\n"
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+
+                            Polyline polyline1 = googleMap.addPolyline(new PolylineOptions().clickable(true)
+                                    .add(
+
+                                            new LatLng(ArrayLatitud.get(0), ArrayLongitud.get(0)),
+                                            new LatLng(ArrayLatitud.get(1), ArrayLongitud.get(1)),
+                                            new LatLng(ArrayLatitud.get(2), ArrayLongitud.get(2)),
+                                            new LatLng(ArrayLatitud.get(3), ArrayLongitud.get(3)),
+                                            new LatLng(ArrayLatitud.get(4), ArrayLongitud.get(4)),
+                                            new LatLng(ArrayLatitud.get(5), ArrayLongitud.get(5)),
+                                            new LatLng(ArrayLatitud.get(6), ArrayLongitud.get(6)),
+                                            new LatLng(ArrayLatitud.get(7), ArrayLongitud.get(7)),
+                                            new LatLng(ArrayLatitud.get(8), ArrayLongitud.get(8)),
+                                            new LatLng(ArrayLatitud.get(9), ArrayLongitud.get(9))
+
+                                    ));
+                            // Indicar un nombre para la linea
+                            polyline1.setTag("A");
+                            // Estilo de la linea
+                            stylePolyline(polyline1);
+
+                        } catch (JSONException e) {
+                            pDialog.dismiss();
+                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .show();
+                        }
+                    }
+                },
+                        new Response.ErrorListener() {
+                            @SuppressLint("MissingPermission")
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                try {
+
+                                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                        if (alertapuntos == 0) {
+
+                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Algo Salio Mal..")
+                                                    .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                                    .show();
+                                            alertapuntos = 1;
+                                        }
+                                    } else {
+                                        if (alertapuntos == 0) {
+                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Algo Salio Mal..")
+                                                    .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                    .show();
+                                            alertapuntos = 1;
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    pDialog.dismiss();
+                                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                            .show();
+                                }
+                            }
+                        });
+                Volley.newRequestQueue(getContext()).add(stringRequest);
+            } catch (Exception e) {
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////
             adapter = new MakersAdapters(markerslist, getContext());
             try {
                 pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
@@ -196,6 +314,7 @@ public class MapsFragment extends Fragment {
 
                         ejecutar();
                         PuntosMapa();
+                        PuntosMapaRuta();
 
 
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -255,12 +374,14 @@ public class MapsFragment extends Fragment {
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
                                     Eliminar_Marcador.dismiss();
                                     PuntosMapa();
+                                    PuntosMapaRuta();
                                 }
                             });
                             Eliminar_Marcador.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dialog) {
                                     PuntosMapa();
+                                    PuntosMapaRuta();
                                 }
                             });
                             Eliminar_Marcador.show();
@@ -481,6 +602,47 @@ public class MapsFragment extends Fragment {
 
 
     };
+    // EVENTOS DEL MAU
+    @Override
+    public void onPolylineClick(@NonNull Polyline polyline) {
+        // Flip from solid stroke to dotted stroke pattern.
+        if ((polyline.getPattern() == null) || (!polyline.getPattern().contains(DOT))) {
+            polyline.setPattern(PATTERN_POLYLINE_DOTTED);
+        } else {
+            // The default pattern is a solid stroke.
+            polyline.setPattern(null);
+        }
+
+
+    }
+
+    // Estilo para las lineas
+    private void stylePolyline(Polyline polyline) {
+        String type = "";
+        // Get the data object stored with the polyline.
+        if (polyline.getTag() != null) {
+            type = polyline.getTag().toString();
+        }
+
+        switch (type) {
+            // If no type is given, allow the API to use the default.
+            case "A":
+                // Use a custom bitmap as the cap at the start of the line.
+                polyline.setStartCap(
+                        new CustomCap(
+                                BitmapDescriptorFactory.fromResource(android.R.drawable.presence_online), 10));
+                polyline.setEndCap(
+                        new CustomCap(
+                                BitmapDescriptorFactory.fromResource(android.R.drawable.presence_busy), 10));
+                break;
+        }
+
+        //polyline.setEndCap(new RoundCap());
+        polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
+        polyline.setColor(COLOR_BLACK_ARGB);
+        polyline.setJointType(JointType.ROUND);
+    }
+    // FIN
 
     private void ejecutar() {
         final Handler handler = new Handler();
@@ -498,6 +660,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void run() {
                 PuntosMapa();
+                PuntosMapaRuta();
 
 
                 handler.postDelayed(this, 8000);
@@ -526,6 +689,7 @@ public class MapsFragment extends Fragment {
 
 
                     PuntosMapa();
+                    PuntosMapaRuta();
 
                 } catch (Exception e) {
                     pDialog.dismiss();
@@ -616,6 +780,7 @@ public class MapsFragment extends Fragment {
                     }
 
                     PuntosMapa();
+                    PuntosMapaRuta();
 
                 } catch (Exception e) {
                     pDialog.dismiss();
@@ -772,6 +937,102 @@ public class MapsFragment extends Fragment {
     }
 
 
+    public void PuntosMapaRuta() {
+        try {
+            id_grupo = preferences.getInt("idgrupo", 0);
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + id_grupo, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONArray array = new JSONArray(response);
+
+                        //mMap.clear();
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+                            try {
+
+
+                                MarkerOptions markerOptions = new MarkerOptions();
+
+
+                                LatLng puntoubicacion =
+                                        new LatLng(cajas.getDouble("Latitud_ruta"), cajas.getDouble("Longitud_ruta"));
+                                markerOptions.position(puntoubicacion);
+                                markerOptions.icon(bitmapDescriptorFromVector(getContext(), android.R.drawable.ic_menu_myplaces));
+
+                                markerOptions.title(cajas.getString("IDruta"));
+                                markerOptions.draggable(true);
+
+
+
+                                // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                                //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
+                                mMap.addMarker(markerOptions);
+                                usuariosMapa();
+                            } catch (Exception e) {
+
+                            }
+                        }
+
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .show();
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
+
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                    if (alertapuntos == 0) {
+
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                } else {
+                                    if (alertapuntos == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .show();
+                            }
+                        }
+                    });
+
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+
+        } catch (Exception e) {
+
+        }
+
+    }
+
+
     public void PuntosMapa() {
         try {
 
@@ -785,7 +1046,7 @@ public class MapsFragment extends Fragment {
                     try {
                         JSONArray array = new JSONArray(response);
 
-                        mMap.clear();
+                        //mMap.clear();
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
@@ -1102,6 +1363,7 @@ public class MapsFragment extends Fragment {
 
                         id_grupo = preferences.getInt("idgrupo", 0);
                         PuntosMapa();
+                        PuntosMapaRuta();
                         BuscarGrupos();
                         bottomSheetDialogunirse.dismiss();
 
@@ -1163,6 +1425,7 @@ public class MapsFragment extends Fragment {
 
     }
 
+
     private void CrearGrupo() {
         pDialog.show();
 
@@ -1199,6 +1462,7 @@ public class MapsFragment extends Fragment {
 
                         id_grupo = preferences.getInt("idgrupo", 0);
                         PuntosMapa();
+                        PuntosMapaRuta();
                         BuscarGrupos();
                         bottomSheetDialogcreargrupo.dismiss();
 
@@ -1466,6 +1730,7 @@ public class MapsFragment extends Fragment {
                     }
 
                     PuntosMapa();
+                    PuntosMapaRuta();
 
                 } catch (Exception e) {
                     pDialog.dismiss();
