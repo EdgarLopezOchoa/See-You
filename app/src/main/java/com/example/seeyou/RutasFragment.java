@@ -49,6 +49,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -94,135 +95,17 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         public void onMapReady(GoogleMap googleMap) {
             mMap=googleMap;
 
+            pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.setTitleText("Cargando ...");
+            pDialog.setCancelable(false);
+
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setCompassEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             getLastLocation();
-
-            // NO SE ENOJE OIGA POFAVO PERO VOLVI A METER EL CODIGO AL ONMAPREADY :D //
-
-            /*// Datos Manuales //
-            Polyline DatosManuales = googleMap.addPolyline(new PolylineOptions()
-                    .clickable(true)
-                    .add(
-                            //Ruta salida de la linea hacia san carlos
-                            new LatLng(31.330355, -110.945011),
-                            new LatLng(31.322998, -110.946117),
-                            new LatLng(31.317467, -110.946884),
-                            new LatLng(31.299756, -110.938258),
-                            new LatLng(31.290274, -110.936714),
-                            new LatLng(31.289967, -110.941091),
-                            new LatLng(31.289967, -110.941091),
-                            new LatLng(31.275013, -110.929017),
-                            new LatLng(31.273242, -110.929281),
-                            new LatLng(31.270566, -110.926998),
-                            new LatLng(31.271447, -110.919941)
-                    ));
-            DatosManuales.setTag("Ruta Manual");
-            stylePolyline(DatosManuales);
-            */
-            ////////////////////////////////////////////////////////////////////////////////////////
-            Toast.makeText(getContext(), "Antes del Try donde esta el Try que tiene el for" , Toast.LENGTH_SHORT).show();
-            try {
-                Toast.makeText(getContext(), "Adentro del Try donde esta el Try que tiene el for" , Toast.LENGTH_SHORT).show();
-                id_grupo = preferences.getInt("idgrupo", 0);
-                Toast.makeText(getContext(), "Antes de entrar al evento donde esta el php" , Toast.LENGTH_SHORT).show();
-                StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                        "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + id_grupo+"&user="+ id_usuario, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(getContext(), "Antes del Try donde esta el for" , Toast.LENGTH_SHORT).show();
-                        try {
-                            Toast.makeText(getContext(), "Adentro del Try donde esta el for" , Toast.LENGTH_SHORT).show();
-                            JSONArray array = new JSONArray(response);
-
-                            ArrayList<Double> ArrayLongitud = new ArrayList<Double>();
-                            ArrayList<Double> ArrayLatitud = new ArrayList<Double>();
-
-                            Toast.makeText(getContext(), "Antes del for" , Toast.LENGTH_SHORT).show();
-                            for (int i = 0; i < array.length(); i++) {
-                                Toast.makeText(getContext(), "Adentro del for" , Toast.LENGTH_SHORT).show();
-                                JSONObject cajas = array.getJSONObject(i);
-
-                                ArrayLatitud.add(cajas.getDouble("Latitud_ruta"));
-                                ArrayLongitud.add(cajas.getDouble("Longitud_ruta"));
+            RutasUsuarios();
 
 
-                                Toast.makeText(getContext(), "Posicion: " + (i+1) + "\n"
-                                                + "Latitud: " + ArrayLatitud.get(i) + "\n"
-                                                + "Longitud: " + ArrayLongitud.get(i) + "\n"
-                                        , Toast.LENGTH_SHORT).show();
-                            }
-
-                            Polyline polyline1 = googleMap.addPolyline(new PolylineOptions().clickable(true)
-                                    .add(
-
-                                            new LatLng(ArrayLatitud.get(0), ArrayLongitud.get(0)),
-                                            new LatLng(ArrayLatitud.get(1), ArrayLongitud.get(1)),
-                                            new LatLng(ArrayLatitud.get(2), ArrayLongitud.get(2)),
-                                            new LatLng(ArrayLatitud.get(3), ArrayLongitud.get(3)),
-                                            new LatLng(ArrayLatitud.get(4), ArrayLongitud.get(4)),
-                                            new LatLng(ArrayLatitud.get(5), ArrayLongitud.get(5)),
-                                            new LatLng(ArrayLatitud.get(6), ArrayLongitud.get(6)),
-                                            new LatLng(ArrayLatitud.get(7), ArrayLongitud.get(7)),
-                                            new LatLng(ArrayLatitud.get(8), ArrayLongitud.get(8)),
-                                            new LatLng(ArrayLatitud.get(9), ArrayLongitud.get(9))
-
-                                    ));
-                            // Indicar un nombre para la linea
-                            polyline1.setTag("A");
-                            // Estilo de la linea
-                            stylePolyline(polyline1);
-
-                        } catch (JSONException e) {
-                            pDialog.dismiss();
-                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
-                                    .show();
-
-                        }
-                    }
-                },
-                        new Response.ErrorListener() {
-                            @SuppressLint("MissingPermission")
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                try {
-
-                                    if (locationManagerinternet.getActiveNetworkInfo() != null
-                                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
-                                        if (alertapuntos == 0) {
-
-                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                    .setTitleText("Algo Salio Mal..")
-                                                    .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
-                                                    .show();
-                                            alertapuntos = 1;
-                                        }
-                                    } else {
-                                        if (alertapuntos == 0) {
-                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                    .setTitleText("Algo Salio Mal..")
-                                                    .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
-                                                    .show();
-                                            alertapuntos = 1;
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    pDialog.dismiss();
-                                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                            .setTitleText("Algo Salio Mal..")
-                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
-                                            .show();
-                                }
-                            }
-                        });
-                Volley.newRequestQueue(getContext()).add(stringRequest);
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "Error de catch: " + e, Toast.LENGTH_SHORT).show();
-            }
             ////////////////////////////////////////////////////////////////////////////////////////
         }
     };
@@ -253,6 +136,114 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     return view;
     }
 
+
+    public void RutasUsuarios(){
+
+        try {
+            pDialog.show();
+            id_grupo = preferences.getInt("idgrupo", 0);
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id="+preferences.getInt("id",0), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        pDialog.dismiss();
+
+                        JSONArray array = new JSONArray(response);
+
+                        ArrayList<Double> ArrayLongitud = new ArrayList<Double>();
+                        ArrayList<Double> ArrayLatitud = new ArrayList<Double>();
+
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+
+                                ArrayLatitud.add(cajas.getDouble("Latitud_ruta"));
+                                ArrayLongitud.add(cajas.getDouble("Longitud_ruta"));
+
+
+                                Toast.makeText(getContext(), "Posicion: " + (i + 1) + "\n"
+                                                + "Latitud: " + ArrayLatitud.get(i) + "\n"
+                                                + "Longitud: " + ArrayLongitud.get(i) + "\n"
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+                        if(!Objects.equals(response,"[]")) {
+
+                            Polyline polyline1 = mMap.addPolyline(new PolylineOptions().clickable(true)
+                                    .add(
+
+                                            new LatLng(ArrayLatitud.get(0), ArrayLongitud.get(0)),
+                                            new LatLng(ArrayLatitud.get(1), ArrayLongitud.get(1)),
+                                            new LatLng(ArrayLatitud.get(2), ArrayLongitud.get(2)),
+                                            new LatLng(ArrayLatitud.get(3), ArrayLongitud.get(3)),
+                                            new LatLng(ArrayLatitud.get(4), ArrayLongitud.get(4)),
+                                            new LatLng(ArrayLatitud.get(5), ArrayLongitud.get(5)),
+                                            new LatLng(ArrayLatitud.get(6), ArrayLongitud.get(6)),
+                                            new LatLng(ArrayLatitud.get(7), ArrayLongitud.get(7)),
+                                            new LatLng(ArrayLatitud.get(8), ArrayLongitud.get(8)),
+                                            new LatLng(ArrayLatitud.get(9), ArrayLongitud.get(9))
+
+                                    ));
+                            // Indicar un nombre para la linea
+                            polyline1.setTag("A");
+                            // Estilo de la linea
+                            stylePolyline(polyline1);
+                        }
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
+                                .show();
+
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
+
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                    if (alertapuntos == 0) {
+
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                } else {
+                                    if (alertapuntos == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
+                                        .show();
+                            }
+                        }
+                    });
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error de catch: " + e, Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     @SuppressLint("MissingPermission")

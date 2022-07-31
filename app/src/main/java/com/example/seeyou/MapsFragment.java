@@ -178,101 +178,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         @SuppressLint({"MissingPermission"})
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            /*///////////////////////////////////////////////////////////////////////////////////////
-            try {
-                id_grupo = preferences.getInt("idgrupo", 0);
-                StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                        "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + id_grupo+"&user="+ id_usuario, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray array = new JSONArray(response);
 
-                            ArrayList<Double> ArrayLongitud = new ArrayList<Double>();
-                            ArrayList<Double> ArrayLatitud = new ArrayList<Double>();
-
-                            for (int i = 0; i < array.length(); i++) {
-
-                                JSONObject cajas = array.getJSONObject(i);
-
-                                ArrayLatitud.add(cajas.getDouble("Latitud_ruta"));
-                                ArrayLongitud.add(cajas.getDouble("Longitud_ruta"));
-
-
-                                Toast.makeText(getContext(), "Posicion: " + (i+1) + "\n"
-                                        + "Latitud: " + ArrayLatitud.get(i) + "\n"
-                                        + "Longitud: " + ArrayLongitud.get(i) + "\n"
-                                        , Toast.LENGTH_SHORT).show();
-                            }
-
-                            Polyline polyline1 = googleMap.addPolyline(new PolylineOptions().clickable(true)
-                                    .add(
-
-                                            new LatLng(ArrayLatitud.get(0), ArrayLongitud.get(0)),
-                                            new LatLng(ArrayLatitud.get(1), ArrayLongitud.get(1)),
-                                            new LatLng(ArrayLatitud.get(2), ArrayLongitud.get(2)),
-                                            new LatLng(ArrayLatitud.get(3), ArrayLongitud.get(3)),
-                                            new LatLng(ArrayLatitud.get(4), ArrayLongitud.get(4)),
-                                            new LatLng(ArrayLatitud.get(5), ArrayLongitud.get(5)),
-                                            new LatLng(ArrayLatitud.get(6), ArrayLongitud.get(6)),
-                                            new LatLng(ArrayLatitud.get(7), ArrayLongitud.get(7)),
-                                            new LatLng(ArrayLatitud.get(8), ArrayLongitud.get(8)),
-                                            new LatLng(ArrayLatitud.get(9), ArrayLongitud.get(9))
-
-                                    ));
-                            // Indicar un nombre para la linea
-                            polyline1.setTag("A");
-                            // Estilo de la linea
-                            stylePolyline(polyline1);
-
-                        } catch (JSONException e) {
-                            pDialog.dismiss();
-                            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
-                                    .show();
-                        }
-                    }
-                },
-                        new Response.ErrorListener() {
-                            @SuppressLint("MissingPermission")
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                try {
-
-                                    if (locationManagerinternet.getActiveNetworkInfo() != null
-                                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
-                                        if (alertapuntos == 0) {
-
-                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                    .setTitleText("Algo Salio Mal..")
-                                                    .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
-                                                    .show();
-                                            alertapuntos = 1;
-                                        }
-                                    } else {
-                                        if (alertapuntos == 0) {
-                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                    .setTitleText("Algo Salio Mal..")
-                                                    .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
-                                                    .show();
-                                            alertapuntos = 1;
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    pDialog.dismiss();
-                                    new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                            .setTitleText("Algo Salio Mal..")
-                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
-                                            .show();
-                                }
-                            }
-                        });
-                Volley.newRequestQueue(getContext()).add(stringRequest);
-            } catch (Exception e) {
-            }
-            /*///////////////////////////////////////////////////////////////////////////////////////
             adapter = new MakersAdapters(markerslist, getContext());
             try {
                 pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
@@ -291,15 +197,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                 locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
                 networkInfo = locationManagerinternet.getActiveNetworkInfo();
 
-                /*if (mensaje == 0) {
-                    new SweetAlertDialog(getContext())
-                            .setTitleText("Bienvenido!!!!")
-                            .setContentText("Bienvenido De Vuelta " + preferences.getString("Nombre", "") +
-                                    ", \n Siempre Es Un Gusto Tenerte Aqui :D")
-                            .show();
-                    mensaje = 1;
-                }*/
-
 
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
@@ -312,7 +209,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                         ejecutar();
                         PuntosMapa();
-                        PuntosMapaRuta();
 
 
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -372,14 +268,13 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
                                     Eliminar_Marcador.dismiss();
                                     PuntosMapa();
-                                    PuntosMapaRuta();
                                 }
                             });
                             Eliminar_Marcador.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dialog) {
                                     PuntosMapa();
-                                    PuntosMapaRuta();
+
                                 }
                             });
                             Eliminar_Marcador.show();
@@ -658,7 +553,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
             @Override
             public void run() {
                 PuntosMapa();
-                PuntosMapaRuta();
+
 
 
                 handler.postDelayed(this, 8000);
@@ -687,7 +582,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
 
                     PuntosMapa();
-                    PuntosMapaRuta();
+
 
                 } catch (Exception e) {
                     pDialog.dismiss();
@@ -778,7 +673,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     }
 
                     PuntosMapa();
-                    PuntosMapaRuta();
+
 
                 } catch (Exception e) {
                     pDialog.dismiss();
@@ -935,101 +830,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     }
 
 
-    public void PuntosMapaRuta() {
-        /*
-        try {
-            id_grupo = preferences.getInt("idgrupo", 0);
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + id_grupo, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONArray array = new JSONArray(response);
-
-                        //mMap.clear();
-
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject cajas = array.getJSONObject(i);
-                            try {
-
-
-                                MarkerOptions markerOptions = new MarkerOptions();
-
-
-                                LatLng puntoubicacion =
-                                        new LatLng(cajas.getDouble("Latitud_ruta"), cajas.getDouble("Longitud_ruta"));
-                                markerOptions.position(puntoubicacion);
-                                markerOptions.icon(bitmapDescriptorFromVector(getContext(), android.R.drawable.ic_menu_myplaces));
-
-                                markerOptions.title(cajas.getString("IDruta"));
-                                markerOptions.draggable(true);
-
-
-
-                                // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-
-                                //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
-                                mMap.addMarker(markerOptions);
-                                usuariosMapa();
-                            } catch (Exception e) {
-
-                            }
-                        }
-
-
-                    } catch (JSONException e) {
-                        pDialog.dismiss();
-                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(11)")
-                                .show();
-                    }
-                }
-            },
-                    new Response.ErrorListener() {
-                        @SuppressLint("MissingPermission")
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            try {
-
-                                if (locationManagerinternet.getActiveNetworkInfo() != null
-                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
-                                    if (alertapuntos == 0) {
-
-                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                .setTitleText("Algo Salio Mal..")
-                                                .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
-                                                .show();
-                                        alertapuntos = 1;
-                                    }
-                                } else {
-                                    if (alertapuntos == 0) {
-                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                .setTitleText("Algo Salio Mal..")
-                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
-                                                .show();
-                                        alertapuntos = 1;
-                                    }
-                                }
-                            } catch (Exception e) {
-                                pDialog.dismiss();
-                                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(12)")
-                                        .show();
-                            }
-                        }
-                    });
-
-            Volley.newRequestQueue(getContext()).add(stringRequest);
-
-        } catch (Exception e) {
-
-        }
-        */
-    }
 
 
     public void PuntosMapa() {
@@ -1362,7 +1163,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                         id_grupo = preferences.getInt("idgrupo", 0);
                         PuntosMapa();
-                        PuntosMapaRuta();
                         BuscarGrupos();
                         bottomSheetDialogunirse.dismiss();
 
@@ -1461,7 +1261,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                         id_grupo = preferences.getInt("idgrupo", 0);
                         PuntosMapa();
-                        PuntosMapaRuta();
                         BuscarGrupos();
                         bottomSheetDialogcreargrupo.dismiss();
 
@@ -1729,7 +1528,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     }
 
                     PuntosMapa();
-                    PuntosMapaRuta();
 
                 } catch (Exception e) {
                     pDialog.dismiss();
