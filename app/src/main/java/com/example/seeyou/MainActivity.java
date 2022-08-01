@@ -270,9 +270,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 guardarruta();
 
-                handler.postDelayed(this, 60 * 1000);
+                handler.postDelayed(this, 60 * 2000);
             }
-        }, 10 * 6000);
+        }, 20 * 6000);
 
     }
 

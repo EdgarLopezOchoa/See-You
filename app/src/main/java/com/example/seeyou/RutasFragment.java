@@ -90,9 +90,9 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     private static final int COLOR_GREEN_ARGB = 0x008000 ;
     private static final int COLOR_PINK_ARGB = 0xff00ff ;
     private static final int COLOR_GOLD_ARGB = 0xffd700 ;
-    private static final int POLYLINE_STROKE_WIDTH_PX = 12;
+    private static final int POLYLINE_STROKE_WIDTH_PX = 10;
     //Cambiar lineas con un clic a otro estilo
-    private static final int PATTERN_GAP_LENGTH_PX = 20;
+    private static final int PATTERN_GAP_LENGTH_PX = 16;
     private static final PatternItem DOT = new Dot();
     private static final PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
     // Create a stroke pattern of a gap followed by a dot.
@@ -174,59 +174,75 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                 @Override
                 public void onResponse(String response) {
                     try {
+                        Polyline polyline1 = null;
+                        
                         nombreusuario.setText(preferences.getString("nombreusuarioruta",preferences.getString("Nombre","Sin Nombre")));
                         JSONArray array = new JSONArray(response);
 
-                        ArrayList<Double> ArrayLongitud = new ArrayList<Double>();
-                        ArrayList<Double> ArrayLatitud = new ArrayList<Double>();
-                        ArrayLatitud.clear();
-                        ArrayLongitud.clear();
+
+                        Iterable<LatLng> Points = new ArrayList<>();
 
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
 
-                            ArrayLatitud.add(cajas.getDouble("Latitud_ruta"));
-                            ArrayLongitud.add(cajas.getDouble("Longitud_ruta"));
+                            LatLng coordenada = new LatLng(cajas.getDouble("Latitud_ruta"),cajas.getDouble("Longitud_ruta"));
+
+                            ((ArrayList<LatLng>) Points).add(coordenada);
 
 
 
-                               /* Toast.makeText(getContext(), "Posicion: " + (i + 1) + "\n"
-                                                + "Latitud: " + ArrayLatitud.get(i) + "\n"
-                                                + "Longitud: " + ArrayLongitud.get(i) + "\n"
-                                        , Toast.LENGTH_SHORT).show();*/
+
+
                         }
-
 
                         if (!Objects.equals(response, "[]")) {
                             try {
-
                                 mMap.clear();
-                                Polyline polyline1 = mMap.addPolyline(new PolylineOptions().clickable(true)
-                                        .add(
 
-                                                new LatLng(ArrayLatitud.get(0), ArrayLongitud.get(0)),
-                                                new LatLng(ArrayLatitud.get(1), ArrayLongitud.get(1)),
-                                                new LatLng(ArrayLatitud.get(2), ArrayLongitud.get(2)),
-                                                new LatLng(ArrayLatitud.get(3), ArrayLongitud.get(3)),
-                                                new LatLng(ArrayLatitud.get(4), ArrayLongitud.get(4)),
-                                                new LatLng(ArrayLatitud.get(5), ArrayLongitud.get(5)),
-                                                new LatLng(ArrayLatitud.get(6), ArrayLongitud.get(6)),
-                                                new LatLng(ArrayLatitud.get(7), ArrayLongitud.get(7)),
-                                                new LatLng(ArrayLatitud.get(8), ArrayLongitud.get(8)),
-                                                new LatLng(ArrayLatitud.get(9), ArrayLongitud.get(9))
+                                    polyline1 = mMap.addPolyline(new PolylineOptions().addAll(Points));
+                                    if (((ArrayList<LatLng>) Points).size()<=10){
+                                    polyline1.setColor(0x9900F361);
+                                    } else  if (((ArrayList<LatLng>) Points).size()<=20){
+                                        polyline1.setColor(0x99DD4819);
+                                    }else  if (((ArrayList<LatLng>) Points).size()<=30){
+                                        polyline1.setColor(0x99E407A6);
+                                    }else  if (((ArrayList<LatLng>) Points).size()<=40){
+                                        polyline1.setColor(0x99145FAF);
+                                    }else  if (((ArrayList<LatLng>) Points).size()<=50){
+                                        polyline1.setColor(0x99000DFF);
+                                    }else  if (((ArrayList<LatLng>) Points).size() <=60){
+                                        polyline1.setColor(0x99595959);
+                                    }else  if (((ArrayList<LatLng>) Points).size()<=70){
+                                        polyline1.setColor(0xFF000000);
+                                    }else  if (((ArrayList<LatLng>) Points).size()<=80){
+                                        polyline1.setColor(0x995b00bc);
+                                    }else  if (((ArrayList<LatLng>) Points).size()<=90){
+                                        polyline1.setColor(0x99FFD400);
+                                    }else  if (((ArrayList<LatLng>) Points).size()<=100){
+                                        polyline1.setColor(0x99FF0000);
+                                    }
 
-                                        ));
-                                // Indicar un nombre para la linea
-                                polyline1.setTag("A");
-                                //polyline1.setTag(userName);
-                                // Estilo de la linea
-                                stylePolyline(polyline1);
+
+
+
+
                             } catch (Exception e) {
 
                             }
                         }else{
                             mMap.clear();
+                        }
+
+
+
+                        if (!Objects.equals(response, "[]")) {
+                            // Indicar un nombre para la linea
+                            polyline1.setTag("A");
+
+                            //polyline1.setTag(userName);
+                            // Estilo de la linea
+                            stylePolyline(polyline1);
                         }
 
                     } catch (JSONException e) {
@@ -460,7 +476,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         }
 
         //polyline.setEndCap(new RoundCap());
-        polyline.setColor(COLOR_BLACK_ARGB);
+        //polyline.setColor(COLOR_BLACK_ARGB);
         polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
         polyline.setJointType(JointType.ROUND);
 }
