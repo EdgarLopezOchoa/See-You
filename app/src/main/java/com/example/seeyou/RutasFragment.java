@@ -23,7 +23,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -57,7 +59,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -69,17 +73,23 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     LocationManager locationManager;
     ConnectivityManager locationManagerinternet;
     public static int id_usuario = 0, id_grupo = 0;
+    int alertaubicacionactual = 0;
     SharedPreferences preferences;
     private ImageView ubicacion;
     int alertapuntos = 0, alertaubicacion = 0;
     View view;
     RecyclerView recyclerViewusers;
     TextView nombreusuario;
+    double longitud,latitud;
 
 
-    // VARIABLES DEL MAU
     // Color y tamaño para las lineas
     private static final int COLOR_BLACK_ARGB = 0xff000000;
+    private static final int COLOR_BLUE_ARGB = 0x000080 ;
+    private static final int COLOR_RED_ARGB = 0xff0000 ;
+    private static final int COLOR_GREEN_ARGB = 0x008000 ;
+    private static final int COLOR_PINK_ARGB = 0xff00ff ;
+    private static final int COLOR_GOLD_ARGB = 0xffd700 ;
     private static final int POLYLINE_STROKE_WIDTH_PX = 12;
     //Cambiar lineas con un clic a otro estilo
     private static final int PATTERN_GAP_LENGTH_PX = 20;
@@ -87,7 +97,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     private static final PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
     // Create a stroke pattern of a gap followed by a dot.
     private static final List<PatternItem> PATTERN_POLYLINE_DOTTED = Arrays.asList(GAP, DOT);
-    // FIN
+
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -164,7 +174,6 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                 @Override
                 public void onResponse(String response) {
                     try {
-
                         nombreusuario.setText(preferences.getString("nombreusuarioruta",preferences.getString("Nombre","Sin Nombre")));
                         JSONArray array = new JSONArray(response);
 
@@ -210,6 +219,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                         ));
                                 // Indicar un nombre para la linea
                                 polyline1.setTag("A");
+                                //polyline1.setTag(userName);
                                 // Estilo de la linea
                                 stylePolyline(polyline1);
                             } catch (Exception e) {
@@ -402,6 +412,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         }
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -412,7 +423,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
     }
 
-    // EVENTOS DEL MAU
+    //Evento cuando se hace clic en una linea (FALLA)
     @Override
     public void onPolylineClick(@NonNull Polyline polyline) {
         // Flip from solid stroke to dotted stroke pattern.
@@ -425,6 +436,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
 
     }
+
 
     // Estilo para las lineas
     private void stylePolyline(Polyline polyline) {
@@ -448,9 +460,73 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         }
 
         //polyline.setEndCap(new RoundCap());
-        polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
         polyline.setColor(COLOR_BLACK_ARGB);
+        polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
         polyline.setJointType(JointType.ROUND);
+}
+
+    public void guardarruta() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://mifolderdeproyectos.online/SEEYOU/puntos_recorridos.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+
+
+                } catch (Exception e) {
+
+                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+
+                    if(alertaubicacionactual == 0) {
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Almacenar La Ruta...")
+                                .show();
+                        alertaubicacionactual = 1;
+                    }
+
+                } catch (Exception e) {
+
+                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .show();
+                }
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("id", id_usuario+"");
+                params.put("latitud", latitud + "");
+                params.put("longitud", longitud + "");
+
+                return params;
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+
     }
-    // FIN
+
 }

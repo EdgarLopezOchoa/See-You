@@ -64,9 +64,15 @@ public class MainActivity extends AppCompatActivity {
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
-    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 sec */
     private long FASTEST_INTERVAL = 3000; /* 3 sec */
-    private long RUTA_INTERVAL = 2000; /* 2 sec */
+
+
+    //private com.google.android.gms.location.LocationRequest RUTA_mLocationRequest;
+    //private long RUTA_INTERVAL = 10 * 6000; /* 60 sec */
+    //private long RUTA_FASTEST_INTERVAL = 3000; /* 3 sec */
+
+
     SweetAlertDialog Eliminar_Marcador;
 
     @Override
@@ -74,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startLocationUpdates();
-
 
 
         constraintLayout = findViewById(R.id.Fondobottomnavigation);
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ejecutar();
-
+        ejecutarRUTA();
 
         //llama al fragmento de mapa y lo pone en el FrameLayout
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -249,18 +254,30 @@ public class MainActivity extends AppCompatActivity {
                 Looper.myLooper());
     }
 
-
     public void onLocationChanged(Location location) {
         latitud = location.getLatitude();
         longitud = location.getLongitude();
 
 
         ActualizarUbicacion();
-        guardarruta();
     }
 
-    public void ActualizarUbicacion() {
+    private void ejecutarRUTA() {
+        final Handler handler = new Handler();
+        final Handler handler2 = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                guardarruta();
 
+                handler.postDelayed(this, 60 * 1000);
+            }
+        }, 10 * 6000);
+
+    }
+
+
+    public void ActualizarUbicacion() {
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -329,15 +346,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void guardarruta() {
 
-
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://mifolderdeproyectos.online/SEEYOU/puntos_recorridos.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-
-
 
                 } catch (Exception e) {
 
