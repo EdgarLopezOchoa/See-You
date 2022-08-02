@@ -125,7 +125,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     private static ObjectAnimator animacionRotation;
     public static ImageView closerecycler, cerrarunir, IVcerrarcreargrupo;
     private ImageView ubicacion, location, vermarkers, cambiarmapa, grupos;
-    private Button cancelar, enviar;
+    private Button cancelar, enviar, cancelarviaje;
     public static Button agregargrupo, creargrupo;
     public static double LatitudDialogo, LongitudDialogo;
     private LinearLayout contenedor;
@@ -135,9 +135,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     public static ArrayList<Markers> markerslist = new ArrayList<>();
     public static ArrayList<Grupos> gruposlist = new ArrayList<>();
     public static String direccion = "", Codigogrupo = "";
-    public static int id_usuario = 0, id_grupo = 0;
+    public static int id_usuario = 0, id_grupo = 0,cerrarbucle = 0;
     String addressStr, NombreGrupo1;
-    int alertapuntos = 0, alertaubicacion = 0;
+    int alertapuntos = 0, alertaubicacion = 0, nomasviaje = 0;
     public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse, bottomSheetDialogcreargrupo;
     public static Toolbar TBgrupos;
     SweetAlertDialog Eliminar_Marcador;
@@ -153,6 +153,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     SharedPreferences preferences;
     EditText Nombregrupo;
     Marker marker[] = new Marker[20];
+    Double Latitudruta, Longitudruta;
+    Polyline polylineruta = null;
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -213,7 +215,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
-                    getLastLocation();
+                    getLastLocation(1);
                 }
 
 
@@ -431,9 +433,23 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         iniciarviaje.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(getContext(), "ESTE BOTON HARA ALGO ALGUN DIA :D",
-                                        Toast.LENGTH_SHORT).show();
+                                bottomSheetDialogmarker.dismiss();
+                                cancelarviaje.setVisibility(View.VISIBLE);
+                                mMap.clear();
+                                nomasviaje = 0;
+                               PuntosMapa();
+                               cerrarbucle = 1;
+                               double latitud = marker.getPosition().latitude,
+                                       longitud = marker.getPosition().longitude;
+                               LatLng ubicacion = new LatLng(Latitudruta,Longitudruta);
 
+                               if(polylineruta != null){
+                                   polylineruta.remove();
+                               }
+
+
+                                rutastrazo(latitud,longitud);
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 18));
 
                             }
                         });
@@ -495,6 +511,42 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
 
     };
+
+    public void rutastrazo(double latitud, double longitud){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    if (nomasviaje == 0) {
+                        if (polylineruta != null) {
+                            polylineruta.remove();
+                        }
+                        getLastLocation(0);
+                        polylineruta = mMap.addPolyline(new PolylineOptions().add(
+                                new LatLng(Latitudruta, Longitudruta),
+                                new LatLng(latitud, longitud)
+                        ));
+
+                        polylineruta.setTag("A");
+                        stylePolyline(polylineruta);
+
+                        handler.postDelayed(this, 1000);
+                    }
+
+                    }catch(Exception e){
+
+                    }
+
+
+            }
+        }, 1000);
+
+
+    }
+
+
     // EVENTOS DEL MAU
     @Override
     public void onPolylineClick(@NonNull Polyline polyline) {
@@ -511,6 +563,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
     // Estilo para las lineas
     private void stylePolyline(Polyline polyline) {
+
         String type = "";
         // Get the data object stored with the polyline.
         if (polyline.getTag() != null) {
@@ -534,6 +587,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
         polyline.setColor(COLOR_BLACK_ARGB);
         polyline.setJointType(JointType.ROUND);
+
     }
     // FIN
 
@@ -543,9 +597,12 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                usuariosMapa();
 
-                handler.postDelayed(this, 3000);
+                if(cerrarbucle == 0) {
+                    usuariosMapa();
+
+                    handler.postDelayed(this, 3000);
+                }
             }
         }, 3000);
 
@@ -1675,7 +1732,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
 
     @SuppressLint("MissingPermission")
-    public void getLastLocation() {
+    public void getLastLocation(int accion) {
         // Get last known recent location using new Google Play Services SDK (v11+)
         try {
 
@@ -1689,8 +1746,11 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             if (location != null) {
                                 LatLng UbicacionActualo = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                //Mueve la camara al punto proporcionado, osea la ubicacion del usuario
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 13));
+                                Latitudruta = location.getLatitude();
+                                Longitudruta = location.getLongitude();
+                                if(accion == 1) {
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UbicacionActualo, 13));
+                                }
                             } else {
                                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
                                     new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
@@ -1711,11 +1771,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         }
                     });
         } catch (Exception e) {
-            pDialog.dismiss();
-            new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Algo Salio Mal..")
-                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(26)")
-                    .show();
+
         }
     }
 
@@ -1883,11 +1939,22 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         contenedor = view.findViewById(R.id.Contenedormarker);
         vermarkers = view.findViewById(R.id.IVvermarkers);
         SVubicacion = view.findViewById(R.id.SVubicacion);
-
+        cancelarviaje = view.findViewById(R.id.BTNcancelarviaje);
         cambiarmapa = view.findViewById(R.id.IVcambiarmapa);
         grupos = view.findViewById(R.id.IVgrupos);
         recyclerviewgrupos = view.findViewById(R.id.RBgrupos);
         TValertamarcador = view.findViewById(R.id.TValertamarcador);
+
+        cancelarviaje.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (polylineruta != null){
+                    polylineruta.remove();
+                    cancelarviaje.setVisibility(View.INVISIBLE);
+                    nomasviaje = 1;
+                }
+            }
+        });
 
 
         //Grupos Dialog
@@ -2379,7 +2446,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
             @Override
             public void onClick(View v) {
 
-                getLastLocation();
+                getLastLocation(1);
 
             }
         });
