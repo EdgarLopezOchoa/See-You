@@ -902,8 +902,12 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                 public void onResponse(String response) {
                     try {
                         JSONArray array = new JSONArray(response);
+                        Circle circle = null;
+                        mMap.clear();
 
-                        //mMap.clear();
+                        if(circle != null) {
+                            circle.remove();
+                        }
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
@@ -923,7 +927,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                                 if (preferences.getBoolean("fondo2", false) == true) {
 
-                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                    circle = mMap.addCircle(new CircleOptions()
                                             .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                             .radius(50)
                                             .strokeWidth(3)
@@ -931,28 +935,28 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                             .fillColor(0x30DD4819));
 
                                 } else if (preferences.getBoolean("fondo", false) == true) {
-                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                    circle = mMap.addCircle(new CircleOptions()
                                             .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                             .radius(50)
                                             .strokeWidth(3)
                                             .strokeColor(Color.TRANSPARENT)
                                             .fillColor(0x30391B6F));
                                 } else if (preferences.getBoolean("fondo3", false) == true) {
-                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                    circle = mMap.addCircle(new CircleOptions()
                                             .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                             .radius(50)
                                             .strokeWidth(3)
                                             .strokeColor(Color.TRANSPARENT)
                                             .fillColor(0x30FF0000));
                                 } else if (preferences.getBoolean("fondo4", false) == true) {
-                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                     circle = mMap.addCircle(new CircleOptions()
                                             .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                             .radius(50)
                                             .strokeWidth(3)
                                             .strokeColor(Color.TRANSPARENT)
                                             .fillColor(0x3000F361));
                                 } else {
-                                    Circle circle = mMap.addCircle(new CircleOptions()
+                                     circle = mMap.addCircle(new CircleOptions()
                                             .center(new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud")))
                                             .radius(50)
                                             .strokeWidth(3)
