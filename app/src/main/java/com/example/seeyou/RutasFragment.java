@@ -136,7 +136,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         id_usuario = preferences.getInt("id", 0);
 
         if (preferences.getInt("idgrupo", 0) == 0) {
-            new SweetAlertDialog(ubicacion.getContext())
+            new SweetAlertDialog(getContext())
                     .setTitleText("Aviso!")
                     .setContentText("Seleccione Un Grupo Para Ver Sus Marcadores y A Otros Usuarios Del Mismo.")
                     .show();
@@ -247,7 +247,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
                     } catch (JSONException e) {
 
-                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
                                 .show();
@@ -283,7 +283,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                 }
                             } catch (Exception e) {
 
-                                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
                                         .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
                                         .show();
@@ -332,7 +332,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
                     } catch (JSONException e) {
                         pDialog.dismiss();
-                        new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
                                 .show();
@@ -368,7 +368,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                 }
                             } catch (Exception e) {
                                 pDialog.dismiss();
-                                new SweetAlertDialog(ubicacion.getContext(), SweetAlertDialog.ERROR_TYPE)
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
                                         .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
                                         .show();

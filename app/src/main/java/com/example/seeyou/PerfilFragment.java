@@ -418,31 +418,7 @@ public class PerfilFragment extends Fragment {
 
     public void validacion() {
 
-
-        if (!Objects.equals(nombre.getText().toString(), NombreUsuario)) {
-            validacion++;
-        }
-        if (!Objects.equals(apellido.getText().toString(), ApellidoUsuario)) {
-            validacion++;
-        }
-        if (!Objects.equals(correo.getText().toString(), CorreoUsuario)) {
-            validacion++;
-        }
-        if (!Objects.equals(telefono.getText().toString(), TelefonoUsuario)) {
-            validacion++;
-        }
-        if (!Objects.equals(contraseña.getText().toString(), ContraseñaUsuario)) {
-            validacion++;
-        }
-        if (validacion == 0) {
-            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("No Hay Cambios..")
-                    .setContentText("Ningun Campo Ha Cambiado...")
-                    .show();
-        } else {
-            CambiosDatos();
-
-        }
+        CambiosDatos();
 
     }
 
@@ -477,8 +453,14 @@ public class PerfilFragment extends Fragment {
                         new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("Cambios Realizados Con Exito!!!!!")
                                 .show();
+                        Usuario();
 
 
+                    }else{
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Cambios Realizados Con Exito!!!!!")
+                                .show();
+                        Usuario();
                     }
                 } catch (Exception e) {
                     new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)
