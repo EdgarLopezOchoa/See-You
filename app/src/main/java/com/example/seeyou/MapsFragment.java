@@ -967,10 +967,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                             .fillColor(0x30391B6F));
                                 }
 
-
-                                // markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-
-                                //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.maps_round));
                                 mMap.addMarker(markerOptions);
                                 usuariosMapa();
                             } catch (Exception e) {
@@ -1046,7 +1042,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     try {
                         JSONArray array = new JSONArray(response);
 
-
                         if (marker != null) {
 
                             for (int p = 0; p < array.length(); p++) {
@@ -1060,16 +1055,10 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             }
                         }
 
-
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
                             try {
-
-
                                 MarkerOptions markerOptions = new MarkerOptions();
-
-                                String name = cajas.getString("nombre");
-
 
                                 LatLng puntoubicacion =
                                         new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
