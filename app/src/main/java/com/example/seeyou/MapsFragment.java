@@ -427,7 +427,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         if (!Objects.equals(marker.getTitle(), "Nombre:")) {
                             Ubicacion(marker.getTitle());
                         } else {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
                         }
 
                         iniciarviaje.setOnClickListener(new View.OnClickListener() {
