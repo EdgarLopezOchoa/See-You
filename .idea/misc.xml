@@ -34,6 +34,7 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/marker_foreground.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/markersbottomsheet.xml" value="0.194" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/perfil_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/progress_bg.xml" value="0.1875" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/remove_foreground.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/routs_foreground.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/drawable/searchbar.xml" value="0.194" />
@@ -57,7 +58,7 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_maps.xml" value="0.25" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_markers.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_perfil.xml" value="0.33" />
-        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_rutas.xml" value="0.33" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_rutas.xml" value="0.30218687872763417" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_tarjeta.xml" value="0.33" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/grupos.xml" value="0.22" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/marker_layout.xml" value="0.33" />

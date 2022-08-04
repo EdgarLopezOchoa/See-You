@@ -414,7 +414,7 @@ public class Login extends AppCompatActivity {
                         && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
                     new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("No Hemos Podido Cargar Los Marcadores...")
+                            .setContentText("No Hemos Podido Registrar Al Usuario...")
                             .show();
                 } else {
                     new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
@@ -477,7 +477,7 @@ public class Login extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Por Favor Active Su Ubicacion O Permita Que La App Accesada A Ella...")
+                                    .setContentText("Por Favor Active Su Ubicacion o Permita Que La App Accesada A Ella...")
                                     .show();
                         }
                     });

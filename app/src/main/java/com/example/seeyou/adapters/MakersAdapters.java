@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +45,7 @@ import com.example.seeyou.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -841,7 +845,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                 new LatLng(cajas.getDouble("Latitud"), cajas.getDouble("Longitud"));
                         markerOptions.position(puntoubicacion);
                         markerOptions.title(cajas.getString("IDpunto"));
-
+                        markerOptions.icon(bitmapDescriptorFromVector(context, R.drawable.markers_round_edit));
 
                         if (preferences.getBoolean("fondo2", false) == true){
 
@@ -935,6 +939,20 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
 
     }
 
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        try {
 
+
+            Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+            vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+            Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            vectorDrawable.draw(canvas);
+            return BitmapDescriptorFactory.fromBitmap(bitmap);
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
 
 }

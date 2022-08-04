@@ -11,6 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -46,12 +51,14 @@ import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,7 +74,7 @@ import java.util.Objects;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClickListener {
-    GoogleMap mMap;
+    public static GoogleMap mMap;
     SweetAlertDialog pDialog;
     ArrayList<Usuarios> UserList = new ArrayList<>();
     LocationManager locationManager;
@@ -81,6 +88,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     RecyclerView recyclerViewusers;
     TextView nombreusuario;
     double longitud,latitud;
+    Marker marker[] = new Marker[1];
 
 
     // Color y tamaño para las lineas
@@ -134,6 +142,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         nombreusuario = view.findViewById(R.id.TVnombreusuarioruta);
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
         id_usuario = preferences.getInt("id", 0);
+        nombreusuario.setText(preferences.getString("nombreusuarioruta","Nombre")+" "+preferences.getString("apellidousuarioruta",""));
 
         if (preferences.getInt("idgrupo", 0) == 0) {
             new SweetAlertDialog(getContext())
@@ -156,9 +165,19 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             public void run() {
                 RutasUsuarios();
 
-                handler.postDelayed(this, 1500);
+                handler.postDelayed(this, 1000);
             }
-        }, 1500);
+        }, 1000);
+
+
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                usuariosMapa();
+
+                handler.postDelayed(this, 1000);
+            }
+        }, 1000);
 
     }
 
@@ -176,7 +195,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                     try {
                         Polyline polyline1 = null;
                         
-                        nombreusuario.setText(preferences.getString("nombreusuarioruta",preferences.getString("Nombre","Sin Nombre")));
+                        nombreusuario.setText(preferences.getString("nombreusuarioruta",preferences.getString("Nombre","Sin Nombre"))+" "+preferences.getString("apellidousuarioruta",""));
                         JSONArray array = new JSONArray(response);
 
 
@@ -295,6 +314,129 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
         }
     }
+
+
+    public void usuariosMapa() {
+        try {
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/fotos_rutas.php?id=" + preferences.getInt("idusuarioruta", 0) + "&idgrupo=" + preferences.getInt("idgrupo", 0), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONArray array = new JSONArray(response);
+
+                        mMap.clear();
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+
+                            try {
+
+
+                                MarkerOptions markerOptions = new MarkerOptions();
+
+                                LatLng puntoubicacion =
+                                        new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
+                                markerOptions.position(puntoubicacion);
+                                markerOptions.title("Nombre:").visible(false);
+                                markerOptions.snippet(cajas.getString("nombre"));
+                                markerOptions.draggable(false);
+                                markerOptions.visible(true);
+
+                                if(!Objects.equals(cajas.getString("foto"), "")) {
+                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                            getMarkerBitmapFromView(cajas.getString("foto"))));
+                                } else{
+                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                            getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
+
+                                }
+
+                                mMap.addMarker(markerOptions);
+
+                            }catch (Exception e){
+
+                            }
+                        }
+
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        Toast.makeText(getContext(), e+"", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
+
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+
+                                    if (alertaubicacion == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("No Hemos Podido Obtener La Ubicacion De Los Miembros Del Grupo...")
+                                                .show();
+                                        alertaubicacion = 1;
+                                    }
+                                } else {
+                                    if (alertaubicacion == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                .show();
+                                        alertaubicacion = 1;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(16)")
+                                        .show();
+                            }
+                        }
+                    });
+
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    private Bitmap getMarkerBitmapFromView(String url) {
+        try {
+
+
+            View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
+            ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
+            Picasso.get().load(url).placeholder(R.drawable.ic_baseline_arrow_circle_down_24).into(markerImageView);
+            customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+            customMarkerView.buildDrawingCache();
+            Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(returnedBitmap);
+            canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+            Drawable drawable = customMarkerView.getBackground();
+            if (drawable != null)
+                drawable.draw(canvas);
+            customMarkerView.draw(canvas);
+            return returnedBitmap;
+        } catch (Exception e) {
+
+        }
+        return null;
+
+    }
+
+
 
 
     public void RutasUsuariosFotos() {

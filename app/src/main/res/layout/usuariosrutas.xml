@@ -10,11 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/frameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-12dp"
+            android:layout_marginTop="-7dp"
+            android:layout_marginBottom="-1dp"
+            app:cardCornerRadius="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,17 +27,20 @@
                 android:id="@+id/IVuserrutas"
                 android:layout_width="70dp"
                 android:layout_height="60dp"
+                android:layout_marginBottom="5dp"
                 android:elevation="8dp"
                 app:srcCompat="@drawable/user" />
-        </FrameLayout>
+        </androidx.cardview.widget.CardView>
 
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="7dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -49,13 +54,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:elevation="8dp"
+                    android:fontFamily="sans-serif-condensed-light"
                     android:text="User Name"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="#000000"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
 
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
