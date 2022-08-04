@@ -326,7 +326,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                     try {
                         JSONArray array = new JSONArray(response);
 
-                        mMap.clear();
+
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
