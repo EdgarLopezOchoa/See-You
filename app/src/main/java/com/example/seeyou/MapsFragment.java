@@ -467,7 +467,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                 Eliminar_Marcador.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
-                                        Eliminar(id_usuario, TVidmarker.getText().toString());
+                                        Eliminar( preferences.getInt("idgrupo",0),marker.getTitle());
                                         Eliminar_Marcador.dismiss();
 
                                     }

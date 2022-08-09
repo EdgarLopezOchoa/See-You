@@ -173,7 +173,7 @@
                         android:fontFamily="sans-serif-condensed-light"
                         android:hint="Descripcion"
                         android:inputType="textPersonName"
-                        android:maxLength="30"
+                        android:maxLength="70"
                         android:textColor="@color/black">
 
                     </com.google.android.material.textfield.TextInputEditText>

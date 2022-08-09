@@ -462,6 +462,7 @@ public class MakersAdapters extends RecyclerView.Adapter<MakersAdapters.ViewHold
                                 .show();
 
                         bottomSheetDialogeditmarker.dismiss();
+                        PuntosRecycler(2);
 
 
                     } else {
