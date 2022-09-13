@@ -11,17 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></fragment>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></fragment>
 
         <ImageView
             android:id="@+id/IVubicacion"
@@ -35,19 +35,19 @@
             app:layout_constraintTop_toBottomOf="@+id/IVlocation"
             app:srcCompat="@drawable/addmarkers_round" />
 
-    <Button
-        android:id="@+id/BTNcancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button"
-        android:text="Cancelar"
-        android:textColor="@color/white"
-        android:visibility="invisible"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SVubicacion" />
+        <Button
+            android:id="@+id/BTNcancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button"
+            android:text="Cancelar"
+            android:textColor="@color/white"
+            android:visibility="invisible"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="@+id/SVubicacion"
+            app:layout_constraintStart_toStartOf="@+id/SVubicacion"
+            app:layout_constraintTop_toBottomOf="@+id/SVubicacion" />
 
         <Button
             android:id="@+id/BTNcancelarviaje"
@@ -103,7 +103,8 @@
             android:src="@mipmap/grupos_round"
             app:layout_constraintEnd_toEndOf="@+id/IVubicacion"
             app:layout_constraintStart_toStartOf="@+id/IVubicacion"
-            app:layout_constraintTop_toBottomOf="@+id/IVubicacion" />
+            app:layout_constraintTop_toBottomOf="@+id/IVubicacion"
+            app:srcCompat="@drawable/grupos_round" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RBgrupos"
@@ -122,35 +123,35 @@
             app:layout_constraintTop_toBottomOf="@+id/TBgrupos"
             app:layout_constraintVertical_bias="0.0" />
 
-    <SearchView
-        android:id="@+id/SVubicacion"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="15dp"
-        android:addStatesFromChildren="false"
-        android:animateLayoutChanges="true"
-        android:elevation="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/IVlocation"
-        app:layout_constraintStart_toStartOf="@+id/RBgrupos"
-        app:layout_constraintTop_toTopOf="parent">
+        <SearchView
+            android:id="@+id/SVubicacion"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="15dp"
+            android:addStatesFromChildren="false"
+            android:animateLayoutChanges="true"
+            android:elevation="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/IVlocation"
+            app:layout_constraintStart_toEndOf="@+id/imageView5"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </SearchView>
+        </SearchView>
 
-    <TextView
-        android:id="@+id/TValertamarcador"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_weight="1"
-        android:background="@color/gris_obscuro_translucido"
-        android:text="\n AGREGAR MARCADOR ESTA ACTIVO"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/TValertamarcador"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="#E6121212"
+            android:text="\n AGREGAR MARCADOR ESTA ACTIVO"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.appcompat.widget.Toolbar
         android:id="@+id/TBgrupos"
@@ -228,6 +229,17 @@
             app:layout_constraintEnd_toEndOf="@+id/RBgrupos"
             app:layout_constraintStart_toEndOf="@+id/textView8"
             app:layout_constraintTop_toTopOf="@+id/BTNcreargrupo" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="50dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/emergency_round"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/IVlocation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/IVlocation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

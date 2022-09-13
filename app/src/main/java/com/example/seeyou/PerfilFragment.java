@@ -273,6 +273,10 @@ public class PerfilFragment extends Fragment {
                 editor.putInt("id", 0);
                 editor.putString("Nombre", "");
                 editor.putString("Apellido", "");
+                editor.putInt("idusuarioruta",0);
+                editor.putString("nombreusuarioruta","");
+                editor.putString("apellidousuarioruta","");
+                editor.putString("fecharuta","");
                 editor.commit();
                 Intent intent = new Intent(getContext(), Login.class);
                 startActivity(intent);

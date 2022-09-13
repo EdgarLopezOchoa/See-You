@@ -4,6 +4,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.seeyou.adapters.AdapterUsuario;
+import com.example.seeyou.adapters.FechasAdapter;
+import com.example.seeyou.adapters.FechasRutas;
 import com.example.seeyou.adapters.Grupos;
 import com.example.seeyou.adapters.MakersAdapters;
 import com.example.seeyou.adapters.Markers;
@@ -64,8 +68,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +84,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     public static GoogleMap mMap;
     SweetAlertDialog pDialog;
     ArrayList<Usuarios> UserList = new ArrayList<>();
+    ArrayList<FechasRutas> FechasList = new ArrayList<>();
     LocationManager locationManager;
     ConnectivityManager locationManagerinternet;
     public static int id_usuario = 0, id_grupo = 0;
@@ -85,10 +93,11 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     private ImageView ubicacion;
     int alertapuntos = 0, alertaubicacion = 0;
     View view;
-    RecyclerView recyclerViewusers;
+    public static RecyclerView recyclerViewusers,RVfechas;
     TextView nombreusuario;
     double longitud,latitud;
     Marker marker[] = new Marker[1];
+    LinearLayoutManager horizontallayout;
 
 
     // Color y tamaño para las lineas
@@ -125,6 +134,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             getLastLocation();
             ejecutar();
             RutasUsuariosFotos();
+            FechasRutas();
 
         }
     };
@@ -135,15 +145,26 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_rutas, container, false);
+        preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("fecharuta","");
+
+
         locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
 
         recyclerViewusers = view.findViewById(R.id.RBusuariosrutas);
+        RVfechas = view.findViewById(R.id.RVrutasfechas);
         nombreusuario = view.findViewById(R.id.TVnombreusuarioruta);
-        preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        id_usuario = preferences.getInt("id", 0);
-        nombreusuario.setText(preferences.getString("nombreusuarioruta","Nombre")+" "+preferences.getString("apellidousuarioruta",""));
 
+        id_usuario = preferences.getInt("id", 0);
+
+        if (preferences.getString("nombreusuarioruta","") == ""){
+            nombreusuario.setText(preferences.getString("Nombre","") + " "  + preferences.getString("Apellido",""));
+        }else {
+            nombreusuario.setText(preferences.getString("nombreusuarioruta", "") + " " + preferences.getString("apellidousuarioruta", ""));
+        }
         if (preferences.getInt("idgrupo", 0) == 0) {
             new SweetAlertDialog(getContext())
                     .setTitleText("Aviso!")
@@ -152,6 +173,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         }
         id_grupo = preferences.getInt("idgrupo", 0);
 
+        horizontallayout = new LinearLayoutManager(getContext(),horizontallayout.HORIZONTAL,false);
 
         return view;
     }
@@ -189,13 +211,20 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             id_grupo = preferences.getInt("idgrupo", 0);
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id", 0)), new Response.Listener<String>() {
+                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id", 0)) + "&fecha=" + preferences.getString("fecharuta",""), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         Polyline polyline1 = null;
-                        
-                        nombreusuario.setText(preferences.getString("nombreusuarioruta",preferences.getString("Nombre","Sin Nombre"))+" "+preferences.getString("apellidousuarioruta",""));
+
+
+                        if (preferences.getString("nombreusuarioruta","") == ""){
+                            nombreusuario.setText(preferences.getString("Nombre","") + " "  + preferences.getString("Apellido",""));
+                        }else {
+
+
+                            nombreusuario.setText(preferences.getString("nombreusuarioruta", preferences.getString("Nombre", "Sin Nombre")) + " " + preferences.getString("apellidousuarioruta", ""));
+                        }
                         JSONArray array = new JSONArray(response);
 
 
@@ -251,6 +280,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                             }
                         }else{
                             mMap.clear();
+
                         }
 
 
@@ -268,7 +298,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
                         new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                 .show();
 
                     }
@@ -304,7 +334,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                         .show();
                             }
                         }
@@ -325,7 +355,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                 public void onResponse(String response) {
                     try {
                         JSONArray array = new JSONArray(response);
-
+                        //mMap.clear();
 
 
                         for (int i = 0; i < array.length(); i++) {
@@ -397,7 +427,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                 pDialog.dismiss();
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(16)")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                         .show();
                             }
                         }
@@ -476,7 +506,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                         pDialog.dismiss();
                         new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(1)")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                 .show();
 
                     }
@@ -495,7 +525,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
                                         new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                                 .setTitleText("Algo Salio Mal..")
-                                                .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                                .setContentText("No Hemos Podido Obtener A Los Usuarios...")
                                                 .show();
                                         alertapuntos = 1;
                                     }
@@ -503,7 +533,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                     if (alertapuntos == 0) {
                                         new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                                 .setTitleText("Algo Salio Mal..")
-                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar A Los Usuarios...")
                                                 .show();
                                         alertapuntos = 1;
                                     }
@@ -512,7 +542,89 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                 pDialog.dismiss();
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(2)")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .show();
+                            }
+                        }
+                    });
+            Volley.newRequestQueue(getContext()).add(stringRequest);
+        } catch (Exception e) {
+            pDialog.dismiss();
+            Toast.makeText(getContext(), "Error de catch: " + e, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void FechasRutas() {
+
+        try {
+            pDialog.show();
+
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id",0)), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        pDialog.dismiss();
+
+                        JSONArray array = new JSONArray(response);
+                        FechasList.clear();
+
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+
+                            FechasList.add(new FechasRutas(
+                                    cajas.getString("fecha")
+                            ));
+                        }
+                        FechasAdapter adapter = new FechasAdapter(FechasList, getContext());
+                        RVfechas.setHasFixedSize(true);
+                        RVfechas.setLayoutManager(horizontallayout);
+                        RVfechas.setAdapter(adapter);
+
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .show();
+
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
+                                pDialog.dismiss();
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                    if (alertapuntos == 0) {
+
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("No Hemos Podido Obtener A Los Usuarios...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                } else {
+                                    if (alertapuntos == 0) {
+                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar A Los Usuarios...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                         .show();
                             }
                         }
@@ -579,6 +691,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
         mapFragment.getMapAsync(callback);
 
+
     }
 
     //Evento cuando se hace clic en una linea (FALLA)
@@ -623,68 +736,6 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         polyline.setJointType(JointType.ROUND);
 }
 
-    public void guardarruta() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://mifolderdeproyectos.online/SEEYOU/puntos_recorridos.php", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-
-
-
-                } catch (Exception e) {
-
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                            .show();
-                }
-
-            }
-
-        }, new com.android.volley.Response.ErrorListener() {
-            @SuppressLint("MissingPermission")
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-
-                    if(alertaubicacionactual == 0) {
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("No Hemos Podido Almacenar La Ruta...")
-                                .show();
-                        alertaubicacionactual = 1;
-                    }
-
-                } catch (Exception e) {
-
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                            .show();
-                }
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-
-
-                params.put("id", id_usuario+"");
-                params.put("latitud", latitud + "");
-                params.put("longitud", longitud + "");
-
-                return params;
-            }
-
-        };
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
-
-    }
 
 }

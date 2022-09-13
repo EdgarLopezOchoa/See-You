@@ -42,8 +42,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -105,6 +107,7 @@ public class Login extends AppCompatActivity {
     LocationManager locationManager;
     TextView Asterisco1, Asterisco2, Asterisco3, Asterisco4, Asterisco5;
     Double Latitud, Longitud;
+    TextView tvterminos;
 
 
     @Override
@@ -118,13 +121,19 @@ public class Login extends AppCompatActivity {
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(true);
 
+        SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
+
+        if (preferences.getBoolean("terminos",false) != true){
+        MostrarTerminos();
+        }
         etEmail = findViewById(R.id.etEmail2);
         etContraseña = findViewById(R.id.etContraseña2);
         irregistro = findViewById(R.id.TVirregistro);
         contenedor = findViewById(R.id.Contenedormarker);
         sesion = findViewById(R.id.CBsesion);
         btnIngresar = findViewById(R.id.btnIngresar);
+
 
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -214,6 +223,83 @@ public class Login extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
 
+    }
+
+
+    public void MostrarTerminos(){
+        BottomSheetBehavior<View> bottomSheetBehavior ;
+
+
+        BottomSheetDialog bottomSheetDialogTerminos = new BottomSheetDialog
+                (Login.this,R.style.BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(Login.this).inflate(
+                R.layout.terminos_y_condiciones, null
+        );
+
+        bottomSheetDialogTerminos.setContentView(bottomSheetView);
+        LinearLayout contenedor1 = bottomSheetDialogTerminos.findViewById(R.id.BottomSheetRegister);
+        bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.92);
+        assert contenedor1 !=null;
+        contenedor1.setMinimumHeight(height);
+        bottomSheetBehavior.setMaxHeight(height);
+        bottomSheetDialogTerminos.show();
+        bottomSheetBehavior.setDraggable(false);
+        tvterminos = bottomSheetDialogTerminos.findViewById(R.id.TVterminos1);
+        Button btncancelar = bottomSheetDialogTerminos.findViewById(R.id.btncancelarterminos);
+        CheckBox CBaceptarterminos = bottomSheetDialogTerminos.findViewById(R.id.CBaceptarterminos);
+        Button btnaceptar = bottomSheetDialogTerminos.findViewById(R.id.btnacetarterminos);
+        btnaceptar.setBackgroundResource(R.drawable.buttonterminos);
+        btnaceptar.setClickable(false);
+
+        bottomSheetDialogTerminos.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+
+                if (keyCode == event.KEYCODE_BACK) {
+                   finish();
+                }
+                return false;
+
+            }
+
+        });
+
+
+        btncancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnaceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(CBaceptarterminos.isChecked() == true) {
+                    bottomSheetDialogTerminos.dismiss();
+                    SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("terminos", true);
+                    editor.commit();
+
+                }
+            }
+        });
+
+        CBaceptarterminos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (CBaceptarterminos.isChecked() == true){
+                    btnaceptar.setBackgroundResource(R.drawable.button2);
+                    btnaceptar.setClickable(true);
+                }else{
+                    btnaceptar.setBackgroundResource(R.drawable.buttonterminos);
+                    btnaceptar.setClickable(false);
+                }
+            }
+        });
     }
 
 

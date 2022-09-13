@@ -95,7 +95,12 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
             @Override
             public void onClick(View v) {
                 PuntosMapa(GroupsList.get(position).getId(),GroupsList.get(position).getNombre());
-
+                preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("idusuarioruta",preferences.getInt("id",0));
+                editor.putString("nombreusuarioruta",preferences.getString("Nombre",""));
+                editor.putString("apellidousuarioruta",preferences.getString("Apellido",""));
+                editor.commit();
             }
         });
 

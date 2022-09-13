@@ -45,10 +45,14 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
     ArrayList<Usuarios> UserList;
     private Context context;
     SharedPreferences preferences;
+    LinearLayoutManager horizontallayout;
     SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
     private GoogleMap mMap = RutasFragment.mMap;
     SharedPreferences.Editor editor;
+    int alertapuntos = 0;
     LocationManager locationManager;
+    RecyclerView RVfechas = RutasFragment.RVfechas;
+    ArrayList<FechasRutas> FechasList = new ArrayList<>();
     ConnectivityManager locationManagerinternet;
 
     public AdapterUsuario(ArrayList<Usuarios> UserList, Context context) {
@@ -85,11 +89,13 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
             @Override
             public void onClick(View v) {
                 UbicacionUsuario(UserList.get(position).getIdusuario());
+                FechasRutas(UserList.get(position).getIdusuario());
                 preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("idusuarioruta",UserList.get(position).getIdusuario());
                 editor.putString("nombreusuarioruta",UserList.get(position).getNombre());
                 editor.putString("apellidousuarioruta",UserList.get(position).getApellido());
+                editor.putString("fecharuta","");
                 editor.commit();
 
 
@@ -119,6 +125,90 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
         }
     }
 
+    public void FechasRutas(int id) {
+
+        try {
+            pDialog.show();
+
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + id+"", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        pDialog.dismiss();
+
+                        JSONArray array = new JSONArray(response);
+                        FechasList.clear();
+
+                        horizontallayout = new LinearLayoutManager(context,horizontallayout.HORIZONTAL,false);
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+
+                            FechasList.add(new FechasRutas(
+                                    cajas.getString("fecha")
+                            ));
+                        }
+                        FechasAdapter adapter = new FechasAdapter(FechasList, context);
+                        RVfechas.setHasFixedSize(true);
+                        RVfechas.setLayoutManager(horizontallayout);
+                        RVfechas.setAdapter(adapter);
+
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .show();
+
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
+                                pDialog.dismiss();
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                    if (alertapuntos == 0) {
+
+                                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("No Hemos Podido Obtener A Los Usuarios...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                } else {
+                                    if (alertapuntos == 0) {
+                                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Algo Salio Mal..")
+                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar A Los Usuarios...")
+                                                .show();
+                                        alertapuntos = 1;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .show();
+                            }
+                        }
+                    });
+            Volley.newRequestQueue(context).add(stringRequest);
+        } catch (Exception e) {
+
+        }
+    }
+
+
+
+
 
     public void UbicacionUsuario(int id) {
 
@@ -139,7 +229,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                             JSONObject cajas = array.getJSONObject(i);
                             if(!Objects.equals(response,"[]")) {
                                 ubicacionActual = new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionActual, 15));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionActual, 13));
                             }
                             }
 
