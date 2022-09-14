@@ -23,11 +23,13 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -110,10 +112,11 @@ public class Login extends AppCompatActivity {
     TextView tvterminos;
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login2);
         locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
 
@@ -134,7 +137,15 @@ public class Login extends AppCompatActivity {
         sesion = findViewById(R.id.CBsesion);
         btnIngresar = findViewById(R.id.btnIngresar);
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            Drawable background = getResources().getDrawable(R.drawable.statusbar_login);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
+            window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
+            window.setNavigationBarColor(getResources().getColor(android.R.color.transparent));
+            window.setBackgroundDrawable(background);
+        }
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
@@ -596,29 +607,39 @@ public class Login extends AppCompatActivity {
 
 
                 try {
-                    JSONArray array = new JSONArray(response);
 
 
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject cajas = array.getJSONObject(i);
-
-                        id = cajas.getInt("idusuario");
-                        Nombre1 = cajas.getString("Nombre");
-                        Apellido1 = cajas.getString("Apellido");
-
-
-                    }
-
-                    if (Objects.equals(response, "[]")) {
+                    if (Objects.equals(response, "Correo Incorrecto")) {
 
                         SweetAlertDialog error = new SweetAlertDialog(Login.this,
                                 SweetAlertDialog.ERROR_TYPE);
                         error.setTitleText("Op...Algo Salio Mal...");
-                        error.setContentText("Revise los datos y vuelva a intentarlo");
+                        error.setContentText("Este Correo No Es Valido.....");
                         error.show();
 
 
+                    }else if(Objects.equals(response, "Password Incorrecta")){
+                        SweetAlertDialog error = new SweetAlertDialog(Login.this,
+                                SweetAlertDialog.ERROR_TYPE);
+                        error.setTitleText("Op...Algo Salio Mal...");
+                        error.setContentText("La Contraseña Es Incorrecta.....");
+                        error.show();
+
                     } else {
+
+                        JSONArray array = new JSONArray(response);
+
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+
+                            id = cajas.getInt("idusuario");
+                            Nombre1 = cajas.getString("Nombre");
+                            Apellido1 = cajas.getString("Apellido");
+
+
+                        }
+
 
                         etEmail.setText("");
                         etContraseña.setText("");
@@ -679,7 +700,7 @@ public class Login extends AppCompatActivity {
                 } catch (JSONException e) {
                     new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                            .setContentText(response+"")
                             .show();
                 }
 

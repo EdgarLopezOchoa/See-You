@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -143,12 +145,17 @@ public class PerfilFragment extends Fragment {
         fondo3 = view.findViewById(R.id.IVfondo3);
         fondo4 = view.findViewById(R.id.IVfondo4);
         usuario = view.findViewById(R.id.IVusuarioinfo);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        } else {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                Window window = getActivity().getWindow();
+                Drawable background = getResources().getDrawable(R.drawable.statusbar_login);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+                window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
+                window.setNavigationBarColor(getResources().getColor(android.R.color.transparent));
+                window.setBackgroundDrawable(background);
+            }
+
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 

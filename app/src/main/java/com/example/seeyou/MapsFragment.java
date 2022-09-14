@@ -1256,7 +1256,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             pDialog.dismiss();
                             new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(18)")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                     .show();
                         }
                     }

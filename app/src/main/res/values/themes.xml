@@ -33,4 +33,7 @@
         <item name="behavior_peekHeight">1200dp</item> // yep, that helped to skip collapsed state at initial
         <item name="behavior_hideable">true</item>
     </style>
+
+
+
 </resources>
