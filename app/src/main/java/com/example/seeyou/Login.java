@@ -37,6 +37,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.view.DragEvent;
@@ -263,6 +264,8 @@ public class Login extends AppCompatActivity {
         Button btnaceptar = bottomSheetDialogTerminos.findViewById(R.id.btnacetarterminos);
         btnaceptar.setBackgroundResource(R.drawable.buttonterminos);
         btnaceptar.setClickable(false);
+        TextView linkTextView = bottomSheetDialogTerminos.findViewById(R.id.TvlinkPoliticas);
+        linkTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         bottomSheetDialogTerminos.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override

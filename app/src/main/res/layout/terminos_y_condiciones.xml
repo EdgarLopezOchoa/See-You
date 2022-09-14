@@ -47,13 +47,11 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="30dp"
                     android:fontFamily="sans-serif-condensed-light"
+                    android:justificationMode="inter_word"
                     android:text="@string/Terminos_Condiciones"
                     android:textColor="@color/gris_obscuro"
                     android:textSize="16sp"
-                    android:justificationMode="inter_word"
-                    app:layout_constraintBottom_toTopOf="@+id/CBaceptarterminos"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -66,6 +64,18 @@
                     android:text="Acepto las politicas de privacidad"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/TvlinkPoliticas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/Politicas_link"
+                    android:textColor="@color/AzulLogin"
+                    app:layout_constraintBottom_toTopOf="@+id/CBaceptarterminos"
+                    app:layout_constraintStart_toStartOf="@+id/TVterminos1"
+                    app:layout_constraintTop_toBottomOf="@+id/TVterminos1" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
