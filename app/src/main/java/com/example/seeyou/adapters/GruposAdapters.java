@@ -73,7 +73,8 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
     private GoogleMap mMap = MapsFragment.mMap;
     SharedPreferences.Editor editor;
     BottomSheetDialog bottomSheetDialog;
-    RecyclerView usersgroup;
+    public static RecyclerView usersgroup, recyclerviewgrupos = MapsFragment.recyclerviewgrupos;
+    ArrayList<Grupos> gruposlist = new ArrayList<>();
 
     public GruposAdapters(ArrayList<Grupos> GroupsList, Context context) {
 
@@ -478,6 +479,12 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
             public void onResponse(String response) {
 
                 try {
+
+                    SharedPreferences preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("idgrupo", 0);
+                    editor.commit();
+
                     pDialog.dismiss();
                     if(Objects.equals(response,"")){
                     new SweetAlertDialog(context,
@@ -493,6 +500,7 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                                 .show();
                     }
 
+                    BuscarGrupos();
 
 
                 } catch (Exception e) {
@@ -551,6 +559,138 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    private void BuscarGrupos() {
+        pDialog.show();
+
+        preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "https://mifolderdeproyectos.online/SEEYOU/buscar_grupos.php?id=" + preferences.getInt("id",0), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+                    gruposlist.clear();
+
+                    JSONArray array = new JSONArray(response);
+
+
+                    int ciclo = 0, primero = 1, id = 0, id_admin = 0;
+
+
+                    String Nombre = preferences.getString("Nombre", ""), codigo = "", grupo = "", verificar = preferences.getString("Nombre", "");
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject cajas = array.getJSONObject(i);
+
+
+                        if (primero == 1) {
+                            ciclo = cajas.getInt("idgrupo");
+                            primero = 0;
+                        }
+
+
+                        if (cajas.getInt("idgrupo") == ciclo) {
+
+                            if (!Objects.equals(cajas.getString("nombreusuario"), verificar)) {
+                                Nombre += ", " + cajas.getString("nombreusuario");
+                            }
+
+                            codigo = cajas.getString("codigo");
+
+                            id = cajas.getInt("idgrupo");
+                            grupo = cajas.getString("nombregrupo");
+                            id_admin = cajas.getInt("id_admin");
+
+                        } else {
+                            if (cajas.getInt("idgrupo") != ciclo) {
+                                gruposlist.add(new Grupos(
+                                        grupo,
+                                        id,
+                                        Nombre,
+                                        codigo,
+                                        id_admin
+                                ));
+                            }
+
+
+                            ciclo = cajas.getInt("idgrupo");
+                            Nombre = "";
+                            Nombre = preferences.getString("Nombre", "");
+                            if (!Objects.equals(cajas.getString("nombreusuario"), verificar)) {
+                                Nombre += ", " + cajas.getString("nombreusuario");
+                            }
+                            codigo = cajas.getString("codigo");
+
+                            id = cajas.getInt("idgrupo");
+                            grupo = cajas.getString("nombregrupo");
+                            id_admin = cajas.getInt("id_admin");
+
+
+                        }
+
+                    }
+
+
+                    gruposlist.add(new Grupos(
+                            grupo,
+                            id,
+                            Nombre,
+                            codigo,
+                            id_admin
+                    ));
+
+
+                    pDialog.dismiss();
+                    GruposAdapters adapter = new GruposAdapters(gruposlist, context);
+                    recyclerviewgrupos.setHasFixedSize(true);
+                    recyclerviewgrupos.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerviewgrupos.setAdapter(adapter);
+
+
+
+
+                } catch (JSONException e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(21)")
+                            .show();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+                            pDialog.dismiss();
+                            if (locationManagerinternet.getActiveNetworkInfo() != null
+                                    && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                    && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("No Hemos Podido Obtener Sus Grupos...")
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Grupos...")
+                                        .show();
+                            }
+                        } catch (Exception e) {
+                            pDialog.dismiss();
+                            new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .show();
+                        }
+                    }
+                });
+
+        Volley.newRequestQueue(context).add(stringRequest);
+
     }
     
 }

@@ -50,11 +50,12 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
     ArrayList<UsersGroups> UserList;
     private Context context;
     SharedPreferences preferences;
+    ArrayList<UsersGroups> UsersGroupsList = new ArrayList<>();
     SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
     private GoogleMap mMap = RutasFragment.mMap;
     int alertapuntos = 0, alertaubicacion = 0;
     SharedPreferences.Editor editor;
-    RecyclerView recyclerViewusers = RutasFragment.RVfechas;
+    RecyclerView recyclerViewusers = RutasFragment.RVfechas, usersgroup = GruposAdapters.usersgroup;
     LocationManager locationManager;
     ConnectivityManager locationManagerinternet;
 
@@ -136,6 +137,94 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
         }
     }
 
+
+    public void UsuariosGrupo( int id) {
+
+        try {
+            pDialog.show();
+            preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    "https://mifolderdeproyectos.online/SEEYOU/usuarios_grupos.php?idgroup=" + id+"&iduser=" + preferences.getInt("id",0), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        pDialog.dismiss();
+
+                        JSONArray array = new JSONArray(response);
+                        UsersGroupsList.clear();
+
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject cajas = array.getJSONObject(i);
+
+                            UsersGroupsList.add(new UsersGroups(
+                                    id,
+                                    cajas.getInt("idusuarios"),
+                                    cajas.getString("foto"),
+                                    cajas.getString("nombre"),
+                                    cajas.getString("apellido")
+                            ));
+                        }
+                        UsersGroupsAdapter adapter = new UsersGroupsAdapter(UsersGroupsList, context);
+                        usersgroup.setHasFixedSize(true);
+                        usersgroup.setLayoutManager(new LinearLayoutManager(context));
+                        usersgroup.setAdapter(adapter);
+
+
+                    } catch (JSONException e) {
+                        pDialog.dismiss();
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                .show();
+
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            try {
+                                pDialog.dismiss();
+                                if (locationManagerinternet.getActiveNetworkInfo() != null
+                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+
+
+                                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("No Hemos Podido Obtener A Los Usuarios...")
+                                            .show();
+
+
+                                } else {
+
+                                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("Por Favor Habilite Su Internet Para Poder Cargar A Los Usuarios...")
+                                            .show();
+
+
+                                }
+                            } catch (Exception e) {
+                                pDialog.dismiss();
+                                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Algo Salio Mal..")
+                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                        .show();
+                            }
+                        }
+                    });
+            Volley.newRequestQueue(context).add(stringRequest);
+        } catch (Exception e) {
+
+        }
+    }
+
+
+
     public void EliminarGrupo(int id_usuario, int id_grupo) {
 
         pDialog.show();
@@ -146,6 +235,8 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
             public void onResponse(String response) {
 
                 try {
+                    UsuariosGrupo(id_grupo);
+
                     pDialog.dismiss();
                     if(Objects.equals(response,"")){
                         new SweetAlertDialog(context,
