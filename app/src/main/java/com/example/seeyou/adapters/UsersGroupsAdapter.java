@@ -82,7 +82,18 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
                 .load(UserList.get(position).getFoto())
                 .placeholder(R.drawable.user)
                 .into(holder.fotouser);
+
+        holder.deleteuser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SweetAlertDialog(context)
+                        .setTitleText("Proximamente")
+                        .setContentText("Este Boton Muy Pronto Eliminara Al Usuario :P")
+                        .show();
+            }
+        });
     }
+
 
 
     @Override
@@ -92,7 +103,7 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView fotouser;
+        ImageView fotouser,deleteuser;
         EditText nombre;
 
 
@@ -101,6 +112,7 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
 
             fotouser = itemView.findViewById(R.id.IVusergroup);
             nombre = itemView.findViewById(R.id.ETnombreusuariogrupo);
+            deleteuser = itemView.findViewById(R.id.IVeliminarusuario);
         }
     }
 

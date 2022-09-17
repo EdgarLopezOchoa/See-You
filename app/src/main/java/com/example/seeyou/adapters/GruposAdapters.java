@@ -207,10 +207,10 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
 
         try {
             pDialog.show();
-
+            preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/usuarios_grupos.php?idgroup=" + id, new Response.Listener<String>() {
+                    "https://mifolderdeproyectos.online/SEEYOU/usuarios_grupos.php?idgroup=" + id+"&iduser=" + preferences.getInt("id",0), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {

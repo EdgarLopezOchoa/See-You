@@ -236,7 +236,7 @@
             android:layout_height="47dp"
             android:layout_marginStart="10dp"
             android:src="@drawable/emergency_round"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/IVlocation"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/IVlocation" />
