@@ -69,10 +69,12 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_rutas.xml" value="0.30218687872763417" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/fragment_tarjeta.xml" value="0.33" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/grupos.xml" value="0.22" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/informacion_usuarios.xml" value="0.22" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/marker_layout.xml" value="0.33" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/markersbottomshet.xml" value="0.25" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/terminos_y_condiciones.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/unirse_grupo.xml" value="0.2401263823064771" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/user_group.xml" value="0.33" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/usuariosrutas.xml" value="1.0" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/layout/view_custom_marker.xml" value="1.0" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/menu/bottom_navigartion_empty.xml" value="0.20416666666666666" />
@@ -81,6 +83,7 @@
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/addgroup.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/addmarkers_round.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/bookmarkers_round.xml" value="0.194" />
+        <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/emergency.xml" value="0.1875" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/grupos.xml" value="0.197" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/edgar/AndroidStudioProjects/SeeYou/GitHub/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />

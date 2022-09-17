@@ -219,9 +219,6 @@
                         android:editable="false"
                         android:fontFamily="sans-serif-condensed-light"
                         android:hint="Direccion"
-                        android:inputType="textPersonName"
-                        android:maxLines="3"
-                        android:minLines="3"
                         android:textColor="@color/black">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -241,7 +238,7 @@
                 android:id="@+id/BTNeliminarmarker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="50dp"
+                android:layout_margin="20dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
                 android:background="@drawable/button"

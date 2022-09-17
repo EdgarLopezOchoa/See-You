@@ -95,7 +95,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 editor.putInt("idusuarioruta",UserList.get(position).getIdusuario());
                 editor.putString("nombreusuarioruta",UserList.get(position).getNombre());
                 editor.putString("apellidousuarioruta",UserList.get(position).getApellido());
-                editor.putString("fecharuta","");
+                editor.putString("fecharuta","hoy");
                 editor.commit();
 
 

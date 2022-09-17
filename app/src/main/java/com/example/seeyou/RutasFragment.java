@@ -146,9 +146,10 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_rutas, container, false);
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor1 = preferences.edit();
 
-        editor.putString("fecharuta","");
+        editor1.putString("fecharuta","hoy");
+        editor1.commit();
 
 
         locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
@@ -211,7 +212,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             id_grupo = preferences.getInt("idgrupo", 0);
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id", 0)) + "&fecha=" + preferences.getString("fecharuta",""), new Response.Listener<String>() {
+                    "https://mifolderdeproyectos.online/SEEYOU/puntos_mapa_recorrido.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id", 0)) + "&fecha=" + preferences.getString("fecharuta","hoy"), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {

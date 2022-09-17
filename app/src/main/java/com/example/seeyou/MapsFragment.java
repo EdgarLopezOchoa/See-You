@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -26,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -124,6 +128,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     private static ObjectAnimator animacionDesvanecido;
     private static ObjectAnimator animacionRotation;
     public static ImageView closerecycler, cerrarunir, IVcerrarcreargrupo;
+    ImageView NotificacionAlerta;
     private ImageView ubicacion, location, vermarkers, cambiarmapa, grupos;
     private Button cancelar, enviar, cancelarviaje;
     public static Button agregargrupo, creargrupo;
@@ -514,6 +519,41 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
 
     };
+
+
+    public void Notificar(int notID){
+        NotificationCompat.Builder creador;
+        String canalID = "MiCanal01";
+        NotificationManager notificador = (NotificationManager) getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
+        // Si nuestro dispositivo tiene Android 8 (API 26, Oreo) o superior
+        creador = new NotificationCompat.Builder(getContext(), canalID);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String canalNombre = "ALERTA";
+            String canalDescribe = "ALGUIEN NECESITA TU AYUDA!!!!";
+            int importancia = NotificationManager.IMPORTANCE_MAX;
+            @SuppressLint("WrongConstant")
+            NotificationChannel miCanal = new NotificationChannel(canalID, canalNombre, importancia);
+            miCanal.setDescription(canalDescribe);
+            miCanal.enableLights(true);
+            miCanal.setLightColor(Color.BLUE); // Esto no lo soportan todos los dispositivos
+            miCanal.enableVibration(true);
+            notificador.createNotificationChannel(miCanal);
+
+        }
+        Bitmap iconoNotifica = BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.emergency);
+        int iconoSmall = R.mipmap.icon_foreground;
+        creador.setSmallIcon(iconoSmall);
+        creador.setLargeIcon(iconoNotifica);
+        creador.setContentTitle("ALERTA!!");
+        creador.setContentText("ALGUIEN NECESITA TU AYUDA!!");
+        creador.setStyle(new NotificationCompat.BigTextStyle().bigText("ALGUIEN NECESITA TU AYUDA!!"));
+        creador.setChannelId(canalID);
+        notificador.notify(notID, creador.build());
+    }
+
+
+
+
 
     public void rutastrazo(double latitud, double longitud){
         final Handler handler = new Handler();
@@ -1145,7 +1185,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
             View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
             ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
-            Picasso.get().load(url).placeholder(R.drawable.ic_baseline_arrow_circle_down_24).into(markerImageView);
+            Picasso.get().load(url).placeholder(R.drawable.user).into(markerImageView);
             customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
             customMarkerView.buildDrawingCache();
@@ -1390,7 +1430,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     JSONArray array = new JSONArray(response);
 
 
-                    int ciclo = 0, primero = 1, id = 0;
+                    int ciclo = 0, primero = 1, id = 0, id_admin = 0;
 
 
                     String Nombre = preferences.getString("Nombre", ""), codigo = "", grupo = "", verificar = preferences.getString("Nombre", "");
@@ -1415,6 +1455,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                             id = cajas.getInt("idgrupo");
                             grupo = cajas.getString("nombregrupo");
+                            id_admin = cajas.getInt("id_admin");
 
                         } else {
                             if (cajas.getInt("idgrupo") != ciclo) {
@@ -1422,7 +1463,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                         grupo,
                                         id,
                                         Nombre,
-                                        codigo
+                                        codigo,
+                                        id_admin
                                 ));
                             }
 
@@ -1437,6 +1479,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                             id = cajas.getInt("idgrupo");
                             grupo = cajas.getString("nombregrupo");
+                            id_admin = cajas.getInt("id_admin");
 
 
                         }
@@ -1448,7 +1491,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             grupo,
                             id,
                             Nombre,
-                            codigo
+                            codigo,
+                            id_admin
                     ));
 
 
@@ -1481,19 +1525,19 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                     && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("No Hemos Podido Obtener Los Puntos De Su Mapa...")
+                                        .setContentText("No Hemos Podido Obtener Sus Grupos...")
                                         .show();
                             } else {
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                        .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Grupos...")
                                         .show();
                             }
                         } catch (Exception e) {
                             pDialog.dismiss();
                             new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(22)")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                     .show();
                         }
                     }
@@ -1941,10 +1985,14 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         grupos = view.findViewById(R.id.IVgrupos);
         recyclerviewgrupos = view.findViewById(R.id.RBgrupos);
         TValertamarcador = view.findViewById(R.id.TValertamarcador);
+        NotificacionAlerta = view.findViewById(R.id.IValerta);
 
-
-
-
+        NotificacionAlerta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Notificar(0);
+            }
+        });
 
 
 
@@ -2362,6 +2410,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
             public void onClick(View v) {
 
                 BuscarGrupos();
+                cancelar.setVisibility(View.INVISIBLE);
+                TValertamarcador.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -2492,8 +2542,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     PuntosRecycler();
 
 
-                    LinearLayout contenedormarkers = bottomSheetDialog.findViewById(R.id.contenedorrecyclermarkers);
-
 
                     SVpunto.setOnSearchClickListener(new View.OnClickListener() {
                         @Override
@@ -2571,7 +2619,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                 //vuelve visible el boton de cancelar
                 cancelar.setVisibility(View.VISIBLE);
                 TValertamarcador.setVisibility(View.VISIBLE);
-
+                cerrargrupo();
 
                     /*hacia una prueba donde bajaba el brillo a la pantalla cuando hacia clic a esta imagen,
                      funciona pero no tiene utilidad de momento

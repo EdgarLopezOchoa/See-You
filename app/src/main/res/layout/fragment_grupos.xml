@@ -16,7 +16,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
         android:elevation="8dp"
-        app:cardBackgroundColor="@color/Color5"
+        app:cardBackgroundColor="@color/AzulLogin"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
                 android:id="@+id/TVnombregrupo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="15dp"
                 android:fontFamily="sans-serif-condensed-light"
@@ -41,7 +41,7 @@
                 android:textAlignment="textStart"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/TVcodigogrupo"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
                 android:fontFamily="sans-serif-condensed-light"
                 android:text="Usuarios"
                 android:textColor="@color/gris_muyclaro"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/TVcodigogrupo"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
@@ -66,11 +66,11 @@
                 android:id="@+id/TVcodigogrupo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="40dp"
                 android:fontFamily="sans-serif-condensed-light"
                 android:text="Codigo"
                 android:textColor="@color/gris_muyclaro"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/TVnombregrupo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/TVnombregrupo" />
@@ -83,13 +83,62 @@
                 android:fontFamily="sans-serif-condensed-light"
                 android:text="Miembros:"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/TVnombregrupo"
                 app:layout_constraintTop_toBottomOf="@+id/TVnombregrupo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/CVeliminargrupo"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="-3dp"
+        android:background="@drawable/close"
+        app:cardBackgroundColor="#FF0000"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/CVgrupos"
+        app:layout_constraintTop_toTopOf="@+id/CVgrupos">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constrainEliminarGrupo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/orange_close_button_png_13" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/CVeditGrupo"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="-5dp"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/Amarillo"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintStart_toStartOf="@+id/CVgrupos"
+        app:layout_constraintTop_toTopOf="@+id/CVgrupos">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/edit_246" />
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

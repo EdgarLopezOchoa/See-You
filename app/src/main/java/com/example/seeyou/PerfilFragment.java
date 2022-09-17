@@ -366,7 +366,7 @@ public class PerfilFragment extends Fragment {
                         if (!Objects.equals(cajas.getString("foto"), "")) {
                             Picasso.get()
                                     .load(cajas.getString("foto"))
-                                    .placeholder(R.drawable.ic_baseline_arrow_circle_down_24)
+                                    .placeholder(R.drawable.user)
                                     .into(usuario);
                         }
 

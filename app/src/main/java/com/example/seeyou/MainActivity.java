@@ -7,14 +7,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +48,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -194,6 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void ejecutar(){
         final Handler handler= new Handler();
+        final Handler handler2= new Handler();
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -215,9 +226,17 @@ public class MainActivity extends AppCompatActivity {
 
                     constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
                 }
-                handler.postDelayed(this,10);//se ejecutara cada 10 segundos
+                handler.postDelayed(this,100);//se ejecutara cada 10 segundos
             }
         },1500);
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                BuscarAlertas();
+                handler.postDelayed(this,5000);//se ejecutara cada 10 segundos
+            }
+        },5000);
     }
 
 
@@ -341,7 +360,87 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void Notificar(int notID){
+        NotificationCompat.Builder creador;
+        String canalID = "MiCanal01";
+        NotificationManager notificador = (NotificationManager) getSystemService(MainActivity.this.NOTIFICATION_SERVICE);
+        // Si nuestro dispositivo tiene Android 8 (API 26, Oreo) o superior
+        creador = new NotificationCompat.Builder(MainActivity.this, canalID);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String canalNombre = "ALERTA";
+            String canalDescribe = "ALGUIEN NECESITA TU AYUDA!!!!";
+            int importancia = NotificationManager.IMPORTANCE_MAX;
+            @SuppressLint("WrongConstant")
+            NotificationChannel miCanal = new NotificationChannel(canalID, canalNombre, importancia);
+            miCanal.setDescription(canalDescribe);
+            miCanal.enableLights(true);
+            miCanal.setLightColor(Color.BLUE); // Esto no lo soportan todos los dispositivos
+            miCanal.enableVibration(true);
+            notificador.createNotificationChannel(miCanal);
 
+        }
+        Bitmap iconoNotifica = BitmapFactory.decodeResource(getResources(), R.mipmap.emergency);
+        int iconoSmall = R.mipmap.icon_foreground;
+        creador.setSmallIcon(iconoSmall);
+        creador.setLargeIcon(iconoNotifica);
+        creador.setContentTitle("ALERTA!!");
+        creador.setContentText("ALGUIEN NECESITA TU AYUDA!!");
+        creador.setStyle(new NotificationCompat.BigTextStyle().bigText("ALGUIEN NECESITA TU AYUDA!!"));
+        creador.setChannelId(canalID);
+        notificador.notify(notID, creador.build());
+    }
+
+
+    private void BuscarAlertas() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "https://mifolderdeproyectos.online/SEEYOU/Notificaciones_Alertas.php?idgrupo=" + preferences.getInt("idgrupo",0), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+
+                    JSONArray array = new JSONArray(response);
+
+
+
+                    if(!Objects.equals(response,"[]")){
+                        Notificar(1);
+                    }
+
+
+
+
+
+                } catch (JSONException e) {
+
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(21)")
+                            .show();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+
+
+                        } catch (Exception e) {
+
+                            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
+                                    .show();
+                        }
+                    }
+                });
+
+        Volley.newRequestQueue(MainActivity.this).add(stringRequest);
+
+    }
 
 
     public void guardarruta() {
