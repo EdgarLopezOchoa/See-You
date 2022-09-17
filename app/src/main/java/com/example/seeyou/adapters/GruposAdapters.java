@@ -124,9 +124,9 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
             @Override
             public void onClick(View v) {
                 SweetAlertDialog Grupo = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                Grupo.setTitleText("ELIMINAR GRUPO")
-                        .setContentText("Estas A Punto De Eliminar Este Grupo...Esta Accion Es Irreversible....")
-                        .setConfirmText("Eliminar")
+                Grupo.setTitleText("SALIR DEL GRUPO GRUPO")
+                        .setContentText("Estas A Punto De Salir De Este Grupo...Esta Accion Es Irreversible....")
+                        .setConfirmText("Salir")
                         .setCancelText("Cancelar")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override

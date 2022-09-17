@@ -19,7 +19,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -37,6 +39,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -86,9 +90,25 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
         holder.deleteuser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SweetAlertDialog(context)
-                        .setTitleText("Proximamente")
-                        .setContentText("Este Boton Muy Pronto Eliminara Al Usuario :P")
+                SweetAlertDialog Grupo = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                Grupo.setTitleText("ELIMINAR USUARI0")
+                        .setContentText("Estas A Punto De Eliminar A Este Usuario DEl Grupo...Esta Accion Es Irreversible....")
+                        .setConfirmText("Eliminar")
+                        .setCancelText("Cancelar")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                                EliminarGrupo(UserList.get(position).getId_usuario(),UserList.get(position).getId_grupo());
+                                Grupo.dismiss();
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                Grupo.dismiss();
+                            }
+                        })
                         .show();
             }
         });
@@ -116,5 +136,89 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
         }
     }
 
+    public void EliminarGrupo(int id_usuario, int id_grupo) {
+
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://mifolderdeproyectos.online/SEEYOU/salir_grupo.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    pDialog.dismiss();
+                    if(Objects.equals(response,"")){
+                        new SweetAlertDialog(context,
+                                SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Eliminado")
+                                .setContentText("Haz Eliminado Al Usuario Del Grupo Exitosamente!! ")
+                                .show();
+                    }else {
+                        new SweetAlertDialog(context,
+                                SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("OPS....")
+                                .setContentText("Algo A Salido Mal Y No Se A Podido Salir Del Grupo...")
+                                .show();
+                    }
+
+
+
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(5)")
+                            .show();
+                }
+            }
+
+
+        }, new com.android.volley.Response.ErrorListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                try {
+                    pDialog.dismiss();
+                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("No Hemos Podido Eliminar Su Marcador...")
+                                .show();
+                    } else {
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Algo Salio Mal..")
+                                .setContentText("Por Favor Habilite Su Internet...")
+                                .show();
+                    }
+                } catch (Exception e) {
+                    pDialog.dismiss();
+                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Algo Salio Mal..")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(6)")
+                            .show();
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("idgrupo", id_grupo + "");
+                params.put("idusuario", id_usuario + "");
+
+
+                return params;
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
 
 }

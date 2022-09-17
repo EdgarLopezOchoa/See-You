@@ -1081,7 +1081,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                 public void onResponse(String response) {
                     try {
                         JSONArray array = new JSONArray(response);
-
+                        int verificar = 0;
                         if (marker != null) {
 
                             for (int p = 0; p < array.length(); p++) {
@@ -1119,7 +1119,20 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
                                 marker[i] = mMap.addMarker(markerOptions);
 
+                                if(Objects.equals(cajas.getString("idusuario"),preferences.getInt("id",0))){
+                                    verificar = 1;
+                                }
 
+                                if (verificar == 0) {
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putInt("idgrupo", 0);
+                                    editor.commit();
+
+                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Error")
+                                            .setContentText("Ya No Perteneces A Este Grupo")
+                                            .show();
+                                }
                             } catch (Exception e) {
 
                             }
