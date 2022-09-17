@@ -1075,117 +1075,118 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
 
             id_grupo = preferences.getInt("idgrupo", 0);
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/usuarios_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONArray array = new JSONArray(response);
-                        int verificar = 0;
-                        if (marker != null) {
+            if (id_grupo != 0) {
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        "https://mifolderdeproyectos.online/SEEYOU/usuarios_mapa.php?id=" + id_grupo, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray array = new JSONArray(response);
+                            int verificar = 0;
+                            if (marker != null) {
 
-                            for (int p = 0; p < array.length(); p++) {
+                                for (int p = 0; p < array.length(); p++) {
+                                    try {
+
+                                        marker[p].remove();
+
+                                    } catch (Exception e) {
+
+                                    }
+                                }
+                            }
+
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject cajas = array.getJSONObject(i);
                                 try {
+                                    MarkerOptions markerOptions = new MarkerOptions();
 
-                                    marker[p].remove();
+                                    LatLng puntoubicacion =
+                                            new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
+                                    markerOptions.position(puntoubicacion);
+                                    markerOptions.title("Nombre:").visible(false);
+                                    markerOptions.snippet(cajas.getString("nombre"));
+                                    markerOptions.draggable(false);
+                                    markerOptions.visible(true);
+
+                                    if (!Objects.equals(cajas.getString("foto"), "")) {
+                                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                                getMarkerBitmapFromView(cajas.getString("foto"))));
+                                    } else {
+                                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                                                getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
+
+                                    }
+
+                                    marker[i] = mMap.addMarker(markerOptions);
+
+                                    if (Objects.equals(cajas.getInt("idusuario"), preferences.getInt("id", 0))) {
+                                        verificar = 1;
+                                    }
+
 
                                 } catch (Exception e) {
 
                                 }
                             }
-                        }
 
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject cajas = array.getJSONObject(i);
-                            try {
-                                MarkerOptions markerOptions = new MarkerOptions();
+                            if (verificar == 0) {
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putInt("idgrupo", 0);
+                                editor.commit();
 
-                                LatLng puntoubicacion =
-                                        new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
-                                markerOptions.position(puntoubicacion);
-                                markerOptions.title("Nombre:").visible(false);
-                                markerOptions.snippet(cajas.getString("nombre"));
-                                markerOptions.draggable(false);
-                                markerOptions.visible(true);
-
-                                if(!Objects.equals(cajas.getString("foto"), "")) {
-                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
-                                            getMarkerBitmapFromView(cajas.getString("foto"))));
-                                } else{
-                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
-                                            getMarkerBitmapFromView("https://mx.web.img2.acsta.net/c_310_420/pictures/15/06/04/16/19/049773.jpg")));
-
-                                }
-
-                                marker[i] = mMap.addMarker(markerOptions);
-
-                                if(Objects.equals(cajas.getString("idusuario"),preferences.getInt("id",0))){
-                                    verificar = 1;
-                                }
-
-                                if (verificar == 0) {
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putInt("idgrupo", 0);
-                                    editor.commit();
-
-                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                            .setTitleText("Error")
-                                            .setContentText("Ya No Perteneces A Este Grupo")
-                                            .show();
-                                }
-                            } catch (Exception e) {
-
-                            }
-                        }
-
-
-                    } catch (JSONException e) {
-                        pDialog.dismiss();
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(15)")
-                                .show();
-                    }
-                }
-            },
-                    new Response.ErrorListener() {
-                        @SuppressLint("MissingPermission")
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            try {
-
-                                if (locationManagerinternet.getActiveNetworkInfo() != null
-                                        && locationManagerinternet.getActiveNetworkInfo().isAvailable()
-                                        && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
-
-                                    if (alertaubicacion == 0) {
-                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                .setTitleText("Algo Salio Mal..")
-                                                .setContentText("No Hemos Podido Obtener La Ubicacion De Los Miembros Del Grupo...")
-                                                .show();
-                                        alertaubicacion = 1;
-                                    }
-                                } else {
-                                    if (alertaubicacion == 0) {
-                                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                                .setTitleText("Algo Salio Mal..")
-                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
-                                                .show();
-                                        alertaubicacion = 1;
-                                    }
-                                }
-                            } catch (Exception e) {
-                                pDialog.dismiss();
                                 new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(16)")
+                                        .setTitleText("Error")
+                                        .setContentText("Ya No Perteneces A Este Grupo")
                                         .show();
                             }
+                        } catch (JSONException e) {
+                            pDialog.dismiss();
+                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Algo Salio Mal..")
+                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(15)")
+                                    .show();
                         }
-                    });
+                    }
+                },
+                        new Response.ErrorListener() {
+                            @SuppressLint("MissingPermission")
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                try {
 
-            Volley.newRequestQueue(getContext()).add(stringRequest);
+                                    if (locationManagerinternet.getActiveNetworkInfo() != null
+                                            && locationManagerinternet.getActiveNetworkInfo().isAvailable()
+                                            && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
 
+                                        if (alertaubicacion == 0) {
+                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Algo Salio Mal..")
+                                                    .setContentText("No Hemos Podido Obtener La Ubicacion De Los Miembros Del Grupo...")
+                                                    .show();
+                                            alertaubicacion = 1;
+                                        }
+                                    } else {
+                                        if (alertaubicacion == 0) {
+                                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Algo Salio Mal..")
+                                                    .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                                    .show();
+                                            alertaubicacion = 1;
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    pDialog.dismiss();
+                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(16)")
+                                            .show();
+                                }
+                            }
+                        });
+
+                Volley.newRequestQueue(getContext()).add(stringRequest);
+            }
         } catch (Exception e) {
 
         }
