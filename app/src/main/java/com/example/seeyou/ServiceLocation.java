@@ -45,10 +45,13 @@ public class ServiceLocation extends Service {
     private com.google.android.gms.location.LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 5000; /* 5 sec */
+    SharedPreferences preferences;
+    int id_usuario = 0;
 
     @Override
     public void onCreate(){
-
+        preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        id_usuario = preferences.getInt("id",0);
 
     }
 
@@ -60,9 +63,9 @@ public class ServiceLocation extends Service {
             public void run() {
 
                startLocationUpdates();
-                handler2.postDelayed(this,5000);
+                handler2.postDelayed(this,2000);
             }
-        },5000);
+        },2000);
         return START_STICKY;
     }
 
@@ -152,8 +155,7 @@ public class ServiceLocation extends Service {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
 
-                SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
-                int id_usuario = preferences.getInt("id",0);
+
                 params.put("id", id_usuario+"");
                 params.put("latitud", latitud + "");
                 params.put("longitud", longitud + "");
