@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startLocationUpdates();
+        startService(new Intent(this,ServiceLocation.class));
 
 
         constraintLayout = findViewById(R.id.Fondobottomnavigation);
@@ -233,8 +234,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                BuscarAlertas();
-                handler.postDelayed(this,5000);//se ejecutara cada 10 segundos
+
+                handler2.postDelayed(this,5000);//se ejecutara cada 10 segundos
             }
         },5000);
     }

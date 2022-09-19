@@ -20,6 +20,8 @@
         android:theme="@style/Theme.SeeYou"
         tools:targetApi="31">
 
+        <service android:name=".ServiceLocation"/>
+
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
