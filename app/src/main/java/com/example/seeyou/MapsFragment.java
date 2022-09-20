@@ -1136,7 +1136,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                 editor.putInt("idgrupo", 0);
                                 editor.commit();
 
-                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                                new SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Error")
                                         .setContentText("Ya No Perteneces A Este Grupo")
                                         .show();
@@ -2038,14 +2038,15 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     editor.putBoolean("viaje",false);
                     editor.commit();
                     nomasviaje = 1;
+                    getLastLocation(1);
                 }
             }
         });
 
 
-        if(preferences.getBoolean("viaje",false) == true){
+        /*if(preferences.getBoolean("viaje",false) == true){
             cancelarviaje.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         if (preferences.getInt("idgrupo", 0) == 0) {
             new SweetAlertDialog(getContext())

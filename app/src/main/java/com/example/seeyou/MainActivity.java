@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     public static ConstraintLayout constraintLayout;
     int id_usuario = 0,alertaubicacionactual = 0;
     double longitud,latitud;
-    GoogleMap mapa = MapsFragment.mapubicacion;
     public static int bucle = 0;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -100,20 +100,24 @@ public class MainActivity extends AppCompatActivity {
 
 
             constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
+            system(2);
 
         }else if(preferences.getBoolean("fondo", false) == true){
 
 
 
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
+            system(1);
         }
         else if(preferences.getBoolean("fondo3", false) == true){
 
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
+            system(3);
         }
         else if(preferences.getBoolean("fondo4", false) == true){
 
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
+            system(4);
         }
 
         ejecutar();
@@ -205,38 +209,50 @@ public class MainActivity extends AppCompatActivity {
         final Handler handler= new Handler();
         final Handler handler2= new Handler();
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (preferences.getBoolean("fondo2", false) == true){
 
-                    constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
-
-                }else if(preferences.getBoolean("fondo", false) == true){
-
-
-                    constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
-                }
-                else if(preferences.getBoolean("fondo3", false) == true){
-
-                    constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
-                }
-                else if(preferences.getBoolean("fondo4", false) == true){
-
-
-                    constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
-                }
-                handler.postDelayed(this,100);//se ejecutara cada 10 segundos
-            }
-        },1500);
-        handler2.postDelayed(new Runnable() {
+        /*handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
 
 
                 handler2.postDelayed(this,5000);//se ejecutara cada 10 segundos
             }
-        },5000);
+        },5000);*/
+    }
+
+    public static void fondobottom(int accion){
+
+        if (accion == 1){
+            constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
+        } else if(accion == 2){
+            constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
+        }else if(accion == 3){
+            constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
+        } else if(accion == 4){
+            constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
+        }
+
+    }
+
+    public void system(int action){
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            Drawable background = null;
+            if (action == 1){
+                background = getResources().getDrawable(R.drawable.fondodegradado);
+            } else if(action == 2){
+                background = getResources().getDrawable(R.drawable.fondonaranaja2);
+            }else if(action == 3){
+                background = getResources().getDrawable(R.drawable.fondodegradado3);
+            } else if(action == 4){
+                background = getResources().getDrawable(R.drawable.fondodegradado4);
+            }
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+            window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
+            window.setNavigationBarColor(getResources().getColor(android.R.color.transparent));
+            window.setBackgroundDrawable(background);
+        }
     }
 
 

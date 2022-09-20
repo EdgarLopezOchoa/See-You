@@ -21,7 +21,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></fragment>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"></fragment>
 
         <ImageView
             android:id="@+id/IVubicacion"
@@ -110,9 +111,8 @@
             android:id="@+id/RBgrupos"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="3dp"
             android:background="@color/blanco_gris"
             android:elevation="8dp"
             android:visibility="invisible"
@@ -154,20 +154,20 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.appcompat.widget.Toolbar
-        android:id="@+id/TBgrupos"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/fondodegradado"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/RBgrupos"
-        app:layout_constraintStart_toStartOf="@+id/RBgrupos"
-        app:layout_constraintTop_toBottomOf="@+id/BTNcancelar">
+            android:id="@+id/TBgrupos"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/fondodegradado"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/RBgrupos"
+            app:layout_constraintStart_toStartOf="@+id/RBgrupos"
+            app:layout_constraintTop_toBottomOf="@+id/SVubicacion">
 
 
-    </androidx.appcompat.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/IVclose"

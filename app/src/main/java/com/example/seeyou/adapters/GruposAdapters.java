@@ -125,7 +125,7 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
             @Override
             public void onClick(View v) {
                 SweetAlertDialog Grupo = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                Grupo.setTitleText("SALIR DEL GRUPO GRUPO")
+                Grupo.setTitleText("SALIR DEL GRUPO!!")
                         .setContentText("Estas A Punto De Salir De Este Grupo...Esta Accion Es Irreversible....")
                         .setConfirmText("Salir")
                         .setCancelText("Cancelar")
@@ -134,6 +134,16 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
                                 EliminarGrupo(preferences.getInt("id",0),GroupsList.get(position).getId());
+                                if (Objects.equals(preferences.getInt("idgrupo",0),GroupsList.get(position).getId())){
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putInt("idgrupo",0);
+                                    editor.commit();
+
+                                    SweetAlertDialog Grupo = new SweetAlertDialog(context);
+                                    Grupo.setTitleText("GRUPO")
+                                            .setContentText("Selecciona Un Nuevo Grupo Para Verlos En El Mapa!")
+                                            .show();
+                                }
                                 Grupo.dismiss();
                             }
                         })
@@ -169,6 +179,13 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                 UsuariosGrupo(holder,GroupsList.get(position).getId());
 
                 usersgroup = bottomSheetDialog.findViewById(R.id.RBusuariosgrupo);
+                ImageView cerrargruposusers = bottomSheetDialog.findViewById(R.id.IVcerraeliminarusuario);
+                cerrargruposusers.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialog.dismiss();
+                    }
+                });
             }
         });
 

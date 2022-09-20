@@ -16,6 +16,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -85,6 +86,7 @@ public class PerfilFragment extends Fragment {
     ConnectivityManager locationManagerinternet;
     SharedPreferences.Editor editor;
     TextInputEditText nombre, correo, contraseña, telefono, apellido;
+    ConstraintLayout ConstrainMain = MainActivity.constraintLayout;
   //  String key_foto = "foto";
 
     public PerfilFragment() {
@@ -145,16 +147,9 @@ public class PerfilFragment extends Fragment {
         fondo3 = view.findViewById(R.id.IVfondo3);
         fondo4 = view.findViewById(R.id.IVfondo4);
         usuario = view.findViewById(R.id.IVusuarioinfo);
+        ConstrainMain = view.findViewById(R.id.Fondobottomnavigation);
 
-            if (Build.VERSION.SDK_INT >= 21) {
-                Window window = getActivity().getWindow();
-                Drawable background = getResources().getDrawable(R.drawable.statusbar_login);
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-                window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
-                window.setNavigationBarColor(getResources().getColor(android.R.color.transparent));
-                window.setBackgroundDrawable(background);
-            }
 
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
@@ -166,22 +161,26 @@ public class PerfilFragment extends Fragment {
             btngaleria.setBackgroundResource(R.drawable.buttonfondo2);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo2);
 
+
         }else if(preferences.getBoolean("fondo", false) == true){
 
             btnCambiar.setBackgroundResource(R.drawable.button2);
             btngaleria.setBackgroundResource(R.drawable.button2);
             btnLogin.setBackgroundResource(R.drawable.button2);
+
         }else if(preferences.getBoolean("fondo3", false) == true){
 
             btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
             btngaleria.setBackgroundResource(R.drawable.buttonfondo3);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
+
         }
         else if(preferences.getBoolean("fondo4", false) == true){
 
             btnCambiar.setBackgroundResource(R.drawable.buttonfondo4);
             btngaleria.setBackgroundResource(R.drawable.buttonfondo4);
             btnLogin.setBackgroundResource(R.drawable.buttonfondo4);
+
         }
 
         fondo1.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +196,8 @@ public class PerfilFragment extends Fragment {
                 btnCambiar.setBackgroundResource(R.drawable.button2);
                 btngaleria.setBackgroundResource(R.drawable.button2);
                 btnLogin.setBackgroundResource(R.drawable.button2);
+                MainActivity.fondobottom(1);
+                system(1);
             }
         });
 
@@ -213,6 +214,8 @@ public class PerfilFragment extends Fragment {
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo2);
                 btngaleria.setBackgroundResource(R.drawable.buttonfondo2);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo2);
+                MainActivity.fondobottom(2);
+                system(2);
             }
         });
 
@@ -229,6 +232,9 @@ public class PerfilFragment extends Fragment {
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo3);
                 btngaleria.setBackgroundResource(R.drawable.buttonfondo3);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo3);
+                MainActivity.fondobottom(3);
+                system(3);
+
             }
         });
         fondo4.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +250,8 @@ public class PerfilFragment extends Fragment {
                 btnCambiar.setBackgroundResource(R.drawable.buttonfondo4);
                 btngaleria.setBackgroundResource(R.drawable.buttonfondo4);
                 btnLogin.setBackgroundResource(R.drawable.buttonfondo4);
+                MainActivity.fondobottom(4);
+                system(4);
             }
         });
 
@@ -322,6 +330,29 @@ public class PerfilFragment extends Fragment {
                         .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                         .show();
             }
+        }
+    }
+
+
+
+    public void system(int action){
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getActivity().getWindow();
+            Drawable background = null;
+            if (action == 1){
+                background = getResources().getDrawable(R.drawable.fondodegradado);
+            } else if(action == 2){
+                background = getResources().getDrawable(R.drawable.fondonaranaja2);
+            }else if(action == 3){
+                background = getResources().getDrawable(R.drawable.fondodegradado3);
+            } else if(action == 4){
+                background = getResources().getDrawable(R.drawable.fondodegradado4);
+            }
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+            window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
+            window.setNavigationBarColor(getResources().getColor(android.R.color.transparent));
+            window.setBackgroundDrawable(background);
         }
     }
 

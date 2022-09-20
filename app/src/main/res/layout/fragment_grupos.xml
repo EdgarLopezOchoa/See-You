@@ -117,7 +117,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/orange_close_button_png_13" />
+                app:srcCompat="@drawable/close" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -129,7 +129,7 @@
         android:layout_marginStart="-2dp"
         android:layout_marginTop="-5dp"
         android:visibility="invisible"
-        app:cardBackgroundColor="@color/Amarillo"
+        app:cardBackgroundColor="@color/App_Color"
         app:cardCornerRadius="5dp"
         app:layout_constraintStart_toStartOf="@+id/CVgrupos"
         app:layout_constraintTop_toTopOf="@+id/CVgrupos">
@@ -138,6 +138,7 @@
             android:id="@+id/imageView5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:tint="#FFFFFF"
             app:srcCompat="@drawable/edit_246" />
     </androidx.cardview.widget.CardView>
 
