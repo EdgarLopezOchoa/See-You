@@ -3,6 +3,7 @@ package com.example.seeyou.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
     RecyclerView RVfechas = RutasFragment.RVfechas;
     ArrayList<FechasRutas> FechasList = new ArrayList<>();
     ConnectivityManager locationManagerinternet;
+    RecyclerView recyclerViewusers = RutasFragment.recyclerViewusers;
 
     public AdapterUsuario(ArrayList<Usuarios> UserList, Context context) {
 
@@ -78,12 +80,18 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
         holder.username.setText(UserList.get(position).getNombre());
         Picasso.get()
                 .load(UserList.get(position).getFoto())
                 .placeholder(R.drawable.ic_baseline_arrow_circle_down_24)
                 .noFade()
                 .into(holder.userimage);
+
+        if (Objects.equals(preferences.getInt("idusuarioruta",0),UserList.get(position).getIdusuario())){
+            holder.constrainuserrutas.setBackgroundResource(R.drawable.buttonfondo4);
+            holder.username.setTextColor(Color.WHITE);
+        }
 
         holder.contenedor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +106,10 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 editor.putString("fecharuta","hoy");
                 editor.commit();
 
-
+                AdapterUsuario adapter = new AdapterUsuario(UserList, context);
+                recyclerViewusers.setHasFixedSize(true);
+                recyclerViewusers.setLayoutManager(new LinearLayoutManager(context));
+                recyclerViewusers.setAdapter(adapter);
             }
         });
     }
@@ -114,6 +125,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
         TextView username;
         ImageView userimage;
         LinearLayout contenedor;
+        ConstraintLayout constrainuserrutas;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -122,6 +134,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
             username = itemView.findViewById(R.id.TVusername);
             userimage = itemView.findViewById(R.id.IVuserrutas);
             contenedor = itemView.findViewById(R.id.Layoutuserrutas);
+            constrainuserrutas = itemView.findViewById(R.id.constrainuserrutas);
         }
     }
 
@@ -132,7 +145,8 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + id+"", new Response.Listener<String>() {
+                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + id+"&idusuario="
+                    +preferences.getInt("id",0)+"&idgrupo="+preferences.getInt("idgrupo",0), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -146,7 +160,9 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                             JSONObject cajas = array.getJSONObject(i);
 
                             FechasList.add(new FechasRutas(
-                                    cajas.getString("fecha")
+                                    cajas.getString("fecha"),
+                                    cajas.getString("mes"),
+                                    cajas.getString("dia")
                             ));
                         }
                         FechasAdapter adapter = new FechasAdapter(FechasList, context);

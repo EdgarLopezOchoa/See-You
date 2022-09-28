@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -52,6 +55,7 @@ public class FechasAdapter extends RecyclerView.Adapter<FechasAdapter.ViewHolder
     RecyclerView recyclerViewusers = RutasFragment.RVfechas;
     LocationManager locationManager;
     ConnectivityManager locationManagerinternet;
+    String date;
 
     public FechasAdapter(ArrayList<FechasRutas> UserList, Context context) {
 
@@ -71,12 +75,28 @@ public class FechasAdapter extends RecyclerView.Adapter<FechasAdapter.ViewHolder
         pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(false);
+        date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.fecha.setText(UserList.get(position).getFecha_rutas());
+
+
+        if (!Objects.equals(date,UserList.get(position).getFecha_rutas())){
+            holder.fecha.setText(UserList.get(position).getDia());
+            holder.fechames.setText(UserList.get(position).getMes());
+            holder.fechahoy.setText("");
+        }else {
+
+
+            holder.fechahoy.setText("Hoy");
+            holder.fecha.setText("");
+            holder.fechames.setText("");
+
+        }
+
+
 
         holder.contenerdor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +117,7 @@ public class FechasAdapter extends RecyclerView.Adapter<FechasAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView fecha;
+        TextView fecha,fechames,fechahoy;
         ConstraintLayout contenerdor;
 
 
@@ -106,6 +126,8 @@ public class FechasAdapter extends RecyclerView.Adapter<FechasAdapter.ViewHolder
             super(itemView);
             fecha = itemView.findViewById(R.id.TVfecharuta);
             contenerdor = itemView.findViewById(R.id.HorizontalRV);
+            fechames = itemView.findViewById(R.id.TVfechames);
+            fechahoy = itemView.findViewById(R.id.TVfechahoy);
 
         }
     }
@@ -133,7 +155,9 @@ public class FechasAdapter extends RecyclerView.Adapter<FechasAdapter.ViewHolder
                             JSONObject cajas = array.getJSONObject(i);
 
                             UserList.add(new FechasRutas(
-                                    cajas.getString("fecha")
+                                    cajas.getString("fecha"),
+                                    cajas.getString("mes"),
+                                    cajas.getString("dia")
                             ));
                         }
                         FechasAdapter adapter = new FechasAdapter(UserList, context);

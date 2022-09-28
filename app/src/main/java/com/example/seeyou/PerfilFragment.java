@@ -76,7 +76,7 @@ public class PerfilFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     SweetAlertDialog pDialog;
-    int id_usuario, validacion = 0;
+    int id_usuario;
     ImageView fondo1,fondo2,fondo3,fondo4,usuario;
     ;
     LocationManager locationManager;
@@ -405,7 +405,7 @@ public class PerfilFragment extends Fragment {
 
 
                 } catch (JSONException e) {
-                    new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
                             .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
@@ -433,7 +433,7 @@ public class PerfilFragment extends Fragment {
                                         .show();
                             }
                         } catch (Exception e){
-                            new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)
+                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Algo Salio Mal..")
                                     .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                                     .show();
@@ -490,20 +490,13 @@ public class PerfilFragment extends Fragment {
                 try {
                     pDialog.dismiss();
 
-                    validacion = 0;
-                    if (Objects.equals(response, "Cambios Realizados")) {
+
                         new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("Cambios Realizados Con Exito!!!!!")
                                 .show();
                         Usuario();
 
 
-                    }else{
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
-                                .setTitleText("Cambios Realizados Con Exito!!!!!")
-                                .show();
-                        Usuario();
-                    }
                 } catch (Exception e) {
                     new SweetAlertDialog(fondo1.getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
@@ -557,10 +550,6 @@ public class PerfilFragment extends Fragment {
 
         };
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
     }

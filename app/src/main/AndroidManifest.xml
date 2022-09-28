@@ -3,15 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.seeyou">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission
+        android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
 
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -23,21 +37,28 @@
         android:theme="@style/Theme.SeeYou"
         tools:targetApi="31">
 
-        <service android:name=".ServiceLocation"
-            android:exported="true"
+        <!--<service android:name=".ServiceLocation"
+           android:exported="true"
+           /> -->
+        <service android:name=".services.ServiceLocation"
+            android:enabled="true"
+            android:exported="false"
             />
 
-        <!--
-             TODO: Before you run your application, you need a Google Maps API key.
+        <service
+            android:name=".KotlinServices.LocationService"
+            android:enabled="true"
+            android:exported="false" />
 
-             To get one, follow the directions here:
+        <receiver
+            android:name=".KotlinServices.BootDeviceReceivers"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
-                https://developers.google.com/maps/documentation/android-sdk/get-api-key
-
-             Once you have your API key (it starts with "AIza"), define a new property in your
-             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
-             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
-        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />

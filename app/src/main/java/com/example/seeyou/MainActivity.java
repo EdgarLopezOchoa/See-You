@@ -2,21 +2,24 @@ package com.example.seeyou;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,11 +30,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,15 +44,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.seeyou.KotlinServices.LocationService;
+import com.example.seeyou.services.ServiceLocation;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,9 +97,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(this,ServiceLocation.class));
+        /*AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this,ServiceLocation.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this,0,intent,0);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),
+                2*2000,pendingIntent);*/
 
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(this, ServiceLocation.class));
+        }*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(this, LocationService.class));
+        }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        } else {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
         constraintLayout = findViewById(R.id.Fondobottomnavigation);
 
         preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
@@ -120,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             system(4);
         }
 
-        ejecutar();
+
         ejecutarRUTA();
 
         //llama al fragmento de mapa y lo pone en el FrameLayout
@@ -203,23 +228,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-    private void ejecutar(){
-        final Handler handler= new Handler();
-        final Handler handler2= new Handler();
-
-
-        /*handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-
-                handler2.postDelayed(this,5000);//se ejecutara cada 10 segundos
-            }
-        },5000);*/
-    }
-
     public static void fondobottom(int accion){
 
         if (accion == 1){
@@ -264,16 +272,24 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                guardarruta();
+              guardarruta();
 
                 handler.postDelayed(this, 60 * 2000);
             }
         }, 20 * 6000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startLocationUpdates();
+
+                handler.postDelayed(this, 5000);
+            }
+        }, 5000);
 
     }
 
 
-    public void ActualizarUbicacion() {
+    /*public void ActualizarUbicacion() {
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -335,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
         requestQueue.add(stringRequest);
 
-    }
+    }*/
 
     public void Notificar(int notID){
         NotificationCompat.Builder creador;
@@ -419,7 +435,86 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("MissingPermission")
+    protected void startLocationUpdates() {
 
+        // Create the location request to start receiving updates
+        mLocationRequest = new com.google.android.gms.location.LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+        final int REQUEST_CHECK_SETTINGS = 0x1;
+
+        LocationSettingsRequest.Builder builder1 = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest)
+                .addLocationRequest(mLocationRequest);
+        builder1.setNeedBle(true);
+        Task<LocationSettingsResponse> result =
+                LocationServices.getSettingsClient(this).checkLocationSettings(builder1.build());
+
+        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @Override
+            public void onComplete(Task<LocationSettingsResponse> task) {
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+                    // All location settings are satisfied. The client can initialize location
+                    // requests here.
+                } catch (ApiException exception) {
+                    switch (exception.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the
+                            // user a dialog.
+                            try {
+                                // Cast to a resolvable exception.
+                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                resolvable.startResolutionForResult(
+                                        MainActivity.this,
+                                        REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            } catch (ClassCastException e) {
+                                // Ignore, should be an impossible error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
+                            break;
+                    }
+                }
+            }
+        });
+
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        // do work here
+                        onLocationChanged(locationResult.getLastLocation());
+
+
+                    }
+                },
+                Looper.myLooper());
+    }
+
+    public void onLocationChanged(Location location) {
+        latitud = location.getLatitude();
+        longitud = location.getLongitude();
+
+    }
     public void guardarruta() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,

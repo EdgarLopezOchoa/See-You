@@ -94,6 +94,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     int alertapuntos = 0, alertaubicacion = 0;
     View view;
     public static RecyclerView recyclerViewusers,RVfechas;
+    RequestQueue requestQueuefechas = null,requestQueueusuarios = null,requestQueuefotos = null,requestQueuerutas = null;
     TextView nombreusuario;
     double longitud,latitud;
     Marker marker[] = new Marker[1];
@@ -123,7 +124,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
-
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
             pDialog.setTitleText("Cargando ...");
             pDialog.setCancelable(false);
@@ -157,15 +158,10 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
         recyclerViewusers = view.findViewById(R.id.RBusuariosrutas);
         RVfechas = view.findViewById(R.id.RVrutasfechas);
-        nombreusuario = view.findViewById(R.id.TVnombreusuarioruta);
+
 
         id_usuario = preferences.getInt("id", 0);
 
-        if (preferences.getString("nombreusuarioruta","") == ""){
-            nombreusuario.setText(preferences.getString("Nombre","") + " "  + preferences.getString("Apellido",""));
-        }else {
-            nombreusuario.setText(preferences.getString("nombreusuarioruta", "") + " " + preferences.getString("apellidousuarioruta", ""));
-        }
         if (preferences.getInt("idgrupo", 0) == 0) {
             new SweetAlertDialog(getContext())
                     .setTitleText("Aviso!")
@@ -188,9 +184,9 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             public void run() {
                 RutasUsuarios();
 
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 3000);
             }
-        }, 1000);
+        }, 3000);
 
 
         handler2.postDelayed(new Runnable() {
@@ -198,9 +194,9 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             public void run() {
                 usuariosMapa();
 
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 3100);
             }
-        }, 1000);
+        }, 3100);
 
     }
 
@@ -219,13 +215,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                         Polyline polyline1 = null;
 
 
-                        if (preferences.getString("nombreusuarioruta","") == ""){
-                            nombreusuario.setText(preferences.getString("Nombre","") + " "  + preferences.getString("Apellido",""));
-                        }else {
 
-
-                            nombreusuario.setText(preferences.getString("nombreusuarioruta", preferences.getString("Nombre", "Sin Nombre")) + " " + preferences.getString("apellidousuarioruta", ""));
-                        }
                         JSONArray array = new JSONArray(response);
 
 
@@ -289,6 +279,8 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                         if (!Objects.equals(response, "[]")) {
                             // Indicar un nombre para la linea
                             polyline1.setTag("A");
+                            polyline1.setClickable(true);
+                            polyline1.setVisible(true);
 
                             //polyline1.setTag(userName);
                             // Estilo de la linea
@@ -340,7 +332,12 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                             }
                         }
                     });
-            Volley.newRequestQueue(getContext()).add(stringRequest);
+
+            if (requestQueuerutas == null){
+                requestQueuerutas = Volley.newRequestQueue(getContext());
+            }
+            requestQueuerutas.add(stringRequest);
+
         } catch (Exception e) {
 
         }
@@ -434,7 +431,13 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                         }
                     });
 
-            Volley.newRequestQueue(getContext()).add(stringRequest);
+            if (requestQueueusuarios == null){
+
+
+                requestQueueusuarios = Volley.newRequestQueue(getContext());
+            }
+            requestQueueusuarios.add(stringRequest);
+
 
         } catch (Exception e) {
 
@@ -548,7 +551,13 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                             }
                         }
                     });
-            Volley.newRequestQueue(getContext()).add(stringRequest);
+            if (requestQueuefotos == null){
+
+
+                requestQueuefotos = Volley.newRequestQueue(getContext());
+            }
+            requestQueuefotos.add(stringRequest);
+
         } catch (Exception e) {
             pDialog.dismiss();
             Toast.makeText(getContext(), "Error de catch: " + e, Toast.LENGTH_SHORT).show();
@@ -562,7 +571,8 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id",0)), new Response.Listener<String>() {
+                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id",0))
+                            +"&idusuario="+preferences.getInt("id",0)+"&idgrupo="+preferences.getInt("idgrupo",0), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -571,12 +581,16 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                         JSONArray array = new JSONArray(response);
                         FechasList.clear();
 
+                        if (!Objects.equals(response,"[]")){
+
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
 
                             FechasList.add(new FechasRutas(
-                                    cajas.getString("fecha")
+                                    cajas.getString("fecha"),
+                                    cajas.getString("mes"),
+                                    cajas.getString("dia")
                             ));
                         }
                         FechasAdapter adapter = new FechasAdapter(FechasList, getContext());
@@ -584,7 +598,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                         RVfechas.setLayoutManager(horizontallayout);
                         RVfechas.setAdapter(adapter);
 
-
+                        }
                     } catch (JSONException e) {
                         pDialog.dismiss();
                         new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
@@ -630,10 +644,15 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                             }
                         }
                     });
-            Volley.newRequestQueue(getContext()).add(stringRequest);
+            if (requestQueuefechas == null){
+
+
+                requestQueuefechas = Volley.newRequestQueue(getContext());
+            }
+            requestQueuefechas.add(stringRequest);
+
         } catch (Exception e) {
             pDialog.dismiss();
-            Toast.makeText(getContext(), "Error de catch: " + e, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -86,6 +86,7 @@
                 android:text="Detalles Del Lugar"
                 android:textAlignment="textStart"
                 android:textColor="@color/gris_obscuro"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

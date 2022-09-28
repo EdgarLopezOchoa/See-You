@@ -10,61 +10,24 @@
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:context=".RutasFragment" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RBusuariosrutas"
-        android:layout_width="0dp"
+        android:layout_width="70dp"
         android:layout_height="0dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cardView3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="40dp"
-        android:elevation="8dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/TVnombreusuarioruta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Nombre Usuario"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
 
     <TextView
         android:id="@+id/TVcolor1"
@@ -309,19 +272,24 @@
         app:layout_constraintTop_toTopOf="@+id/TVcolor9"
         app:layout_constraintVertical_bias="0.562" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RVrutasfechas"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout7"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="10dp"
-        android:scrollbars="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/cardView3"
+        android:layout_height="70dp"
+        android:background="@drawable/top_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RVrutasfechas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

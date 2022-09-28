@@ -1,28 +1,19 @@
-package com.example.seeyou;
+package com.example.seeyou.services;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.SystemClock;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,45 +22,48 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.seeyou.MainActivity;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class ServiceLocation extends Service {
 
 
-     com.google.android.gms.location.LocationRequest mLocationRequest;
-     long UPDATE_INTERVAL = 5000;  /* 10 secs */
-     long FASTEST_INTERVAL = 5000; /* 5 sec */
+    com.google.android.gms.location.LocationRequest mLocationRequest;
+    long UPDATE_INTERVAL = 5000;  /* 10 secs */
+    long FASTEST_INTERVAL = 5000; /* 5 sec */
     SharedPreferences preferences;
     int id_usuario;
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
 
         preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        id_usuario = preferences.getInt("id",0);
+        id_usuario = preferences.getInt("id", 0);
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flag, int idProcess){
+    public int onStartCommand(Intent intent, int flag, int idProcess) {
         startLocationUpdates();
         return START_STICKY;
     }
 
-    public void onDestroy(){
-
+    public void onDestroy() {
+        super.onDestroy();
     }
-
 
 
     @Nullable
@@ -98,6 +92,7 @@ public class ServiceLocation extends Service {
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
 
+
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
         getFusedLocationProviderClient(ServiceLocation.this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
@@ -113,7 +108,7 @@ public class ServiceLocation extends Service {
 
     public void onLocationChanged(Location location) {
 
-        ActualizarUbicacion(location.getLatitude(),location.getLongitude());
+        ActualizarUbicacion(location.getLatitude(), location.getLongitude());
 
         /*Ringtone ringtone = RingtoneManager.getRingtone (this, RingtoneManager.getDefaultUri (RingtoneManager.TYPE_RINGTONE));
         ringtone.play ();
@@ -134,15 +129,12 @@ public class ServiceLocation extends Service {
             @Override
             public void onResponse(String response) {
 
-
             }
 
         }, new com.android.volley.Response.ErrorListener() {
             @SuppressLint("MissingPermission")
             @Override
             public void onErrorResponse(VolleyError error) {
-
-
 
 
             }
@@ -152,9 +144,9 @@ public class ServiceLocation extends Service {
                 Map<String, String> params = new HashMap<String, String>();
 
                 preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
-                id_usuario = preferences.getInt("id",0);
+                id_usuario = preferences.getInt("id", 0);
 
-                params.put("id", id_usuario+"");
+                params.put("id", id_usuario + "");
                 params.put("latitud", latitud + "");
                 params.put("longitud", longitud + "");
 
