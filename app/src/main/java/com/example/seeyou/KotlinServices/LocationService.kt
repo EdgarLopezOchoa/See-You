@@ -6,12 +6,14 @@ import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startForegroundService
 import com.example.seeyou.R
 import com.example.seeyou.services.UpdateLocation
 import retrofit2.Call
@@ -95,6 +97,11 @@ class LocationService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         isServiceStarted = false
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            var startservice1 = Intent(this@LocationService,LocationService::class.java)
+            startForegroundService(Intent(startservice1))
+        }
     }
 
     companion object {

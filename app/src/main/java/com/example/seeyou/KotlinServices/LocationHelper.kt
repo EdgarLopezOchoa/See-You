@@ -9,7 +9,7 @@ import android.os.Bundle
 
 class LocationHelper {
     var LOCATION_REFRESH_TIME = 3000 // 3 seconds. The Minimum Time to get location update
-    var LOCATION_REFRESH_DISTANCE = 0 // 0 meters. The Minimum Distance to be changed to get location update
+    var LOCATION_REFRESH_DISTANCE = 20 // 0 meters. The Minimum Distance to be changed to get location update
     @SuppressLint("MissingPermission")
     fun startListeningUserLocation(context: Context, myListener: MyLocationListener) {
         val mLocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
