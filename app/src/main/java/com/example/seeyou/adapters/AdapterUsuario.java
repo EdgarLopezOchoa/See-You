@@ -97,7 +97,6 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
             @Override
             public void onClick(View v) {
                 UbicacionUsuario(UserList.get(position).getIdusuario());
-                FechasRutas(UserList.get(position).getIdusuario());
                 preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("idusuarioruta",UserList.get(position).getIdusuario());
@@ -105,7 +104,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 editor.putString("apellidousuarioruta",UserList.get(position).getApellido());
                 editor.putString("fecharuta","hoy");
                 editor.commit();
-
+                FechasRutas(UserList.get(position).getIdusuario());
                 AdapterUsuario adapter = new AdapterUsuario(UserList, context);
                 recyclerViewusers.setHasFixedSize(true);
                 recyclerViewusers.setLayoutManager(new LinearLayoutManager(context));
@@ -145,8 +144,8 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + id+"&idusuario="
-                    +preferences.getInt("id",0)+"&idgrupo="+preferences.getInt("idgrupo",0), new Response.Listener<String>() {
+                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id",0))
+                            +"&idusuario=" +preferences.getInt("id",0)+"&idgrupo="+preferences.getInt("idgrupo",0), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -154,6 +153,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
                         JSONArray array = new JSONArray(response);
                         FechasList.clear();
+
 
                         horizontallayout = new LinearLayoutManager(context,horizontallayout.HORIZONTAL,false);
                         for (int i = 0; i < array.length(); i++) {
