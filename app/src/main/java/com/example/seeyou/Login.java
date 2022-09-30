@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -126,7 +127,6 @@ public class Login extends AppCompatActivity {
         pDialog.setCancelable(true);
 
         SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
-
 
         if (preferences.getBoolean("terminos",false) != true){
         MostrarTerminos();
@@ -235,6 +235,30 @@ public class Login extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
 
+
+        if (preferences.getBoolean("modoobscuro",false) !=true) {
+            CambiarSesion = new SweetAlertDialog(Login.this);
+            CambiarSesion.setTitleText("MODO OBSCURO");
+            CambiarSesion.setContentText("De momento nuestra aplicacion no soporta el modo obscuro, favor de " +
+                    "utilizar el modo claro de su dispositivo para apreciar mejor el diseño y evitar errores de" +
+                    " contraste.");
+            CambiarSesion.show();
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("modoobscuro",true);
+            editor.commit();
+        }
+
+
+
+    }
+
+    public void ubicacionsegundoplano(){
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
 
@@ -312,6 +336,33 @@ public class Login extends AppCompatActivity {
                     btnaceptar.setBackgroundResource(R.drawable.buttonterminos);
                     btnaceptar.setClickable(false);
                 }
+            }
+        });
+
+        bottomSheetDialogTerminos.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                CambiarSesion = new SweetAlertDialog(Login.this);
+                CambiarSesion.setTitleText("Ubicacion en segundo plano");
+                CambiarSesion.setContentText("See You necesita hacer uso de tu ubicación en segundo plano para brindarte " +
+                        "a ti y a tus conocidos una mejor experiencia en el funcionamiento de la app, por favor " +
+                        "permite que See You tenga acceso a tu ubicación en todo momento.");
+                CambiarSesion.setConfirmText("IR");
+                CambiarSesion.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        ubicacionsegundoplano();
+                    }
+                });
+                CambiarSesion.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        ubicacionsegundoplano();
+                    }
+                });
+                CambiarSesion.show();
+
+
             }
         });
     }

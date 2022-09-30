@@ -17,6 +17,7 @@ import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -26,11 +27,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
             startForegroundService(new Intent(this, LocationService.class));
         }
 
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -155,6 +160,10 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.navegador);
         navigation.setOnNavigationItemSelectedListener(mOnNavigacionItemSelectedListener);
+
+
+
+
     }
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigacionItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
