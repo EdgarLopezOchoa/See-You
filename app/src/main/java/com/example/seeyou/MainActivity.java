@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -79,14 +80,15 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
     public static ConstraintLayout constraintLayout;
-    int id_usuario = 0,alertaubicacionactual = 0;
-    double longitud,latitud;
+    int id_usuario = 0, alertaubicacionactual = 0;
+    double longitud, latitud;
     public static int bucle = 0;
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 sec */
     private long FASTEST_INTERVAL = 3000; /* 3 sec */
+    private float distance_interval = 15.0F;
 
 
     //private com.google.android.gms.location.LocationRequest RUTA_mLocationRequest;
@@ -109,10 +111,13 @@ public class MainActivity extends AppCompatActivity {
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(new Intent(this, ServiceLocation.class));
         }*/
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(this, LocationService.class));
-        }
 
+
+        if (isMyServiceRunning(LocationService.class) == false) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(new Intent(this, LocationService.class));
+            }
+        }
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -126,25 +131,22 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
         id_usuario = preferences.getInt("id", 0);
 
-        if (preferences.getBoolean("fondo2", false) == true){
+        if (preferences.getBoolean("fondo2", false) == true) {
 
 
             constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
             system(2);
 
-        }else if(preferences.getBoolean("fondo", false) == true){
-
+        } else if (preferences.getBoolean("fondo", false) == true) {
 
 
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
             system(1);
-        }
-        else if(preferences.getBoolean("fondo3", false) == true){
+        } else if (preferences.getBoolean("fondo3", false) == true) {
 
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
             system(3);
-        }
-        else if(preferences.getBoolean("fondo4", false) == true){
+        } else if (preferences.getBoolean("fondo4", false) == true) {
 
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
             system(4);
@@ -155,16 +157,15 @@ public class MainActivity extends AppCompatActivity {
 
         //llama al fragmento de mapa y lo pone en el FrameLayout
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.FrameLayout,mapsFragment);
+        transaction.replace(R.id.FrameLayout, mapsFragment);
         transaction.commit();
 
         BottomNavigationView navigation = findViewById(R.id.navegador);
         navigation.setOnNavigationItemSelectedListener(mOnNavigacionItemSelectedListener);
 
 
-
-
     }
+
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigacionItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
             //la navegacion entre fragmentos de la barra inferior
 
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.RutasFragment:
                     loadFragment(RutasFragment);
                     bucle = 1;
@@ -191,15 +192,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void loadFragment(Fragment fragment){
+    public void loadFragment(Fragment fragment) {
 
         //remplaza el fragmentLayour por los fragmentos
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.replace(R.id.FrameLayout,fragment);
+        transaction.replace(R.id.FrameLayout, fragment);
         transaction.commit();
     }
-
 
 
     @Override
@@ -236,32 +236,47 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private boolean isMyServiceRunning(Class serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public static void fondobottom(int accion){
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
 
-        if (accion == 1){
+    public static void fondobottom(int accion) {
+
+        if (accion == 1) {
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado);
-        } else if(accion == 2){
+        } else if (accion == 2) {
             constraintLayout.setBackgroundResource(R.drawable.fondonaranaja2);
-        }else if(accion == 3){
+        } else if (accion == 3) {
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado3);
-        } else if(accion == 4){
+        } else if (accion == 4) {
             constraintLayout.setBackgroundResource(R.drawable.fondodegradado4);
         }
 
     }
 
-    public void system(int action){
+    public void system(int action) {
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
             Drawable background = null;
-            if (action == 1){
+            if (action == 1) {
                 background = getResources().getDrawable(R.drawable.fondodegradado);
-            } else if(action == 2){
+            } else if (action == 2) {
                 background = getResources().getDrawable(R.drawable.fondonaranaja2);
-            }else if(action == 3){
+            } else if (action == 3) {
                 background = getResources().getDrawable(R.drawable.fondodegradado3);
-            } else if(action == 4){
+            } else if (action == 4) {
                 background = getResources().getDrawable(R.drawable.fondodegradado4);
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -273,15 +288,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     private void ejecutarRUTA() {
         final Handler handler = new Handler();
         final Handler handler2 = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-              guardarruta();
+                guardarruta();
 
                 handler.postDelayed(this, 60 * 2000);
             }
@@ -362,13 +375,13 @@ public class MainActivity extends AppCompatActivity {
 
     }*/
 
-    public void Notificar(int notID){
+    public void Notificar(int notID) {
         NotificationCompat.Builder creador;
         String canalID = "MiCanal01";
         NotificationManager notificador = (NotificationManager) getSystemService(MainActivity.this.NOTIFICATION_SERVICE);
         // Si nuestro dispositivo tiene Android 8 (API 26, Oreo) o superior
         creador = new NotificationCompat.Builder(MainActivity.this, canalID);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String canalNombre = "ALERTA";
             String canalDescribe = "ALGUIEN NECESITA TU AYUDA!!!!";
             int importancia = NotificationManager.IMPORTANCE_MAX;
@@ -396,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
     private void BuscarAlertas() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://mifolderdeproyectos.online/SEEYOU/Notificaciones_Alertas.php?idgrupo=" + preferences.getInt("idgrupo",0), new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/Notificaciones_Alertas.php?idgrupo=" + preferences.getInt("idgrupo", 0), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -405,13 +418,9 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray array = new JSONArray(response);
 
 
-
-                    if(!Objects.equals(response,"[]")){
+                    if (!Objects.equals(response, "[]")) {
                         Notificar(1);
                     }
-
-
-
 
 
                 } catch (JSONException e) {
@@ -451,6 +460,7 @@ public class MainActivity extends AppCompatActivity {
         mLocationRequest = new com.google.android.gms.location.LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setSmallestDisplacement(distance_interval);
 
         // Create LocationSettingsRequest object using location request
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
@@ -459,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Check whether location settings are satisfied
         // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+       /* SettingsClient settingsClient = LocationServices.getSettingsClient(this);
         settingsClient.checkLocationSettings(locationSettingsRequest);
         final int REQUEST_CHECK_SETTINGS = 0x1;
 
@@ -503,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
 
 
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
@@ -524,6 +534,7 @@ public class MainActivity extends AppCompatActivity {
         longitud = location.getLongitude();
 
     }
+
     public void guardarruta() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -548,7 +559,7 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 try {
 
-                    if(alertaubicacionactual == 0) {
+                    if (alertaubicacionactual == 0) {
                         new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("No Hemos Podido Almacenar La Ruta...")
@@ -571,7 +582,7 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
 
 
-                params.put("id", id_usuario+"");
+                params.put("id", id_usuario + "");
                 params.put("latitud", latitud + "");
                 params.put("longitud", longitud + "");
 
