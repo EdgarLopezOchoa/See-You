@@ -37,13 +37,11 @@
         android:theme="@style/Theme.SeeYou"
         tools:targetApi="31">
 
-        <!--<service android:name=".ServiceLocation"
-           android:exported="true"
-           /> -->
+        <!--
         <service android:name=".services.ServiceLocation"
             android:enabled="true"
             android:exported="false"
-            />
+            />-->
 
         <service
             android:name=".KotlinServices.LocationService"
@@ -59,12 +57,15 @@
             </intent-filter>
         </receiver>
 
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".registro_grupos"
+
             android:exported="false" />
         <activity
             android:name=".Login"

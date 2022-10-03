@@ -3,6 +3,7 @@ package com.example.seeyou.services;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,11 +14,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.seeyou.KotlinServices.LocationService;
+import com.example.seeyou.MainActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UpdateLocation extends AppCompatActivity {
+public class UpdateLocation extends LocationService {
     RequestQueue requestQueue = null;
 
 
@@ -28,14 +31,15 @@ public class UpdateLocation extends AppCompatActivity {
         ActualizarUbicacion(Latitud,Longitud,context);
     }
 
-    public void ActualizarUbicacion(double latitud, double longitud,Context context) {
+    public void ActualizarUbicacion(double latitud, double longitud, Context context) {
+        try{
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://mifolderdeproyectos.online/SEEYOU/ubicacion_usuario.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                finish();
+
             }
 
         }, new com.android.volley.Response.ErrorListener() {
@@ -69,5 +73,9 @@ public class UpdateLocation extends AppCompatActivity {
         }
         requestQueue.add(stringRequest);
 
+        }catch (Exception e){
+
+        }
     }
+
 }
