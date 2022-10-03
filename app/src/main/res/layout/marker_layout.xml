@@ -41,7 +41,7 @@
                 android:layout_marginTop="10dp"
                 android:elevation="10dp"
                 android:fontFamily="sans-serif-condensed-light"
-                android:text="TextView"
+                android:text="DIRECCION DEL PUNTO"
                 android:textAlignment="center"
                 android:textColor="@color/gris_obscuro"
                 android:textSize="16sp"
@@ -105,7 +105,7 @@
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="@+id/BTNeliminar"
                 app:layout_constraintEnd_toStartOf="@+id/TVbotonesmarker"
-                app:layout_constraintStart_toStartOf="@+id/TVmasinformacion"
+                app:layout_constraintStart_toStartOf="@+id/IVusermarker"
                 app:layout_constraintTop_toTopOf="@+id/BTNeliminar" />
 
             <Switch
@@ -126,7 +126,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/button"
                 android:text="ELIMINAR"
@@ -134,7 +134,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
                 app:layout_constraintStart_toEndOf="@+id/TVbotonesmarker"
-                app:layout_constraintTop_toBottomOf="@+id/TVubicacion" />
+                app:layout_constraintTop_toBottomOf="@+id/TVusermarker" />
 
             <TextView
                 android:id="@+id/TVbotonesmarker"
@@ -143,7 +143,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
                 app:layout_constraintStart_toStartOf="@+id/TVmasinformacion"
-                app:layout_constraintTop_toBottomOf="@+id/TVmasinformacion" />
+                app:layout_constraintTop_toBottomOf="@+id/IVusermarker" />
 
             <TextView
                 android:id="@+id/Tvtitulodireccionmarker"
@@ -159,6 +159,42 @@
                 app:layout_constraintEnd_toEndOf="@+id/TVdescripcion"
                 app:layout_constraintStart_toStartOf="@+id/TVdescripcion"
                 app:layout_constraintTop_toBottomOf="@+id/TVdescripcion" />
+
+            <ImageView
+                android:id="@+id/IVusermarker"
+                android:layout_width="80dp"
+                android:layout_height="75dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/TVubicacion"
+                app:layout_constraintTop_toBottomOf="@+id/TVubicacion"
+                app:srcCompat="@drawable/button2" />
+
+            <TextView
+                android:id="@+id/TVusermarker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="USER NAME"
+                android:textColor="@color/gris_obscuro"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+                app:layout_constraintStart_toEndOf="@+id/IVusermarker"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="MARCADOR REGISTRADOR POR:"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/TVmasinformacion"
+                app:layout_constraintStart_toEndOf="@+id/IVusermarker"
+                app:layout_constraintTop_toTopOf="@+id/IVusermarker" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

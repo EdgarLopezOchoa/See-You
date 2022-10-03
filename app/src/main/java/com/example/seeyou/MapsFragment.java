@@ -129,7 +129,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     private static ObjectAnimator animacionDesvanecido;
     private static ObjectAnimator animacionRotation;
     public static ImageView closerecycler, cerrarunir, IVcerrarcreargrupo;
-    ImageView NotificacionAlerta;
+    ImageView NotificacionAlerta,IVusermarker;
     private ImageView ubicacion, location, vermarkers, cambiarmapa, grupos;
     private Button cancelar, enviar, cancelarviaje;
     public static Button agregargrupo, creargrupo;
@@ -154,7 +154,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     RequestQueue requestQueue,requestQueueUsers = null,requestQueuePuntos = null;
     ConnectivityManager locationManagerinternet;
     NetworkInfo networkInfo;
-    TextView ubicacionmarcador, coordenadamarcador, descripcionmarcador;
+    TextView ubicacionmarcador, coordenadamarcador, descripcionmarcador,TVusermarker;
     Switch habilitado;
     SharedPreferences preferences;
     EditText Nombregrupo;
@@ -324,6 +324,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         TVidmarker = bottomSheetDialogmarker.findViewById(R.id.TVbotonesmarker);
                         Button btneliminar = bottomSheetDialogmarker.findViewById(R.id.BTNeliminar);
                         Button iniciarviaje = bottomSheetDialogmarker.findViewById(R.id.BTNviajar);
+                        IVusermarker = bottomSheetDialogmarker.findViewById(R.id.IVusermarker);
+                        TVusermarker = bottomSheetDialogmarker.findViewById(R.id.TVusermarker);
 
 
                         if (preferences.getBoolean("fondo2", false) == true) {
@@ -431,7 +433,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         nombremarcador.setText(marker.getTitle());
 
                         if (!Objects.equals(marker.getTitle(), "Nombre:")) {
-                            Ubicacion(marker.getTitle());
+                            DatosMarker(marker.getTitle());
                         } else {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
                         }
@@ -1142,10 +1144,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                             }
                         } catch (JSONException e) {
                             pDialog.dismiss();
-                            new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Algo Salio Mal..")
-                                    .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                                    .show();
+
                         }
                     }
                 },
@@ -1257,7 +1256,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                 .setContentText("EL Grupo No Existe... Introduzca Un Codigo Valido....")
                                 .show();
                     } else if (Objects.equals(response, "Error Usuario")) {
-                        new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("Algo Salio Mal..")
                                 .setContentText("Ya Formas Parte De Este Grupo....")
                                 .show();
@@ -1285,7 +1284,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     new SweetAlertDialog(
                             getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(17)")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -1382,7 +1381,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     pDialog.dismiss();
                     new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(19)")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -1707,7 +1706,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     }
 
 
-    public void Ubicacion(String id) {
+    public void DatosMarker(String id) {
 
         pDialog.show();
 
@@ -1725,6 +1724,11 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                     descripcionmarcador.setText(cajas.getString("descripcion"));
                     TVidmarker.setText(cajas.getString("IDpunto"));
                     nombremarcador.setText(cajas.getString("Nombre"));
+                    TVusermarker.setText(cajas.getString("usuario")+" "+cajas.getString("apellido"));
+                    Picasso.get()
+                            .load(cajas.getString("foto"))
+                            .placeholder(R.drawable.user)
+                            .into(IVusermarker);
                     bottomSheetDialogmarker.show();
 
 
@@ -1999,6 +2003,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         recyclerviewgrupos = view.findViewById(R.id.RBgrupos);
         TValertamarcador = view.findViewById(R.id.TValertamarcador);
         NotificacionAlerta = view.findViewById(R.id.IValerta);
+
 
         NotificacionAlerta.setOnClickListener(new View.OnClickListener() {
             @Override

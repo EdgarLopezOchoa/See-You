@@ -150,7 +150,8 @@ public class PerfilFragment extends Fragment {
         ConstrainMain = view.findViewById(R.id.Fondobottomnavigation);
 
 
-
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
 
