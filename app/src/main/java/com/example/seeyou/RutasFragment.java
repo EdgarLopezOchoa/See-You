@@ -184,9 +184,9 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             public void run() {
                 RutasUsuarios();
 
-                handler.postDelayed(this, 3000);
+                handler.postDelayed(this, 5000);
             }
-        }, 3000);
+        }, 5000);
 
 
         handler2.postDelayed(new Runnable() {
@@ -194,9 +194,9 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             public void run() {
                 usuariosMapa();
 
-                handler.postDelayed(this, 3100);
+                handler.postDelayed(this, 5000);
             }
-        }, 3100);
+        }, 5000);
 
     }
 
@@ -450,7 +450,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
             View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
             ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
-            Picasso.get().load(url).placeholder(R.drawable.ic_baseline_arrow_circle_down_24).into(markerImageView);
+            Picasso.get().load(url).placeholder(R.drawable.user).into(markerImageView);
             customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
             customMarkerView.buildDrawingCache();

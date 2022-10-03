@@ -83,6 +83,10 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.nombre.setText(UserList.get(position).getNombre() +" " + UserList.get(position).getApellido());
+        holder.union.setText("FECHA DE UNION AL GRUPO: \n" +
+                             "Año: "+UserList.get(position).getAño()+"\n"
+                            +"Mes: "+UserList.get(position).getMes()+"\n"
+                            +"Dia: "+UserList.get(position).getDay());
         Picasso.get()
                 .load(UserList.get(position).getFoto())
                 .placeholder(R.drawable.user)
@@ -126,6 +130,7 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
 
         ImageView fotouser,deleteuser;
         EditText nombre;
+        TextView union;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -134,6 +139,7 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
             fotouser = itemView.findViewById(R.id.IVusergroup);
             nombre = itemView.findViewById(R.id.ETnombreusuariogrupo);
             deleteuser = itemView.findViewById(R.id.IVeliminarusuario);
+            union = itemView.findViewById(R.id.TVunionUsuario);
         }
     }
 
@@ -163,7 +169,10 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
                                     cajas.getInt("idusuarios"),
                                     cajas.getString("foto"),
                                     cajas.getString("nombre"),
-                                    cajas.getString("apellido")
+                                    cajas.getString("apellido"),
+                                    cajas.getString("año"),
+                                    cajas.getString("mes"),
+                                    cajas.getString("day")
                             ));
                         }
                         UsersGroupsAdapter adapter = new UsersGroupsAdapter(UsersGroupsList, context);

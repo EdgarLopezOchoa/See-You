@@ -246,7 +246,10 @@ public class GruposAdapters extends RecyclerView.Adapter<GruposAdapters.ViewHold
                                     cajas.getInt("idusuarios"),
                                     cajas.getString("foto"),
                                     cajas.getString("nombre"),
-                                    cajas.getString("apellido")
+                                    cajas.getString("apellido"),
+                                    cajas.getString("año"),
+                                    cajas.getString("mes"),
+                                    cajas.getString("day")
                             ));
                         }
                         UsersGroupsAdapter adapter = new UsersGroupsAdapter(UsersGroupsList, context);

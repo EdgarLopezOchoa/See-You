@@ -132,7 +132,6 @@ open class LocationService : Service() {
 
 }
 
-
 class BootDeviceReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {

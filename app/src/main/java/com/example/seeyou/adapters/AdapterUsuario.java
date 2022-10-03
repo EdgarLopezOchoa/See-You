@@ -84,7 +84,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
         holder.username.setText(UserList.get(position).getNombre());
         Picasso.get()
                 .load(UserList.get(position).getFoto())
-                .placeholder(R.drawable.ic_baseline_arrow_circle_down_24)
+                .placeholder(R.drawable.user)
                 .noFade()
                 .into(holder.userimage);
 

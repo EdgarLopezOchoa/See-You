@@ -6,13 +6,20 @@ public class UsersGroups {
     private String foto;
     private String Nombre;
     private String Apellido;
+    private String Año;
+    private String Mes;
+    private String Day;
 
-    public UsersGroups(int id_grupo, int id_usuario, String foto, String nombre, String apellido) {
+
+    public UsersGroups(int id_grupo, int id_usuario, String foto, String nombre, String apellido, String año, String mes, String day) {
         this.id_grupo = id_grupo;
         this.id_usuario = id_usuario;
         this.foto = foto;
         Nombre = nombre;
         Apellido = apellido;
+        Año = año;
+        Mes = mes;
+        Day = day;
     }
 
     public int getId_grupo() {
@@ -55,6 +62,30 @@ public class UsersGroups {
         Apellido = apellido;
     }
 
+    public String getAño() {
+        return Año;
+    }
+
+    public void setAño(String año) {
+        Año = año;
+    }
+
+    public String getMes() {
+        return Mes;
+    }
+
+    public void setMes(String mes) {
+        Mes = mes;
+    }
+
+    public String getDay() {
+        return Day;
+    }
+
+    public void setDay(String day) {
+        Day = day;
+    }
+
     @Override
     public String toString() {
         return "UsersGroups{" +
@@ -63,6 +94,9 @@ public class UsersGroups {
                 ", foto='" + foto + '\'' +
                 ", Nombre='" + Nombre + '\'' +
                 ", Apellido='" + Apellido + '\'' +
+                ", Año='" + Año + '\'' +
+                ", Mes='" + Mes + '\'' +
+                ", Day='" + Day + '\'' +
                 '}';
     }
 }
