@@ -336,6 +336,8 @@ public class PerfilFragment extends Fragment {
 
 
 
+
+
     public void system(int action){
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getActivity().getWindow();

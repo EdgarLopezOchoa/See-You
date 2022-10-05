@@ -40,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -112,13 +113,10 @@ public class MainActivity extends AppCompatActivity {
             startForegroundService(new Intent(this, ServiceLocation.class));
         }*/
 
-
-        if (isMyServiceRunning(LocationService.class) == false) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(new Intent(this, LocationService.class));
-            }
+        Intent intent = new Intent(this, LocationService.class);
+        if(LocationService.Companion.isServiceStarted() == false) {
+            startService(intent);
         }
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -165,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigacionItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -236,21 +235,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private boolean isMyServiceRunning(Class serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        finish();
-    }
 
     public static void fondobottom(int accion) {
 
