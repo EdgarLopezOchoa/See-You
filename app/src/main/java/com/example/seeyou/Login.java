@@ -577,7 +577,16 @@ public class Login extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-               String IMAGEN = getStringImagen(bitmap);
+               String IMAGEN = "";
+
+                       if (bitmap != null){
+
+                           IMAGEN = getStringImagen(bitmap);
+                       }else {
+                           IMAGEN="NOFOTO";
+                       }
+
+
                 Map<String, String> parametros = new HashMap<String, String>();
                 parametros.put("Nombre", Nombre);
                 parametros.put("Apellido", Apellido);
