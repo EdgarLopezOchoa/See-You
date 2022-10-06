@@ -50,21 +50,6 @@
             app:layout_constraintStart_toStartOf="@+id/SVubicacion"
             app:layout_constraintTop_toBottomOf="@+id/SVubicacion" />
 
-        <Button
-            android:id="@+id/BTNcancelarviaje"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/button"
-            android:text="Cancelar Viaje"
-            android:textColor="@color/white"
-            android:visibility="invisible"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/BTNcancelar"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="@+id/BTNcancelar" />
-
         <ImageView
             android:id="@+id/IVlocation"
             android:layout_width="50dp"
@@ -229,6 +214,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/IVlocation"
             app:srcCompat="@drawable/emergency_round" />
+
+        <Button
+            android:id="@+id/BTNcancelarviaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/button"
+            android:text="Cancelar Viaje"
+            android:textColor="@color/white"
+            android:visibility="invisible"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/BTNcancelar"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="@+id/BTNcancelar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

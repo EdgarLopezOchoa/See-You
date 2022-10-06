@@ -318,7 +318,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                         //Asigna los valores a los objetos dentro el bottomsheetdialog
                         nombremarcador = bottomSheetDialogmarker.findViewById(R.id.TVnombreubicacion);
                         ubicacionmarcador = bottomSheetDialogmarker.findViewById(R.id.TVubicacion);
-                        coordenadamarcador = bottomSheetDialogmarker.findViewById(R.id.TVmasinformacion);
                         descripcionmarcador = bottomSheetDialogmarker.findViewById(R.id.TVdescripcion);
                         habilitado = bottomSheetDialogmarker.findViewById(R.id.SWhabilitar);
                         TVidmarker = bottomSheetDialogmarker.findViewById(R.id.TVbotonesmarker);
@@ -429,7 +428,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                     .show();
                         }
 
-                        coordenadamarcador.setText("" + Latitud + " : " + logitud);
                         nombremarcador.setText(marker.getTitle());
 
                         if (!Objects.equals(marker.getTitle(), "Nombre:")) {

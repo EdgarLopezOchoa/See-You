@@ -83,9 +83,9 @@ public class UsersGroupsAdapter extends RecyclerView.Adapter<UsersGroupsAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.nombre.setText(UserList.get(position).getNombre() +" " + UserList.get(position).getApellido());
-        holder.union.setText("FECHA DE UNION AL GRUPO: \n" +
-                             "Año: "+UserList.get(position).getAño()+"\n"
-                            +"Mes: "+UserList.get(position).getMes()+"\n"
+        holder.union.setText("FECHA DE UNION AL GRUPO: \n\n" +
+                             "Año: "+UserList.get(position).getAño()+"\n\n"
+                            +"Mes: "+UserList.get(position).getMes()+"\n\n"
                             +"Dia: "+UserList.get(position).getDay());
         Picasso.get()
                 .load(UserList.get(position).getFoto())
