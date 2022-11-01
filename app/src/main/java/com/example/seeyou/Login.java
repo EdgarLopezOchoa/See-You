@@ -122,6 +122,8 @@ public class Login extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         pDialog = new SweetAlertDialog(Login.this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(true);
@@ -138,15 +140,9 @@ public class Login extends AppCompatActivity {
         sesion = findViewById(R.id.CBsesion);
         btnIngresar = findViewById(R.id.btnIngresar);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            Drawable background = getResources().getDrawable(R.drawable.statusbar_login);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-            window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
-            window.setNavigationBarColor(getResources().getColor(android.R.color.transparent));
-            window.setBackgroundDrawable(background);
-        }
+
+
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
@@ -232,7 +228,6 @@ public class Login extends AppCompatActivity {
         });
 
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
 
 

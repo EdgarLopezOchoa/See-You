@@ -2,12 +2,9 @@ package com.example.seeyou;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -24,17 +21,14 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -45,24 +39,18 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -76,11 +64,6 @@ import com.example.seeyou.adapters.GruposAdapters;
 import com.example.seeyou.adapters.MakersAdapters;
 import com.example.seeyou.adapters.Markers;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -99,12 +82,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.maps.android.ui.IconGenerator;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -112,7 +93,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -127,9 +107,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickListener {
     public static GoogleMap mMap, mapubicacion;
     private static ObjectAnimator animacionDesvanecido;
+    private static ObjectAnimator animacionbuttons;
     private static ObjectAnimator animacionRotation;
+
     public static ImageView closerecycler, cerrarunir, IVcerrarcreargrupo;
-    ImageView NotificacionAlerta,IVusermarker;
+    ImageView NotificacionAlerta,IVusermarker, IVsettings;
     private ImageView ubicacion, location, vermarkers, cambiarmapa, grupos;
     private Button cancelar, enviar, cancelarviaje;
     public static Button agregargrupo, creargrupo;
@@ -143,7 +125,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     public static String direccion = "", Codigogrupo = "";
     public static int id_usuario = 0, id_grupo = 0, cerrarbucle = 0;
     String addressStr, NombreGrupo1;
-    int alertapuntos = 0, alertaubicacion = 0, nomasviaje = 0;
+    int alertapuntos = 0, alertaubicacion = 0, nomasviaje = 0, settings = 0;
     public static BottomSheetDialog bottomSheetDialog, bottomSheetDialogmarker, bottomSheetDialogunirse, bottomSheetDialogcreargrupo;
     public static Toolbar TBgrupos;
     SweetAlertDialog Eliminar_Marcador;
@@ -161,6 +143,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     Marker marker[] = new Marker[20];
     Double Latitudruta, Longitudruta;
     Polyline polylineruta = null;
+
 
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
@@ -1174,10 +1157,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                                     }
                                 } catch (Exception e) {
                                     pDialog.dismiss();
-                                    new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                            .setTitleText("Algo Salio Mal..")
-                                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                                            .show();
+
                                 }
                             }
                         });
@@ -1976,6 +1956,39 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
     }
 
 
+    public void cambiarbotones(){
+
+        animacionbuttons = ObjectAnimator.ofFloat(ubicacion, "y", 65);
+        animacionbuttons.setDuration(0);
+        animacionDesvanecido = ObjectAnimator.ofFloat(ubicacion, View.ALPHA, 1.0f, 0.0f);
+        animacionDesvanecido.setDuration(0);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+        animatorSet.start();
+
+
+        animacionbuttons = ObjectAnimator.ofFloat(cambiarmapa, "y", 71);
+        animacionDesvanecido = ObjectAnimator.ofFloat(cambiarmapa, View.ALPHA, 1.0f, 0.0f);
+        animacionDesvanecido.setDuration(0);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+        animatorSet.start();
+
+
+        animacionbuttons = ObjectAnimator.ofFloat(vermarkers, "y", 73);
+        animacionbuttons.setDuration(0);
+        animacionDesvanecido = ObjectAnimator.ofFloat(vermarkers, View.ALPHA, 1.0f, 0.0f);
+        animacionDesvanecido.setDuration(0);
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+        animatorSet.start();
+
+
+        ubicacion.setVisibility(View.GONE);
+        vermarkers.setVisibility(View.GONE);
+        cambiarmapa.setVisibility(View.GONE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -1988,7 +2001,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         //objetos de la pantalla de inicio de maps
-        ubicacion = view.findViewById(R.id.IVubicacion);
+        ubicacion = view.findViewById(R.id.IVsetmarker);
         cancelar = view.findViewById(R.id.BTNcancelar);
         enviar = view.findViewById(R.id.BTNenviarmensaje);
         location = view.findViewById(R.id.IVlocation);
@@ -2001,6 +2014,20 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         recyclerviewgrupos = view.findViewById(R.id.RBgrupos);
         TValertamarcador = view.findViewById(R.id.TValertamarcador);
         NotificacionAlerta = view.findViewById(R.id.IValerta);
+        IVsettings = view.findViewById(R.id.IVsettingsmap);
+
+        //Grupos Dialog
+        closerecycler = view.findViewById(R.id.IVclose);
+
+        TBgrupos = view.findViewById(R.id.TBgrupos);
+        agregargrupo = view.findViewById(R.id.BTNunirsegrupo);
+        creargrupo = view.findViewById(R.id.BTNcreargrupo);
+
+
+        cambiarbotones();
+
+
+
 
 
         NotificacionAlerta.setOnClickListener(new View.OnClickListener() {
@@ -2011,12 +2038,91 @@ public class MapsFragment extends Fragment implements GoogleMap.OnPolylineClickL
         });
 
 
-        //Grupos Dialog
-        closerecycler = view.findViewById(R.id.IVclose);
+        IVsettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        TBgrupos = view.findViewById(R.id.TBgrupos);
-        agregargrupo = view.findViewById(R.id.BTNunirsegrupo);
-        creargrupo = view.findViewById(R.id.BTNcreargrupo);
+                if (settings == 1) {
+                    animacionbuttons = ObjectAnimator.ofFloat(ubicacion, "y", 65);
+                    animacionbuttons.setDuration(500);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(ubicacion, View.ALPHA, 1.0f, 0.0f);
+                    animacionDesvanecido.setDuration(500);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+                    animatorSet.start();
+
+
+
+
+                    animacionbuttons = ObjectAnimator.ofFloat(cambiarmapa, "y", 71);
+                    animacionbuttons.setDuration(500);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(cambiarmapa, View.ALPHA, 1.0f, 0.0f);
+                    animacionDesvanecido.setDuration(500);
+                    animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+                    animatorSet.start();
+
+
+                    animacionbuttons = ObjectAnimator.ofFloat(vermarkers, "y", 73);
+                    animacionbuttons.setDuration(500);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(vermarkers, View.ALPHA, 1.0f, 0.0f);
+                    animacionDesvanecido.setDuration(500);
+                    animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+                    animatorSet.start();
+
+                    ubicacion.setClickable(false);
+                    vermarkers.setClickable(false);
+                    cambiarmapa.setClickable(false);
+
+
+
+                    settings = 0;
+                } else{
+
+                    ubicacion.setVisibility(View.VISIBLE);
+                    vermarkers.setVisibility(View.VISIBLE);
+                    cambiarmapa.setVisibility(View.VISIBLE);
+
+                    animacionbuttons = ObjectAnimator.ofFloat(ubicacion, "y", 165);
+                    animacionbuttons.setDuration(500);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(ubicacion, View.ALPHA, 0.0f, 1.0f);
+                    animacionDesvanecido.setDuration(500);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+                    animatorSet.start();
+
+
+                    animacionbuttons = ObjectAnimator.ofFloat(cambiarmapa, "y", 261);
+                    animacionbuttons.setDuration(500);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(cambiarmapa, View.ALPHA, 0.0f, 1.0f);
+                    animacionDesvanecido.setDuration(500);
+                    animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+                    animatorSet.start();
+
+
+                    animacionbuttons = ObjectAnimator.ofFloat(vermarkers, "y", 358);
+                    animacionbuttons.setDuration(500);
+                    animacionDesvanecido = ObjectAnimator.ofFloat(vermarkers, View.ALPHA, 0.0f, 1.0f);
+                    animacionDesvanecido.setDuration(500);
+                    animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animacionbuttons,animacionDesvanecido);
+                    animatorSet.start();
+                    animatorSet = new AnimatorSet();
+                    animatorSet.play(animacionbuttons);
+                    animatorSet.start();
+
+                    ubicacion.setClickable(true);
+                    vermarkers.setClickable(true);
+                    cambiarmapa.setClickable(true);
+
+
+                    settings = 1;
+                }
+            }
+        });
+
 
 
         SVubicacion.setIconifiedByDefault(false);

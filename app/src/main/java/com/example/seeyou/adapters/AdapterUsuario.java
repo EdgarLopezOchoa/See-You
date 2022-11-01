@@ -1,11 +1,13 @@
 package com.example.seeyou.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,23 +46,24 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHolder> {
 
     ArrayList<Usuarios> UserList;
+    Activity activity;
     private Context context;
     SharedPreferences preferences;
     LinearLayoutManager horizontallayout;
     SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
     private GoogleMap mMap = RutasFragment.mMap;
     SharedPreferences.Editor editor;
-    int alertapuntos = 0;
+    int alertapuntos = 0, height = RutasFragment.height;
     LocationManager locationManager;
     RecyclerView RVfechas = RutasFragment.RVfechas;
     ArrayList<FechasRutas> FechasList = new ArrayList<>();
     ConnectivityManager locationManagerinternet;
     RecyclerView recyclerViewusers = RutasFragment.recyclerViewusers;
 
-    public AdapterUsuario(ArrayList<Usuarios> UserList, Context context) {
+    public AdapterUsuario(ArrayList<Usuarios> UserList, Context context, Activity activity) {
 
         this.UserList = UserList;
-
+        this.activity = activity;
         this.context = context;
 
 
@@ -76,10 +79,16 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(false);
         return new ViewHolder(view);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
+
+
         preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
         holder.username.setText(UserList.get(position).getNombre());
         Picasso.get()
@@ -88,9 +97,20 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 .noFade()
                 .into(holder.userimage);
 
-        if (Objects.equals(preferences.getInt("idusuarioruta",0),UserList.get(position).getIdusuario())){
-            holder.constrainuserrutas.setBackgroundResource(R.drawable.buttonfondo4);
-            holder.username.setTextColor(Color.WHITE);
+        if (Objects.equals(preferences.getInt("idusuarioruta", 0), UserList.get(position).getIdusuario())) {
+
+            if(position == 0) {
+                holder.constrainuserrutas.setBackgroundResource(R.drawable.button2_top);
+                holder.username.setTextColor(Color.WHITE);
+            }else{
+                holder.constrainuserrutas.setBackgroundResource(R.drawable.buttonfondo5);
+                holder.username.setTextColor(Color.WHITE);
+            }
+
+            if(UserList.size() == position+1){
+                holder.constrainuserrutas.setBackgroundResource(R.drawable.button2_bottom);
+                holder.username.setTextColor(Color.WHITE);
+            }
         }
 
         holder.contenedor.setOnClickListener(new View.OnClickListener() {
@@ -99,16 +119,23 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 UbicacionUsuario(UserList.get(position).getIdusuario());
                 preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt("idusuarioruta",UserList.get(position).getIdusuario());
-                editor.putString("nombreusuarioruta",UserList.get(position).getNombre());
-                editor.putString("apellidousuarioruta",UserList.get(position).getApellido());
-                editor.putString("fecharuta","hoy");
+                editor.putInt("idusuarioruta", UserList.get(position).getIdusuario());
+                editor.putString("nombreusuarioruta", UserList.get(position).getNombre());
+                editor.putString("apellidousuarioruta", UserList.get(position).getApellido());
+                editor.putString("fecharuta", "hoy");
                 editor.commit();
                 FechasRutas(UserList.get(position).getIdusuario());
-                AdapterUsuario adapter = new AdapterUsuario(UserList, context);
+                AdapterUsuario adapter = new AdapterUsuario(UserList, context, activity);
+
+                height = RutasFragment.height;
                 recyclerViewusers.setHasFixedSize(true);
                 recyclerViewusers.setLayoutManager(new LinearLayoutManager(context));
                 recyclerViewusers.setAdapter(adapter);
+                if (height == (displaymetrics.heightPixels * 78) / 100) {
+                    recyclerViewusers.suppressLayout(true);
+                } else {
+                    recyclerViewusers.suppressLayout(false);
+                }
             }
         });
     }
@@ -144,8 +171,8 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id",0))
-                            +"&idusuario=" +preferences.getInt("id",0)+"&idgrupo="+preferences.getInt("idgrupo",0), new Response.Listener<String>() {
+                    "https://mifolderdeproyectos.online/SEEYOU/fecha_puntos_recorridos.php?id=" + preferences.getInt("idusuarioruta", preferences.getInt("id", 0))
+                            + "&idusuario=" + preferences.getInt("id", 0) + "&idgrupo=" + preferences.getInt("idgrupo", 0), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -155,7 +182,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                         FechasList.clear();
 
 
-                        horizontallayout = new LinearLayoutManager(context,horizontallayout.HORIZONTAL,false);
+                        horizontallayout = new LinearLayoutManager(context, horizontallayout.HORIZONTAL, false);
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
 
@@ -223,9 +250,6 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
     }
 
 
-
-
-
     public void UbicacionUsuario(int id) {
 
         try {
@@ -243,12 +267,11 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                         LatLng ubicacionActual;
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject cajas = array.getJSONObject(i);
-                            if(!Objects.equals(response,"[]")) {
+                            if (!Objects.equals(response, "[]")) {
                                 ubicacionActual = new LatLng(cajas.getDouble("latitud"), cajas.getDouble("longitud"));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionActual, 13));
                             }
-                            }
-
+                        }
 
 
                     } catch (JSONException e) {
@@ -272,20 +295,20 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                                         && locationManagerinternet.getActiveNetworkInfo().isConnected()) {
 
 
-                                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-                                                .setTitleText("Algo Salio Mal..")
-                                                .setContentText("No Hemos Podido Obtener La Ubicacion De Este Usuario...")
-                                                .show();
+                                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("No Hemos Podido Obtener La Ubicacion De Este Usuario...")
+                                            .show();
 
 
                                 } else {
 
-                                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-                                                .setTitleText("Algo Salio Mal..")
-                                                .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
-                                                .show();
+                                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Algo Salio Mal..")
+                                            .setContentText("Por Favor Habilite Su Internet Para Poder Cargar Sus Puntos...")
+                                            .show();
 
-                                    }
+                                }
 
                             } catch (Exception e) {
                                 pDialog.dismiss();
@@ -298,7 +321,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                     });
             Volley.newRequestQueue(context).add(stringRequest);
         } catch (Exception e) {
-            Toast.makeText(context, e+"", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, e + "", Toast.LENGTH_SHORT).show();
         }
     }
 

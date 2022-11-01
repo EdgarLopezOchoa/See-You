@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +25,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,15 +93,20 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
     public static int id_usuario = 0, id_grupo = 0;
     int alertaubicacionactual = 0;
     SharedPreferences preferences;
-    private ImageView ubicacion;
+    private ImageView ubicacion, IVtamañorecycler;
     int alertapuntos = 0, alertaubicacion = 0;
+    public static int height = 0;
     View view;
     public static RecyclerView recyclerViewusers,RVfechas;
-    RequestQueue requestQueuefechas = null,requestQueueusuarios = null,requestQueuefotos = null,requestQueuerutas = null;
+    RequestQueue requestQueuefechas = null,requestQueueusuarios = null,requestQueuefotos = null
+            ,requestQueuerutas = null;
     TextView nombreusuario;
     double longitud,latitud;
     Marker marker[] = new Marker[1];
     LinearLayoutManager horizontallayout;
+
+    private static ObjectAnimator animacionDesvanecido;
+    private static ObjectAnimator animacionRotation;
 
 
     // Color y tamaño para las lineas
@@ -132,13 +140,30 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setCompassEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
             getLastLocation();
             ejecutar();
             RutasUsuariosFotos();
             FechasRutas();
+            recyclertamaño();
 
         }
     };
+
+    public void recyclertamaño(){
+
+        animacionRotation = ObjectAnimator.ofFloat(recyclerViewusers, "y",  height+10);
+        animacionRotation.setDuration(0);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(animacionRotation);
+        animatorSet.start();
+
+        animacionRotation = ObjectAnimator.ofFloat(IVtamañorecycler, "y",  height-80);
+        animacionRotation.setDuration(0);
+        animatorSet = new AnimatorSet();
+        animatorSet.play(animacionRotation);
+        animatorSet.start();
+    }
 
     @Nullable
     @Override
@@ -151,12 +176,71 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
 
         editor1.putString("fecharuta","hoy");
         editor1.commit();
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
-
+        height = (displaymetrics.heightPixels * 78) / 100;
         locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
         locationManagerinternet = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
 
+
         recyclerViewusers = view.findViewById(R.id.RBusuariosrutas);
+        IVtamañorecycler = view.findViewById(R.id.IVtamañorecycler);
+
+
+
+        IVtamañorecycler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (height == (displaymetrics.heightPixels * 23) / 100) {
+
+                    height = (displaymetrics.heightPixels * 78) / 100;
+
+                    recyclerViewusers.suppressLayout(true);
+                    animacionRotation = ObjectAnimator.ofFloat(recyclerViewusers, "y",  height+10);
+                    animacionRotation.setDuration(500);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.play(animacionRotation);
+                    animatorSet.start();
+
+                    animacionRotation = ObjectAnimator.ofFloat(IVtamañorecycler, "y",  height-80);
+                    animacionRotation.setDuration(500);
+                    animatorSet = new AnimatorSet();
+                    animatorSet.play(animacionRotation);
+                    animatorSet.start();
+                    IVtamañorecycler.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24);
+
+
+
+
+
+                } else {
+                    height = (displaymetrics.heightPixels * 23) / 100;
+                    recyclerViewusers.suppressLayout(false);
+                    recyclerViewusers.setVerticalScrollbarPosition(1);
+                    animacionRotation = ObjectAnimator.ofFloat(recyclerViewusers, "y",  height);
+                    animacionRotation.setDuration(500);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.play(animacionRotation);
+                    animatorSet.start();
+
+                    animacionRotation = ObjectAnimator.ofFloat(IVtamañorecycler, "y",  height-80);
+                    animacionRotation.setDuration(500);
+                    animatorSet = new AnimatorSet();
+                    animatorSet.play(animacionRotation);
+                    animatorSet.start();
+
+                    IVtamañorecycler.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
+                }
+            }
+        });
+
+
+        /*getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+         a = (displaymetrics.heightPixels * 10) / 100;
+        recyclerViewusers.getLayoutParams().height = a;*/
+
         RVfechas = view.findViewById(R.id.RVrutasfechas);
 
 
@@ -165,7 +249,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
         if (preferences.getInt("idgrupo", 0) == 0) {
             new SweetAlertDialog(getContext())
                     .setTitleText("Aviso!")
-                    .setContentText("Seleccione Un Grupo Para Ver Sus Marcadores y A Otros Usuarios Del Mismo.")
+                    .setContentText("Seleccione Un Grupo Para Ver Sus Rutas y Al Resto De Usuarios.")
                     .show();
         }
         id_grupo = preferences.getInt("idgrupo", 0);
@@ -214,7 +298,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                     try {
                         Polyline polyline1 = null;
 
-
+                        FechasAdapter.pDialog.dismiss();
 
                         JSONArray array = new JSONArray(response);
 
@@ -423,10 +507,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                 }
                             } catch (Exception e) {
                                 pDialog.dismiss();
-                                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Algo Salio Mal..")
-                                        .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                                        .show();
+
                             }
                         }
                     });
@@ -500,7 +581,7 @@ public class RutasFragment extends Fragment implements GoogleMap.OnPolylineClick
                                     cajas.getString("foto")
                             ));
                         }
-                        AdapterUsuario adapter = new AdapterUsuario(UserList, getContext());
+                        AdapterUsuario adapter = new AdapterUsuario(UserList, getContext(),getActivity());
                         recyclerViewusers.setHasFixedSize(true);
                         recyclerViewusers.setLayoutManager(new LinearLayoutManager(getContext()));
                         recyclerViewusers.setAdapter(adapter);

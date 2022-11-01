@@ -22,9 +22,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RBusuariosrutas"
-        android:layout_width="70dp"
+        android:layout_width="60dp"
         android:layout_height="0dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/fondo_de_edittext"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
@@ -36,6 +37,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/naranja"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor10"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -46,6 +48,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/Verde_Azul"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -55,6 +58,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@color/rosa"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor1"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor1"
         app:layout_constraintStart_toStartOf="@+id/TVcolor1" />
@@ -65,6 +69,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@color/Color5"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor2"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor2"
         app:layout_constraintHorizontal_bias="1.0"
@@ -76,6 +81,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@color/azul"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor3"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor3"
         app:layout_constraintHorizontal_bias="0.0"
@@ -87,6 +93,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@color/gris_obscuro"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor4"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor4"
         app:layout_constraintHorizontal_bias="1.0"
@@ -98,6 +105,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@android:color/black"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor5"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor5"
         app:layout_constraintHorizontal_bias="0.0"
@@ -109,6 +117,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@color/App_Color"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor6"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor6"
         app:layout_constraintHorizontal_bias="1.0"
@@ -120,6 +129,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@color/Amarillo"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor7"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor7"
         app:layout_constraintHorizontal_bias="0.0"
@@ -131,6 +141,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="5dp"
         android:background="@color/Rojo"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/TVcolor8"
         app:layout_constraintEnd_toEndOf="@+id/TVcolor8"
         app:layout_constraintHorizontal_bias="0.0"
@@ -145,6 +156,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor10"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor1"
         app:layout_constraintTop_toTopOf="@+id/TVcolor10" />
@@ -158,6 +170,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor1"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor1"
         app:layout_constraintTop_toTopOf="@+id/TVcolor1" />
@@ -171,6 +184,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor2"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor3"
         app:layout_constraintTop_toTopOf="@+id/TVcolor2" />
@@ -184,6 +198,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor3"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor4"
         app:layout_constraintTop_toTopOf="@+id/TVcolor3"
@@ -198,6 +213,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor4"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor4"
         app:layout_constraintTop_toTopOf="@+id/TVcolor4" />
@@ -211,6 +227,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor5"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor4"
         app:layout_constraintTop_toTopOf="@+id/TVcolor5"
@@ -225,6 +242,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor6"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor4"
         app:layout_constraintTop_toTopOf="@+id/TVcolor6"
@@ -239,6 +257,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor7"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor4"
         app:layout_constraintTop_toTopOf="@+id/TVcolor7"
@@ -253,6 +272,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor8"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor4"
         app:layout_constraintTop_toTopOf="@+id/TVcolor8"
@@ -267,6 +287,7 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/TVcolor9"
         app:layout_constraintEnd_toStartOf="@+id/TVcolor9"
         app:layout_constraintTop_toTopOf="@+id/TVcolor9"
@@ -275,8 +296,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout7"
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:background="@drawable/top_background"
+        android:layout_height="110dp"
+        android:background="@drawable/fondodegradado"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -284,12 +305,40 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RVrutasfechas"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
             android:scrollbars="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="FECHAS"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/IVtamañorecycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_baseline_keyboard_arrow_up_24"
+        app:layout_constraintBottom_toTopOf="@+id/RBusuariosrutas"
+        app:layout_constraintEnd_toEndOf="@+id/RBusuariosrutas"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
