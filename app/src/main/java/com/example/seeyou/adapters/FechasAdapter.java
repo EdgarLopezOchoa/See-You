@@ -48,7 +48,7 @@ public class FechasAdapter extends RecyclerView.Adapter<FechasAdapter.ViewHolder
     ArrayList<FechasRutas> UserList;
     private Context context;
     SharedPreferences preferences;
-    SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
+    public static SweetAlertDialog Eliminar_Marcador_recycler, pDialog;
     private GoogleMap mMap = RutasFragment.mMap;
     int alertapuntos = 0, alertaubicacion = 0;
     SharedPreferences.Editor editor;
@@ -101,6 +101,7 @@ public class FechasAdapter extends RecyclerView.Adapter<FechasAdapter.ViewHolder
         holder.contenerdor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pDialog.show();
                 preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("fecharuta",UserList.get(position).fecha_rutas);

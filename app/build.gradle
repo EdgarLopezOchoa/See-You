@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.seeyou.example.seeyou"
-        minSdk 26
+        minSdk 21
         targetSdk 32
         versionCode 5
         versionName "1.1.1"

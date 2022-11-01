@@ -34,6 +34,9 @@ open class LocationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        try{
+
+
         val iconoNotifica =
             BitmapFactory.decodeResource(resources, R.mipmap.icon_round)
 
@@ -65,11 +68,23 @@ open class LocationService : Service() {
             notificationManager.createNotificationChannel(notificationChannel)
             startForeground(1, builder.build())
         }
+
+        }catch(e: Exception){
+
+
+        }
     }
 
     @SuppressLint("MissingPermission")
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+
+        try{
         Ubicacion()
+        return START_STICKY
+
+    }catch(e: Exception){
+
+    }
         return START_STICKY
     }
 
@@ -78,6 +93,8 @@ open class LocationService : Service() {
     }
 
     override fun onDestroy() {
+
+        try{
         super.onDestroy()
         isServiceStarted = false
 
@@ -85,6 +102,9 @@ open class LocationService : Service() {
             var startservice1 = Intent(this@LocationService, LocationService::class.java)
             startForegroundService(Intent(startservice1))
             onResume()
+        }
+        }catch(e: Exception){
+
         }
     }
 
@@ -105,6 +125,8 @@ open class LocationService : Service() {
 
     @SuppressLint("MissingPermission")
     fun Ubicacion() {
+
+        try{
         val UPDATE_INTERVAL = (300000 /* 5 min */).toLong()
         val FASTEST_INTERVAL: Long = 3000 /* 3 sec */
         val distance_interval = 20.0f
@@ -140,6 +162,9 @@ open class LocationService : Service() {
             },
             Looper.myLooper()!!
         )
+        }catch(e: Exception){
+
+        }
     }
 
     open fun ActualizarUbicacion(latitud: Double, longitud: Double, context: Context) {

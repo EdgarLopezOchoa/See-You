@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,6 +51,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.seeyou.KotlinServices.LocationService;
+import com.example.seeyou.KotlinServices.NotificationService;
+import com.example.seeyou.KotlinServices.RoutesService;
+import com.example.seeyou.adapters.Markers;
 import com.example.seeyou.services.ServiceLocation;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -66,7 +70,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -78,12 +85,16 @@ public class MainActivity extends AppCompatActivity {
     RutasFragment RutasFragment = new RutasFragment();
     MapsFragment mapsFragment = new MapsFragment();
     PerfilFragment perfilFragment = new PerfilFragment();
-
+    int alerta = 0;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     public static ConstraintLayout constraintLayout;
     int id_usuario = 0, alertaubicacionactual = 0;
     double longitud, latitud;
+    long tiempoEnMS = 0;
+    SweetAlertDialog pDialog;
     public static int bucle = 0;
+    ArrayList<Integer> pressedkeys = new ArrayList<>();
 
     private com.google.android.gms.location.LocationRequest mLocationRequest;
 
@@ -112,10 +123,21 @@ public class MainActivity extends AppCompatActivity {
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(new Intent(this, ServiceLocation.class));
         }*/
+        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Cargando ...");
+        pDialog.setCancelable(false);
 
         Intent intent = new Intent(this, LocationService.class);
-        if(LocationService.Companion.isServiceStarted() == false) {
+        Intent intent2 = new Intent(this, RoutesService.class);
+        Intent intent3 = new Intent(this, NotificationService.class);
+        if (LocationService.Companion.isServiceStarted() == false) {
             startService(intent);
+        }
+        if (RoutesService.Companion.isServiceStarted() == false) {
+            startService(intent2);
+        }
+        if (NotificationService.isServiceEnable == false) {
+            startService(intent3);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -127,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.Fondobottomnavigation);
 
         preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
         id_usuario = preferences.getInt("id", 0);
 
         if (preferences.getBoolean("fondo2", false) == true) {
@@ -151,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        ejecutarRUTA();
-
+        //ejecutarRUTA();
+        startLocationUpdates();
         //llama al fragmento de mapa y lo pone en el FrameLayout
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.FrameLayout, mapsFragment);
@@ -161,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navegador);
         navigation.setOnNavigationItemSelectedListener(mOnNavigacionItemSelectedListener);
 
-
+        //BuscarAlertas();
     }
 
 
@@ -232,7 +256,26 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+
+        AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+
+        pressedkeys.add(keyCode);
+
+        if(event.isLongPress())
+            if(pressedkeys.contains(24) && pressedkeys.contains(25)) {
+
+                EnviarAlerta();
+
+        }
+
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+        pressedkeys.removeAll(Collections.singleton(keyCode));
+        return false;
     }
 
 
@@ -272,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void ejecutarRUTA() {
+    /*private void ejecutarRUTA() {
         final Handler handler = new Handler();
         final Handler handler2 = new Handler();
         handler.postDelayed(new Runnable() {
@@ -286,80 +329,16 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startLocationUpdates();
 
-                handler.postDelayed(this, 5000);
+                alerta = 0;
+                handler.postDelayed(this, 3000);
             }
-        }, 5000);
-
-    }
-
-
-    /*public void ActualizarUbicacion() {
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "https://mifolderdeproyectos.online/SEEYOU/ubicacion_usuario.php", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-
-
-                } catch (Exception e) {
-
-                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                            .show();
-                }
-
-            }
-
-        }, new com.android.volley.Response.ErrorListener() {
-            @SuppressLint("MissingPermission")
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-
-                    if(alertaubicacionactual == 0){
-                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Algo Salio Mal..")
-                                .setContentText("No Hemos Podido Actualizar Tu Ubicacion Actual...")
-                                .show();
-                        alertaubicacionactual = 1;
-
-                    }
-                } catch (Exception e) {
-
-                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
-                            .show();
-                }
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-
-
-                params.put("id", id_usuario+"");
-                params.put("latitud", latitud + "");
-                params.put("longitud", longitud + "");
-
-                return params;
-            }
-
-        };
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-        requestQueue.add(stringRequest);
+        }, 3000);
 
     }*/
 
-    public void Notificar(int notID) {
+
+    public void Notificar(int notID, String Nombre, int id_notifi) {
         NotificationCompat.Builder creador;
         String canalID = "MiCanal01";
         NotificationManager notificador = (NotificationManager) getSystemService(MainActivity.this.NOTIFICATION_SERVICE);
@@ -367,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         creador = new NotificationCompat.Builder(MainActivity.this, canalID);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String canalNombre = "ALERTA";
-            String canalDescribe = "ALGUIEN NECESITA TU AYUDA!!!!";
+            String canalDescribe = Nombre + " NECESITA TU AYUDA!!!!";
             int importancia = NotificationManager.IMPORTANCE_MAX;
             @SuppressLint("WrongConstant")
             NotificationChannel miCanal = new NotificationChannel(canalID, canalNombre, importancia);
@@ -379,21 +358,22 @@ public class MainActivity extends AppCompatActivity {
 
         }
         Bitmap iconoNotifica = BitmapFactory.decodeResource(getResources(), R.mipmap.emergency);
-        int iconoSmall = R.mipmap.icon_foreground;
+        int iconoSmall = R.mipmap.icon_round;
         creador.setSmallIcon(iconoSmall);
         creador.setLargeIcon(iconoNotifica);
         creador.setContentTitle("ALERTA!!");
-        creador.setContentText("ALGUIEN NECESITA TU AYUDA!!");
-        creador.setStyle(new NotificationCompat.BigTextStyle().bigText("ALGUIEN NECESITA TU AYUDA!!"));
+        creador.setContentText(Nombre + " NECESITA TU AYUDA!!!!");
+        creador.setStyle(new NotificationCompat.BigTextStyle().bigText(Nombre + " NECESITA TU AYUDA!!!!"));
         creador.setChannelId(canalID);
         notificador.notify(notID, creador.build());
     }
 
 
-    private void BuscarAlertas() {
+   /*private void BuscarAlertas() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://mifolderdeproyectos.online/SEEYOU/Notificaciones_Alertas.php?idgrupo=" + preferences.getInt("idgrupo", 0), new Response.Listener<String>() {
+                "https://mifolderdeproyectos.online/SEEYOU/Notificaciones_Alertas.php?iduser=" + preferences.getInt("id", 0)
+                +"&idnotifi=" + preferences.getInt("idNotificacion", 0), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -401,9 +381,29 @@ public class MainActivity extends AppCompatActivity {
 
                     JSONArray array = new JSONArray(response);
 
+                    int notifi = 2;
 
-                    if (!Objects.equals(response, "[]")) {
-                        Notificar(1);
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject cajas = array.getJSONObject(i);
+
+                       Notificar(notifi,cajas.getString("nombre")+" "
+                               +cajas.getString("apellido"),cajas.getInt("notificacion"));
+
+                       notifi = notifi + 1;
+
+
+                       if(i+1 == array.length()){
+                           preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                           SharedPreferences.Editor editor = preferences.edit();
+                           editor.putInt("idNotificacion",cajas.getInt("notificacion"));
+                           editor.commit();
+
+                           new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                   .setTitleText("Algo Salio Mal..")
+                                   .setContentText(preferences.getInt("idNotificacion",0)+"")
+                                   .show();
+
+                       }
                     }
 
 
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
 
                     new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Algo Salio Mal..")
-                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....(21)")
+                            .setContentText("Ubo Un Fallo En La App... Contacte Con El Equipo De Soporte....")
                             .show();
                 }
             }
@@ -435,6 +435,52 @@ public class MainActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(MainActivity.this).add(stringRequest);
 
+    }*/
+
+    private void EnviarAlerta() {
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "https://mifolderdeproyectos.online/SEEYOU/Notificacion_registro.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    pDialog.dismiss();
+
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("ALERTA!!")
+                            .setContentText("AHORA TUS AMIGOS SABEN QUE LOS NECESITAS!!")
+                            .show();
+                } catch (Exception e) {
+                    pDialog.dismiss();
+
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                            pDialog.dismiss();
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("idgrupo", preferences.getInt("idgrupo", 0)+"");
+                params.put("idusuario", id_usuario + "");
+
+
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(stringRequest);
+
     }
 
     @SuppressLint("MissingPermission")
@@ -450,54 +496,6 @@ public class MainActivity extends AppCompatActivity {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(mLocationRequest);
         LocationSettingsRequest locationSettingsRequest = builder.build();
-
-        // Check whether location settings are satisfied
-        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-       /* SettingsClient settingsClient = LocationServices.getSettingsClient(this);
-        settingsClient.checkLocationSettings(locationSettingsRequest);
-        final int REQUEST_CHECK_SETTINGS = 0x1;
-
-        LocationSettingsRequest.Builder builder1 = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest)
-                .addLocationRequest(mLocationRequest);
-        builder1.setNeedBle(true);
-        Task<LocationSettingsResponse> result =
-                LocationServices.getSettingsClient(this).checkLocationSettings(builder1.build());
-
-        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-            @Override
-            public void onComplete(Task<LocationSettingsResponse> task) {
-                try {
-                    LocationSettingsResponse response = task.getResult(ApiException.class);
-                    // All location settings are satisfied. The client can initialize location
-                    // requests here.
-                } catch (ApiException exception) {
-                    switch (exception.getStatusCode()) {
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            // Location settings are not satisfied. But could be fixed by showing the
-                            // user a dialog.
-                            try {
-                                // Cast to a resolvable exception.
-                                ResolvableApiException resolvable = (ResolvableApiException) exception;
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                resolvable.startResolutionForResult(
-                                        MainActivity.this,
-                                        REQUEST_CHECK_SETTINGS);
-                            } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
-                            } catch (ClassCastException e) {
-                                // Ignore, should be an impossible error.
-                            }
-                            break;
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            // Location settings are not satisfied. However, we have no way to fix the
-                            // settings so we won't show the dialog.
-                            break;
-                    }
-                }
-            }
-        });*/
 
 
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
@@ -519,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void guardarruta() {
+    /*public void guardarruta() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 "https://mifolderdeproyectos.online/SEEYOU/puntos_recorridos.php", new Response.Listener<String>() {
@@ -579,6 +577,6 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
         requestQueue.add(stringRequest);
 
-    }
+    }*/
 
 }
