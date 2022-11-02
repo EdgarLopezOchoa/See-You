@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(false);
 
-       iniciarServicios();
+        iniciarServicios();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -207,23 +207,23 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void iniciarServicios(){
+    public void iniciarServicios() {
 
         Intent intent = new Intent(this, LocationService.class);
         Intent intent2 = new Intent(this, RoutesService.class);
         Intent intent3 = new Intent(this, NotificationService.class);
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (LocationService.Companion.isServiceStarted() == false) {
-                startService(intent);
+                startForegroundService(intent);
             }
-            if (RoutesService.Companion.isServiceStarted() == false) {
+        }
+            /*if (RoutesService.Companion.isServiceStarted() == false) {
                 startService(intent2);
             }
             if (NotificationService.isServiceEnable == false) {
                 startService(intent3);
-            }
+            }*/
 
     }
 
@@ -264,12 +264,12 @@ public class MainActivity extends AppCompatActivity {
 
         pressedkeys.add(keyCode);
 
-        if(event.isLongPress())
-            if(pressedkeys.contains(24) && pressedkeys.contains(25)) {
+        if (event.isLongPress())
+            if (pressedkeys.contains(24) && pressedkeys.contains(25)) {
 
                 EnviarAlerta();
 
-        }
+            }
 
         return super.onKeyDown(keyCode, event);
     }
@@ -465,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                            pDialog.dismiss();
+                        pDialog.dismiss();
 
                     }
                 }) {
@@ -474,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
 
 
-                params.put("idgrupo", preferences.getInt("idgrupo", 0)+"");
+                params.put("idgrupo", preferences.getInt("idgrupo", 0) + "");
                 params.put("idusuario", id_usuario + "");
 
 
