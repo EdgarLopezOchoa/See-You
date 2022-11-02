@@ -34,42 +34,42 @@ open class LocationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        try{
+        try {
 
 
-        val iconoNotifica =
-            BitmapFactory.decodeResource(resources, R.mipmap.icon_round)
+            val iconoNotifica =
+                BitmapFactory.decodeResource(resources, R.mipmap.icon_round)
 
 
-        isServiceStarted = true
-        val builder: NotificationCompat.Builder =
-            NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-                .setOngoing(false)
-                .setSmallIcon(R.mipmap.icon)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon))
-                .setContentTitle("Ubicacion En Segundo Plano")
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .setContentText(
-                    "ESTA APLICACION ESTA HACIENDO USO DE LA UBICACION EN SEGUNDO PLANO PARA PODER" +
-                            " PROPORCIONARTE A TI Y LOS USUARIOS QUE USAN LA APLICACION UNA MEJOR EXPERIENCIA"
+            isServiceStarted = true
+            val builder: NotificationCompat.Builder =
+                NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                    .setOngoing(false)
+                    .setSmallIcon(R.mipmap.icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon))
+                    .setContentTitle("Ubicacion En Segundo Plano")
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setContentText(
+                        "ESTA APLICACION ESTA HACIENDO USO DE LA UBICACION EN SEGUNDO PLANO PARA PODER" +
+                                " PROPORCIONARTE A TI Y LOS USUARIOS QUE USAN LA APLICACION UNA MEJOR EXPERIENCIA"
+                    )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val notificationManager: NotificationManager =
+                    getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                val notificationChannel = NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_MIN
                 )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager: NotificationManager =
-                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            val notificationChannel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_MIN
-            )
 
 
 
-            notificationChannel.description = NOTIFICATION_CHANNEL_ID
-            notificationChannel.setSound(null, null)
-            notificationManager.createNotificationChannel(notificationChannel)
-            startForeground(1, builder.build())
-        }
+                notificationChannel.description = NOTIFICATION_CHANNEL_ID
+                notificationChannel.setSound(null, null)
+                notificationManager.createNotificationChannel(notificationChannel)
+                startForeground(1, builder.build())
+            }
 
-        }catch(e: Exception){
+        } catch (e: Exception) {
 
 
         }
@@ -78,13 +78,7 @@ open class LocationService : Service() {
     @SuppressLint("MissingPermission")
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
-        try{
         Ubicacion()
-        return START_STICKY
-
-    }catch(e: Exception){
-
-    }
         return START_STICKY
     }
 
@@ -94,16 +88,17 @@ open class LocationService : Service() {
 
     override fun onDestroy() {
 
-        try{
-        super.onDestroy()
-        isServiceStarted = false
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        try {
+            super.onDestroy()
+            isServiceStarted = false
             var startservice1 = Intent(this@LocationService, LocationService::class.java)
-            startForegroundService(Intent(startservice1))
-            onResume()
-        }
-        }catch(e: Exception){
+
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                startService(startservice1)
+
+           // }
+        } catch (e: Exception) {
 
         }
     }
@@ -115,7 +110,7 @@ open class LocationService : Service() {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-
+        Ubicacion()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -126,43 +121,45 @@ open class LocationService : Service() {
     @SuppressLint("MissingPermission")
     fun Ubicacion() {
 
-        try{
-        val UPDATE_INTERVAL = (300000 /* 5 min */).toLong()
-        val FASTEST_INTERVAL: Long = 3000 /* 3 sec */
-        val distance_interval = 20.0f
-        var mLocationRequest: LocationRequest? = null
-        isServiceStarted = true
-        // Create the location request to start receiving updates
-        mLocationRequest = LocationRequest()
-        //mLocationRequest.setInterval(UPDATE_INTERVAL)
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL)
-        mLocationRequest.setSmallestDisplacement(distance_interval)
+        try {
+            val UPDATE_INTERVAL = (300000 /* 5 min */).toLong()
+            val FASTEST_INTERVAL: Long = 3000 /* 3 sec */
+            val distance_interval = 20.0f
+            var mLocationRequest: LocationRequest? = null
+            isServiceStarted = true
+            // Create the location request to start receiving updates
+            mLocationRequest = LocationRequest()
+            //mLocationRequest.setInterval(UPDATE_INTERVAL)
+            mLocationRequest.setFastestInterval(FASTEST_INTERVAL)
+            mLocationRequest.setSmallestDisplacement(distance_interval)
 
-        // Create LocationSettingsRequest object using location request
-        val builder = LocationSettingsRequest.Builder()
-        builder.addLocationRequest(mLocationRequest)
-        val locationSettingsRequest = builder.build()
+            // Create LocationSettingsRequest object using location request
+            val builder = LocationSettingsRequest.Builder()
+            builder.addLocationRequest(mLocationRequest)
+            val locationSettingsRequest = builder.build()
 
 
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(
-            mLocationRequest, object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    // do work here
-                    ActualizarUbicacion(locationResult.lastLocation.latitude,
-                        locationResult.lastLocation.longitude,
-                        this@LocationService)
+            // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(
+                mLocationRequest, object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult) {
+                        // do work here
+                        ActualizarUbicacion(
+                            locationResult.lastLocation.latitude,
+                            locationResult.lastLocation.longitude,
+                            this@LocationService
+                        )
 
-                    /*UpdateLocation(
-                        locationResult.lastLocation.latitude,
-                        locationResult.lastLocation.longitude,
-                        this@LocationService
-                    )*/
-                }
-            },
-            Looper.myLooper()!!
-        )
-        }catch(e: Exception){
+                        /*UpdateLocation(
+                            locationResult.lastLocation.latitude,
+                            locationResult.lastLocation.longitude,
+                            this@LocationService
+                        )*/
+                    }
+                },
+                Looper.myLooper()!!
+            )
+        } catch (e: Exception) {
 
         }
     }

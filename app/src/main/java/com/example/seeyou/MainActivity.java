@@ -5,6 +5,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
@@ -110,35 +111,17 @@ public class MainActivity extends AppCompatActivity {
 
     SweetAlertDialog Eliminar_Marcador;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this,ServiceLocation.class);
-        PendingIntent pendingIntent = PendingIntent.getService(this,0,intent,0);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),
-                2*2000,pendingIntent);*/
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(this, ServiceLocation.class));
-        }*/
         pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Cargando ...");
         pDialog.setCancelable(false);
 
-        Intent intent = new Intent(this, LocationService.class);
-        Intent intent2 = new Intent(this, RoutesService.class);
-        Intent intent3 = new Intent(this, NotificationService.class);
-        if (LocationService.Companion.isServiceStarted() == false) {
-            startService(intent);
-        }
-        if (RoutesService.Companion.isServiceStarted() == false) {
-            startService(intent2);
-        }
-        if (NotificationService.isServiceEnable == false) {
-            startService(intent3);
-        }
+       iniciarServicios();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -175,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        //ejecutarRUTA();
         startLocationUpdates();
+
         //llama al fragmento de mapa y lo pone en el FrameLayout
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.FrameLayout, mapsFragment);
@@ -222,6 +205,26 @@ public class MainActivity extends AppCompatActivity {
 
         transaction.replace(R.id.FrameLayout, fragment);
         transaction.commit();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void iniciarServicios(){
+
+        Intent intent = new Intent(this, LocationService.class);
+        Intent intent2 = new Intent(this, RoutesService.class);
+        Intent intent3 = new Intent(this, NotificationService.class);
+
+
+            if (LocationService.Companion.isServiceStarted() == false) {
+                startService(intent);
+            }
+            if (RoutesService.Companion.isServiceStarted() == false) {
+                startService(intent2);
+            }
+            if (NotificationService.isServiceEnable == false) {
+                startService(intent3);
+            }
+
     }
 
 

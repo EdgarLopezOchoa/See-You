@@ -58,10 +58,28 @@ public class NotificationService extends Service {
         return null;
     }
 
-    public int onStartCommand(Intent intent,int Flags,int startId){
+    public int onStartCommand(Intent intent, int Flags, int startId) {
         isServiceEnable = true;
         ejecutar();
         return START_STICKY;
+    }
+
+    public void onDestroy() {
+        Intent startservice1 = new Intent(NotificationService.this, NotificationService.class);
+
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+           startService(startservice1);
+        //}
+
+    }
+
+    public void onResume() {
+        ejecutar();
+    }
+
+    public void onPause() {
+        onResume();
     }
 
    /* @Override
@@ -98,7 +116,7 @@ public class NotificationService extends Service {
             @Override
             public void run() {
 
-               BuscarAlertas();
+                BuscarAlertas();
                 handler2.postDelayed(this, 10000);
             }
         }, 10000);
@@ -111,7 +129,7 @@ public class NotificationService extends Service {
         SharedPreferences.Editor editor = preferences.edit();
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 "https://mifolderdeproyectos.online/SEEYOU/Notificaciones_Alertas.php?iduser=" + preferences.getInt("id", 0)
-                        +"&idnotifi=" + preferences.getInt("idNotificacion", 0), new Response.Listener<String>() {
+                        + "&idnotifi=" + preferences.getInt("idNotificacion", 0), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -124,16 +142,16 @@ public class NotificationService extends Service {
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject cajas = array.getJSONObject(i);
 
-                        Notificar(notifi,cajas.getString("nombre")+" "
-                                +cajas.getString("apellido"),cajas.getInt("notificacion"));
+                        Notificar(notifi, cajas.getString("nombre") + " "
+                                + cajas.getString("apellido"), cajas.getInt("notificacion"));
 
                         notifi = notifi + 1;
 
 
-                        if(i+1 == array.length()){
+                        if (i + 1 == array.length()) {
                             preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putInt("idNotificacion",cajas.getInt("notificacion"));
+                            editor.putInt("idNotificacion", cajas.getInt("notificacion"));
                             editor.commit();
 
                         }
@@ -158,8 +176,9 @@ public class NotificationService extends Service {
 
             requestQueue = Volley.newRequestQueue(NotificationService.this);
 
-        }else{
-           requestQueue.add(stringRequest);;
+        } else {
+            requestQueue.add(stringRequest);
+            ;
         }
     }
 
@@ -195,6 +214,7 @@ public class NotificationService extends Service {
     }
 
 }
+
 class BootDeviceReceiversNotification extends BroadcastReceiver {
 
 

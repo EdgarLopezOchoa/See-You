@@ -28,25 +28,22 @@ import com.google.android.gms.location.*
 
 class RoutesService : Service() {
     private val NOTIFICATION_CHANNEL_ID = "My_Routes_Background"
-    private val TAG = "LocationService"
     var requestQueue: RequestQueue? = null
 
     override fun onCreate() {
         super.onCreate()
+        isServiceStarted = true
 
     }
 
     @SuppressLint("MissingPermission")
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
-        try{
-            Ubicacion()
-            return Service.START_STICKY
 
-        }catch(e: Exception){
+        Ubicacion()
 
-        }
-        return Service.START_STICKY
+
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -55,16 +52,17 @@ class RoutesService : Service() {
 
     override fun onDestroy() {
 
-        try{
+        try {
             super.onDestroy()
             isServiceStarted = false
+            var startservice1 = Intent(this@RoutesService, RoutesService::class.java)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                var startservice1 = Intent(this@RoutesService, RoutesService::class.java)
-                startForegroundService(Intent(startservice1))
-                onResume()
-            }
-        }catch(e: Exception){
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            startService(startservice1)
+
+            //}
+        } catch (e: Exception) {
 
         }
     }
@@ -76,7 +74,7 @@ class RoutesService : Service() {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-
+        Ubicacion()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -87,12 +85,12 @@ class RoutesService : Service() {
     @SuppressLint("MissingPermission")
     fun Ubicacion() {
 
-        try{
+        try {
             val UPDATE_INTERVAL = (300000 /* 5 min */).toLong()
-            val FASTEST_INTERVAL: Long = 15 /* 3 sec */
-            val distance_interval = 50.0f
+            val FASTEST_INTERVAL: Long = 20000 /* 20 sec */
+            val distance_interval = 35.0F
             var mLocationRequest: LocationRequest? = null
-            LocationService.isServiceStarted = true
+            isServiceStarted = true
             // Create the location request to start receiving updates
             mLocationRequest = LocationRequest()
             //mLocationRequest.setInterval(UPDATE_INTERVAL)
@@ -111,53 +109,54 @@ class RoutesService : Service() {
 
                     override fun onLocationResult(locationResult: LocationResult) {
                         // do work here
-                        guardarruta(locationResult.lastLocation.latitude,
-                            locationResult.lastLocation.longitude,
-                            this@RoutesService)
-
-                        /*UpdateLocation(
+                        guardarruta(
                             locationResult.lastLocation.latitude,
                             locationResult.lastLocation.longitude,
-                            this@LocationService
-                        )*/
+                            this@RoutesService
+                        )
                     }
                 },
                 Looper.myLooper()!!
             )
-        }catch(e: Exception){
+        } catch (e: Exception) {
 
         }
     }
 
-    fun guardarruta(latitud: Double, longitud: Double,context: Context) {
+    fun guardarruta(latitud: Double, longitud: Double, context: Context) {
+        try {
 
-        isServiceStarted = true
-        val stringRequest: StringRequest = object : StringRequest(
-            Method.POST,
-            "https://mifolderdeproyectos.online/SEEYOU/puntos_recorridos.php", Response.Listener {
+            val stringRequest: StringRequest = object : StringRequest(
+                Method.POST,
+                "https://mifolderdeproyectos.online/SEEYOU/puntos_recorridos.php",
+                Response.Listener {
 
-            }, Response.ErrorListener {
+                },
+                Response.ErrorListener {
 
-            }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String>? {
-                val params: MutableMap<String, String> = HashMap()
-                val preferences: SharedPreferences
-                val id_usuario: Int
-                preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE)
-                id_usuario = preferences.getInt("id", 0)
-                params["id"] = id_usuario.toString() + ""
-                params["latitud"] = latitud.toString() + ""
-                params["longitud"] = longitud.toString() + ""
-                return params
+                }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String>? {
+                    val params: MutableMap<String, String> = HashMap()
+                    val preferences: SharedPreferences
+                    val id_usuario: Int
+                    preferences = context.getSharedPreferences("sesion", Context.MODE_PRIVATE)
+                    id_usuario = preferences.getInt("id", 0)
+                    params["id"] = id_usuario.toString() + ""
+                    params["latitud"] = latitud.toString() + ""
+                    params["longitud"] = longitud.toString() + ""
+                    return params
+                }
             }
-        }
 
-        if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(this@RoutesService)
-        }
-        requestQueue?.add<String>(stringRequest)
+            if (requestQueue == null) {
+                requestQueue = Volley.newRequestQueue(this@RoutesService)
+            }
+            requestQueue?.add<String>(stringRequest)
 
+        } catch (e: Exception) {
+
+        }
     }
 
 
